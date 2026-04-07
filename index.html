@@ -153,15 +153,17 @@
       <div class="label">Trafic organique (Semrush)</div>
       <div class="change down">7 649 visites/mois estimées</div>
     </div>
-    <div class="card kpi">
+    <div class="card kpi" style="border:2px dashed var(--warning);">
       <div class="value" style="color:var(--danger)">-63,7%</div>
       <div class="label">Utilisateurs actifs (GA4, 12 mois)</div>
       <div class="change down">36k vs 99k l'année précédente</div>
+      <div style="margin-top:.35rem;padding:.25rem .5rem;background:#fef3c7;border-radius:4px;font-size:.7rem;color:#92400e;">⚠️ Tracking GA4 probablement défaillant — chiffre réel supérieur. Comparer avec données back-office.</div>
     </div>
-    <div class="card kpi">
+    <div class="card kpi" style="border:2px dashed var(--warning);">
       <div class="value" style="color:var(--danger)">-90,2%</div>
       <div class="label">Achats (GA4, 12 mois)</div>
       <div class="change down">105 vs 1 072 l'année précédente</div>
+      <div style="margin-top:.35rem;padding:.25rem .5rem;background:#fef3c7;border-radius:4px;font-size:.7rem;color:#92400e;">⚠️ Tracking GA4 probablement défaillant — chiffre réel supérieur. Comparer avec données back-office.</div>
     </div>
     <div class="card kpi">
       <div class="value">10.7</div>
@@ -198,7 +200,7 @@
     <p style="margin-top:.5rem;"><strong>1. Avril → août 2025</strong> : érosion progressive (-36% de clics vs janvier), probablement liée à une perte de positions sur des requêtes non-brand à fort volume (parcours motricité, poussettes, barrières). <span class="badge hypothese">Hypothèse</span></p>
     <p style="margin-top:.5rem;"><strong>2. Décembre 2025</strong> : chute brutale corrélée au <strong>Google Core Update du 11 décembre 2025</strong>, l'une des mises à jour les plus disruptives récemment (15% des pages du TOP 10 éjectées). <span class="badge fait">Fait observé</span></p>
     <p style="margin-top:.5rem;">Depuis janvier 2026, le trafic s'est <strong>stabilisé autour de 11 000-12 000 clics/mois</strong>, soit environ 15-19% sous le pic de début 2025. La position moyenne s'est améliorée (23 → 11), indiquant un <strong>rétrécissement du pool de requêtes indexées</strong>.</p>
-    <p style="margin-top:.75rem;"><strong>3. Impact business confirmé par GA4</strong> : la baisse de trafic a provoqué un <strong>effondrement des achats de -90,2%</strong> et une perte de -63,7% d'utilisateurs actifs sur 12 mois. <span class="badge fait">Fait observé</span></p>
+    <p style="margin-top:.75rem;"><strong>3. Impact business selon GA4</strong> : GA4 affiche -90,2% d'achats et -63,7% d'utilisateurs actifs sur 12 mois. <span style="padding:.15rem .4rem;background:#fef3c7;border-radius:3px;font-size:.8rem;color:#92400e;">⚠️ Tracking GA4 probablement défaillant</span> — les chiffres réels sont supérieurs (à comparer avec le back-office/ERP). La tendance baissière reste néanmoins confirmée par les données Search Console. <span class="badge fait">Fait observé (données GA4 à fiabiliser)</span></p>
     <p style="margin-top:.5rem;"><strong>4. Profil de backlinks dégradé</strong> : score de toxicité ÉLEVÉ (30,5% de liens toxiques), 625 backlinks cassés, et perte de 7,76% des domaines référents. <span class="badge fait">Fait observé</span></p>
     <p style="margin-top:.5rem;"><strong>5. Core Web Vitals Desktop catastrophiques</strong> : seulement 72 URLs rapides sur desktop vs 1 607 "à améliorer" et 28 lentes. Le mobile est correct. <span class="badge fait">Fait observé</span></p>
     <p style="margin-top:.5rem;"><strong>6. Aucune action manuelle Google</strong> détectée — pas de pénalité. <span class="badge fait">Fait observé</span></p>
@@ -774,16 +776,75 @@
 <section id="ga4">
   <h2>Impact business (Google Analytics 4)</h2>
 
+  <!-- AUDIT TRACKING GTM / GA4 / CookieScript -->
+  <div class="card" style="border-left:4px solid var(--danger);background:linear-gradient(135deg,#fef2f2,#fff7ed);margin-bottom:1.5rem;">
+    <h3 style="color:var(--danger);margin-bottom:.75rem;">&#x1F6A8; Audit tracking : 3 problèmes critiques détectés</h3>
+    <p style="margin-bottom:.5rem;">L'analyse du code source de <strong>www.papouillefrance.com</strong> (7 avril 2026) révèle que <strong>les données GA4 sont massivement sous-estimées</strong>. Les chiffres ci-dessous ne reflètent pas la réalité business.</p>
+
+    <div class="grid-2" style="margin-top:1rem;">
+      <div class="card" style="border:1px solid #fca5a5;">
+        <h4 style="color:var(--danger);">1. CookieScript bloque GA4 par défaut</h4>
+        <table>
+          <tr><th>Élément</th><th>Constat</th></tr>
+          <tr><td>CMP utilisé</td><td><code>CookieScript</code> (cdn.cookie-script.com)</td></tr>
+          <tr><td>Catégories activées par défaut</td><td><code>strict</code>, <code>functionality</code> uniquement</td></tr>
+          <tr><td>Catégorie "analytics" / "performance"</td><td style="color:var(--danger);font-weight:bold;">Absente ou non déclenchée</td></tr>
+          <tr><td>Résultat sur visite test</td><td style="color:var(--danger);font-weight:bold;">0 requête GA4 envoyée à Google</td></tr>
+        </table>
+        <p style="margin-top:.5rem;font-size:.85rem;"><strong>Impact :</strong> Seuls les visiteurs qui acceptent activement les cookies analytics sont trackés. La majorité du trafic est invisible pour GA4.</p>
+      </div>
+
+      <div class="card" style="border:1px solid #fca5a5;">
+        <h4 style="color:var(--danger);">2. Google Consent Mode v2 non configuré</h4>
+        <table>
+          <tr><th>Élément</th><th>Constat</th></tr>
+          <tr><td><code>gtag('consent', 'default', ...)</code></td><td style="color:var(--danger);font-weight:bold;">Non trouvé</td></tr>
+          <tr><td><code>gtag('consent', 'update', ...)</code></td><td style="color:var(--danger);font-weight:bold;">Non trouvé</td></tr>
+          <tr><td>Données modélisées (cookieless pings)</td><td style="color:var(--danger);font-weight:bold;">Désactivées</td></tr>
+        </table>
+        <p style="margin-top:.5rem;font-size:.85rem;"><strong>Impact :</strong> Sans Consent Mode v2, Google ne peut pas collecter de données anonymisées pour les visiteurs qui refusent les cookies. Perte de 100% de ces données au lieu d'une estimation modélisée.</p>
+      </div>
+    </div>
+
+    <div class="card" style="border:1px solid #fca5a5;margin-top:1rem;">
+      <h4 style="color:var(--danger);">3. DataLayer e-commerce au mauvais format</h4>
+      <table>
+        <tr><th>Élément</th><th>Constat</th></tr>
+        <tr><td>Conteneur GTM</td><td><code>GTM-PNR2PTM</code> — chargé correctement</td></tr>
+        <tr><td>Format e-commerce détecté</td><td style="color:var(--danger);font-weight:bold;">Universal Analytics Enhanced Ecommerce (<code>ecommerce.impressions</code>)</td></tr>
+        <tr><td>Format requis par GA4</td><td>GA4 Ecommerce (<code>ecommerce.items</code>)</td></tr>
+        <tr><td>Événements <code>purchase</code>, <code>add_to_cart</code></td><td style="color:var(--danger);font-weight:bold;">Probablement non interprétés par GA4</td></tr>
+        <tr><td>Accès GTM (florian@papouillefrance.com)</td><td style="color:var(--danger);font-weight:bold;">Aucun accès — conteneur géré par un autre compte</td></tr>
+        <tr><td>Accès GA4 (florian@papouillefrance.com)</td><td style="color:var(--danger);font-weight:bold;">Aucune propriété GA4 visible</td></tr>
+      </table>
+      <p style="margin-top:.5rem;font-size:.85rem;"><strong>Impact :</strong> Même quand GA4 se déclenche (rare), les événements e-commerce sont au format UA et ne sont probablement pas correctement comptabilisés dans GA4. Cela explique les 105 achats vs la réalité.</p>
+    </div>
+
+    <div style="margin-top:1rem;padding:.75rem;background:#fef3c7;border-radius:6px;">
+      <strong>&#x26A0;&#xFE0F; Conclusion :</strong> Les données GA4 (36k utilisateurs, 105 achats, -63,7% / -90,2%) <strong>ne sont pas fiables</strong>. Elles sous-estiment massivement l'activité réelle du site. Comparer avec les données du back-office / ERP pour obtenir les vrais chiffres.
+    </div>
+
+    <div style="margin-top:.75rem;padding:.75rem;background:#ecfdf5;border-radius:6px;">
+      <strong>&#x2705; Corrections prioritaires :</strong>
+      <br>1. Configurer <strong>Google Consent Mode v2</strong> dans GTM (consentement par défaut <code>denied</code> → mise à jour dynamique via CookieScript)
+      <br>2. Ajouter la catégorie <strong>"analytics"</strong> dans CookieScript et la lier aux tags GA4 dans GTM
+      <br>3. Migrer le dataLayer e-commerce du format <strong>UA → GA4</strong> (<code>impressions</code> → <code>items</code>, <code>productClick</code> → <code>select_item</code>, etc.)
+      <br>4. Donner accès au conteneur <strong>GTM-PNR2PTM</strong> et à la propriété <strong>GA4</strong> au compte <code>florian@papouillefrance.com</code>
+    </div>
+  </div>
+
   <div class="grid-4">
-    <div class="card kpi">
+    <div class="card kpi" style="border:2px dashed var(--warning);">
       <div class="value" style="color:var(--danger);">36k</div>
       <div class="label">Utilisateurs actifs (12 mois)</div>
       <div class="change down">▼ -63,7% vs année précédente</div>
+      <div style="margin-top:.35rem;padding:.25rem .5rem;background:#fef3c7;border-radius:4px;font-size:.7rem;color:#92400e;">⚠️ Tracking GA4 défaillant — chiffre sous-estimé</div>
     </div>
-    <div class="card kpi">
+    <div class="card kpi" style="border:2px dashed var(--warning);">
       <div class="value" style="color:var(--danger);">105</div>
       <div class="label">Achats (12 mois)</div>
       <div class="change down">▼ -90,2% vs année précédente</div>
+      <div style="margin-top:.35rem;padding:.25rem .5rem;background:#fef3c7;border-radius:4px;font-size:.7rem;color:#92400e;">⚠️ Tracking GA4 défaillant — chiffre sous-estimé</div>
     </div>
     <div class="card kpi">
       <div class="value">664k</div>
@@ -856,28 +917,35 @@
   </div>
 
   <div class="action-card card urgent">
-    <h3>4. Corriger le problème Merchant Center (272 produits)</h3>
+    <h3>4. Auditer et corriger le tracking GA4</h3>
+    <p><strong>Impact :</strong> <span class="badge fort">Fort</span> — Le tracking GA4 est probablement défaillant : 105 achats sur 12 mois et 36k utilisateurs sont incohérents avec le volume réel d'activité du site. Sans données fiables, impossible de mesurer l'impact réel des actions SEO.</p>
+    <p><strong>Action :</strong> (1) Comparer les achats GA4 vs back-office/ERP pour mesurer l'écart. (2) Vérifier l'implémentation du tag GA4 (gtag.js ou GTM) : est-il présent sur toutes les pages ? (3) Vérifier que les événements e-commerce (purchase, add_to_cart) se déclenchent correctement. (4) Vérifier l'impact du bandeau de consentement cookies sur le taux de collecte. (5) Corriger et valider en temps réel via GA4 DebugView.</p>
+    <p><strong>Effort :</strong> 1-2 jours</p>
+  </div>
+
+  <div class="action-card card urgent">
+    <h3>5. Corriger le problème Merchant Center (272 produits)</h3>
     <p><strong>Impact :</strong> <span class="badge fort">Fort</span> — 272 produits absents de Google Shopping à cause du champ "availability" manquant.</p>
     <p><strong>Action :</strong> Accéder à Google Merchant Center > Diagnostics > Corriger le flux produit pour ajouter le champ availability.</p>
     <p><strong>Effort :</strong> 1 jour</p>
   </div>
 
   <div class="action-card card urgent">
-    <h3>5. Corriger les Core Web Vitals Desktop</h3>
+    <h3>6. Corriger les Core Web Vitals Desktop</h3>
     <p><strong>Impact :</strong> <span class="badge fort">Fort</span> — 96% des URLs desktop en "à améliorer", alors que 42% du trafic est desktop.</p>
     <p><strong>Action :</strong> Analyser via PageSpeed Insights les pages principales. Optimiser : compression images, lazy loading, réduction JavaScript, cache serveur.</p>
     <p><strong>Effort :</strong> 1-2 semaines (avec développeur)</p>
   </div>
 
   <div class="action-card card urgent">
-    <h3>6. Auditer et désavouer les backlinks toxiques</h3>
+    <h3>7. Auditer et désavouer les backlinks toxiques</h3>
     <p><strong>Impact :</strong> <span class="badge fort">Fort</span> — Score de toxicité ÉLEVÉ (30,5% toxiques). Risque amplifié par le March 2026 Spam Update.</p>
     <p><strong>Action :</strong> Semrush > Backlink Audit > Examiner les 196 toxiques → créer un fichier disavow → soumettre dans Search Console.</p>
     <p><strong>Effort :</strong> 2-3 jours</p>
   </div>
 
   <div class="action-card card urgent">
-    <h3>7. Bloquer le crawl des URLs /image/ dans robots.txt</h3>
+    <h3>8. Bloquer le crawl des URLs /image/ dans robots.txt</h3>
     <p><strong>Impact :</strong> <span class="badge fort">Fort</span> — <strong>90,7% des 10 695 pages explorées non indexées sont des URLs d'images</strong> (/image/be-article-articlePicture-*). Google les explore sans les indexer, gaspillant massivement le budget de crawl.</p>
     <p><strong>Action :</strong> Ajouter <code>Disallow: /image/</code> dans robots.txt. Cela libérera immédiatement du budget de crawl pour les pages utiles (fiches produits, catégories). Les 68 fiches produits non indexées restantes doivent être enrichies en contenu.</p>
     <p><strong>Effort :</strong> 30 minutes (robots.txt) + 3-5 jours (enrichissement contenu)</p>
@@ -886,28 +954,28 @@
   <h3 style="margin:2rem 0 1rem; color:var(--warning);">🟡 Mois 1 : Optimisations contenu à fort impact</h3>
 
   <div class="action-card card important">
-    <h3>8. Résoudre la cannibalisation "parcours motricité"</h3>
+    <h3>9. Résoudre la cannibalisation "parcours motricité"</h3>
     <p><strong>Impact :</strong> <span class="badge fort">Fort</span> — ~110 000 impressions cumulées avec un CTR &lt; 1%.</p>
     <p><strong>Action :</strong> Choisir UNE page pilier pour ce cluster → rediriger les autres → consolider le contenu → optimiser le title.</p>
     <p><strong>Effort :</strong> 2-3 jours</p>
   </div>
 
   <div class="action-card card important">
-    <h3>9. Optimiser les titles des pages à fort potentiel</h3>
+    <h3>10. Optimiser les titles des pages à fort potentiel</h3>
     <p><strong>Impact :</strong> <span class="badge fort">Fort</span> — La page couchette (pos. 6.4, CTR 0.79%) devrait avoir un CTR de ~5% à cette position.</p>
     <p><strong>Action :</strong> Réécrire les titles et meta des 15 pages identifiées comme "fort potentiel inexploité" dans le tableau ci-dessus.</p>
     <p><strong>Effort :</strong> 3-5 jours</p>
   </div>
 
   <div class="action-card card important">
-    <h3>10. Enrichir les pages catégories à forte impression</h3>
+    <h3>11. Enrichir les pages catégories à forte impression</h3>
     <p><strong>Impact :</strong> <span class="badge moyen">Moyen</span> — Les pages barrières de sécurité (176k impr., pos 18.7) et chaises hautes (131k impr., pos 18.9) ont besoin de contenu supplémentaire pour remonter.</p>
     <p><strong>Action :</strong> Ajouter du contenu expert (guides d'achat, comparatifs, FAQ) sur les 5 catégories les plus impressionnées.</p>
     <p><strong>Effort :</strong> 1-2 semaines</p>
   </div>
 
   <div class="action-card card important">
-    <h3>11. Ajouter les auteurs sur le blog + signaux E-E-A-T</h3>
+    <h3>12. Ajouter les auteurs sur le blog + signaux E-E-A-T</h3>
     <p><strong>Impact :</strong> <span class="badge moyen">Moyen</span> — Le Core Update de décembre ciblait spécifiquement l'E-E-A-T.</p>
     <p><strong>Action :</strong> Créer des pages auteur, attribuer les articles existants, ajouter des bios avec expertise petite enfance.</p>
     <p><strong>Effort :</strong> 2-3 jours</p>
@@ -916,7 +984,7 @@
   <h3 style="margin:2rem 0 1rem; color:var(--success);">🟢 Mois 2-3 : Stratégie contenu + autorité</h3>
 
   <div class="action-card card normal">
-    <h3>12. Migrer le blog vers un sous-répertoire</h3>
+    <h3>13. Migrer le blog vers un sous-répertoire</h3>
     <p><strong>Impact :</strong> <span class="badge fort">Fort</span> (long terme) — blog.papouillefrance.com → papouillefrance.com/blog/</p>
     <p><strong>Action :</strong> Planifier la migration avec redirections 301 systématiques. Le blog génère 8 900 clics et consoliderait l'autorité du domaine principal.</p>
     <p><strong>Effort :</strong> 1-2 semaines (avec développeur)</p>
@@ -924,21 +992,21 @@
   </div>
 
   <div class="action-card card normal">
-    <h3>13. Créer du contenu ciblé sur les requêtes non-brand perdues</h3>
+    <h3>14. Créer du contenu ciblé sur les requêtes non-brand perdues</h3>
     <p><strong>Impact :</strong> <span class="badge fort">Fort</span> — Le trafic non-brand ne représente que 51% des clics pour 93% des impressions.</p>
     <p><strong>Action :</strong> Identifier via Semrush les 20 mots-clés non-brand où Papouille a perdu des positions depuis avril 2025. Créer ou enrichir des pages dédiées.</p>
     <p><strong>Effort :</strong> 4-6 semaines (création de contenu)</p>
   </div>
 
   <div class="action-card card normal">
-    <h3>14. Stratégie de liens internes (Topic Clusters)</h3>
+    <h3>15. Stratégie de liens internes (Topic Clusters)</h3>
     <p><strong>Impact :</strong> <span class="badge moyen">Moyen</span></p>
     <p><strong>Action :</strong> Structurer le contenu en clusters thématiques (Motricité, Mobilier, Puériculture, Couchage) avec des pages piliers et des liens internes croisés systématiques.</p>
     <p><strong>Effort :</strong> Continu</p>
   </div>
 
   <div class="action-card card normal">
-    <h3>15. Développer l'autorité externe (link building)</h3>
+    <h3>16. Développer l'autorité externe (link building)</h3>
     <p><strong>Impact :</strong> <span class="badge moyen">Moyen</span></p>
     <p><strong>Action :</strong> Relations presse avec médias petite enfance, partenariats avec des blogs parentaux, publications d'études/guides pouvant être cités.</p>
     <p><strong>Effort :</strong> Continu, 3-6 mois pour résultats</p>
@@ -955,7 +1023,8 @@
       <tr style="background:#f0fdf4;"><td>Core Web Vitals</td><td>Search Console</td><td>✅ Vérifié — Desktop critique, Mobile OK</td></tr>
       <tr style="background:#f0fdf4;"><td>Indexation (pages indexées vs non)</td><td>Search Console</td><td>✅ Vérifié — 4 562 indexées / 34 541 non</td></tr>
       <tr style="background:#f0fdf4;"><td>Profil de backlinks et toxicité</td><td>Semrush</td><td>✅ Vérifié — Score toxicité ÉLEVÉ</td></tr>
-      <tr style="background:#f0fdf4;"><td>Impact business (utilisateurs, achats)</td><td>Google Analytics 4</td><td>✅ Vérifié — -63,7% utilisateurs, -90,2% achats</td></tr>
+      <tr style="background:#fffbeb;"><td>Impact business (utilisateurs, achats)</td><td>Google Analytics 4</td><td>⚠️ Données GA4 sous-estimées (tracking défaillant) — comparer avec back-office/ERP pour chiffres réels</td></tr>
+      <tr style="background:#fef3c7;"><td>Audit complet du tracking GA4</td><td>GA4 DebugView + GTM</td><td>🔴 Prioritaire — Vérifier tag GA4, événements e-commerce, impact bandeau cookies</td></tr>
       <tr style="background:#f0fdf4;"><td>Google Merchant Center</td><td>GA4 Insights</td><td>✅ Détecté — 272 produits manquants</td></tr>
       <tr><td>Positions perdues par mot-clé + concurrent gagnant</td><td>Semrush (Organic Research > Changes)</td><td>⬜ À faire — croiser les données de régression</td></tr>
       <tr><td>Crawl complet avec Screaming Frog</td><td>Screaming Frog</td><td>⬜ À faire — identifier toutes les erreurs techniques</td></tr>
