@@ -1108,10 +1108,15 @@
     </div>
 
     <div class="fix-item" style="border-left-color: var(--danger);">
-      <h4>1.3 — Titles de catégorie/famille incorrects (sous-catégorie aléatoire)</h4>
-      <p><strong>Constat :</strong> Les balises <code>&lt;title&gt;</code> des pages famille incluent une sous-catégorie apparemment aléatoire. Exemple : la page <code>/articles/mobilier-11</code> affiche <em>"Mobilier - Meuble en mousse et Pouf | Papouille"</em> au lieu de <em>"Mobilier crèche et collectivité | Papouille"</em>.</p>
-      <p><strong>Action BLGCLOUD :</strong> Corriger le template <code>&lt;title&gt;</code> des pages famille pour utiliser uniquement <code>family.title</code>, sans injecter un <code>subfamily.title</code> arbitraire.</p>
-      <p><strong>Impact :</strong> 12 pages famille + 118 pages sous-famille potentiellement affectées.</p>
+      <h4>1.3 — Titles de catégorie/famille incorrects (sous-catégorie aléatoire + ordre inversé)</h4>
+      <p><strong>Constat :</strong> Deux problèmes dans les balises <code>&lt;title&gt;</code> :</p>
+      <p>1. Les pages famille incluent une sous-catégorie apparemment aléatoire. Exemple : <code>/articles/mobilier-11</code> affiche <em>"Mobilier - Meuble en mousse et Pouf | Papouille"</em> au lieu du titre de la famille seule.</p>
+      <p>2. Le format actuel des pages sous-famille est <em>"Famille - Sous-famille | Papouille"</em> (ex : <em>"Repas - Assiettes Enfants et à Compartiments"</em>). Le format correct demandé par Papouille est <strong>Sous-catégorie / Catégorie</strong> :</p>
+      <p style="background: #e8f0fe; padding: 10px; border-radius: 6px; font-family: monospace;">Format attendu : <strong>{subfamily.title} / {family.title} | Papouille</strong><br>Exemple : <em>Assiettes Enfants et à Compartiments / Repas | Papouille</em><br>Exemple : <em>Table crèche et scolaire / Mobilier | Papouille</em></p>
+      <p><strong>Action BLGCLOUD :</strong></p>
+      <p>— Pages famille : utiliser uniquement <code>family.title</code>, sans injecter un <code>subfamily.title</code> arbitraire.</p>
+      <p>— Pages sous-famille : inverser l'ordre pour afficher <code>subfamily.title / family.title | Papouille</code> (et non <code>family.title - subfamily.title</code>).</p>
+      <p><strong>Impact :</strong> 12 pages famille + 118 pages sous-famille.</p>
     </div>
 
     <div class="fix-item" style="border-left-color: var(--danger);">
