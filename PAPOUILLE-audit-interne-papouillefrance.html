@@ -1858,6 +1858,12 @@
                         <td><span style="color: #e37400; font-weight: 700;">HAUTE</span></td>
                         <td>Créer un tag GA4 event <code>search</code> avec <code>search_term</code> déclenché sur le paramètre <code>?q=</code></td>
                     </tr>
+                    <tr>
+                        <td>GTM-5</td>
+                        <td>Mettre à jour le code de suivi dans le contentBlock</td>
+                        <td><span style="color: #1a73e8; font-weight: 600;">MOYENNE</span></td>
+                        <td>Le bloc <code>cms/contentBlock</code> id=6 (trackingCode) contient le snippet GTM noscript pour GTM-PNR2PTM. Vérifier que le code GA4 est à jour et que le Consent Mode est bien injecté via ce bloc.</td>
+                    </tr>
                 </tbody>
             </table>
 
@@ -1874,16 +1880,48 @@
                     <tr><td>6</td><td>H1 manquant sur la homepage</td><td><span style="color: #1a73e8; font-weight: 600;">MOYENNE</span></td></tr>
                     <tr><td>7</td><td>Open Graph incomplet sur pages produit</td><td><span style="color: #1a73e8; font-weight: 600;">MOYENNE</span></td></tr>
                     <tr><td>8</td><td>Hreflang absent</td><td><span style="color: #1a73e8; font-weight: 600;">MOYENNE</span></td></tr>
+                    <tr><td>9</td><td>Sitemap pollué par 33 articles « Non diffusé » (frais de port, bons de réduction, articles épuisés) malgré le tag <code>usertag_75b1o</code></td><td><span style="color: #e37400; font-weight: 700;">HAUTE</span></td></tr>
+                </tbody>
+            </table>
+
+            <h3>Action 7 — Problèmes Semrush à traiter côté Papouille</h3>
+            <p>Ces points ont été identifiés par le Site Audit Semrush et sont corrigeables sans intervention BLGCLOUD :</p>
+            <table>
+                <thead><tr><th>Ref</th><th>Problème</th><th>Volume</th><th>Priorité</th><th>Action Papouille</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td>S25</td>
+                        <td>Balises title trop longues (> 60 caractères)</td>
+                        <td>678 pages</td>
+                        <td><span style="color: #e37400; font-weight: 700;">HAUTE</span></td>
+                        <td>Raccourcir les noms produit / sous-familles dans BLGCLOUD (champ <code>label</code> de article/part ou article/subfamily). Le template génère le title à partir de ces champs.</td>
+                    </tr>
+                    <tr>
+                        <td>S26</td>
+                        <td>Pages avec HTML trop lourd (ratio texte/HTML faible)</td>
+                        <td>26 pages</td>
+                        <td><span style="color: #1a73e8; font-weight: 600;">MOYENNE</span></td>
+                        <td>Identifier les pages concernées (souvent des pages catégorie avec beaucoup d'inline CSS ou des blocs CMS surchargés). Alléger le contenu HTML via l'API <code>cms/dynamicPage</code> ou simplifier les descriptions.</td>
+                    </tr>
+                    <tr>
+                        <td>S27</td>
+                        <td>Pages avec un seul lien interne entrant</td>
+                        <td>842 pages</td>
+                        <td><span style="color: #e37400; font-weight: 700;">HAUTE</span></td>
+                        <td>Créer du maillage interne : ajouter des liens croisés dans les descriptions de sous-familles et les pages CMS. Utiliser les blocs <code>cms/dynamicPage</code> pour ajouter des liens « Voir aussi » entre produits/catégories liés.</td>
+                    </tr>
                 </tbody>
             </table>
 
             <div style="background: #e8f0fe; border: 1px solid #aecbfa; border-radius: 8px; padding: 20px; margin: 16px 0;">
                 <h4 style="color: #1a73e8;">Ordre de priorité recommandé</h4>
-                <p>1. <strong>Transmettre les 4 bugs critiques à BLGCLOUD</strong> (meta descriptions, JSON-LD, titles, pages erreur) — ce sont les plus impactants et bloquants.</p>
+                <p>1. <strong>Transmettre les 5 bugs critiques + sitemap à BLGCLOUD</strong> (Action 6 : meta descriptions, JSON-LD, titles, pages erreur, sitemap pollué) — ce sont les plus impactants et bloquants.</p>
                 <p>2. <strong>Lancer la rédaction des descriptions sous-familles</strong> (Action 1) — 65 pages "thin content" à enrichir.</p>
                 <p>3. <strong>Corriger les 166 redirections homepage via script</strong> (Action 3) — automatisable en 1h.</p>
-                <p>4. <strong>Configurer GTM</strong> (Action 5, GTM-1 et GTM-2) — restaure l'attribution e-commerce.</p>
-                <p>5. <strong>Compléter les fiches produit</strong> (Action 2) — travail de fond, peut être planifié sur plusieurs semaines.</p>
+                <p>4. <strong>Configurer GTM</strong> (Action 5, GTM-1 à GTM-4) — restaure l'attribution e-commerce.</p>
+                <p>5. <strong>Raccourcir les 678 titles trop longs</strong> (Action 7, S25) — améliore le CTR dans les SERP.</p>
+                <p>6. <strong>Améliorer le maillage interne</strong> (Action 7, S27) — 842 pages orphelines à relier.</p>
+                <p>7. <strong>Compléter les fiches produit</strong> (Action 2) — travail de fond, peut être planifié sur plusieurs semaines.</p>
             </div>
         </section>
 
