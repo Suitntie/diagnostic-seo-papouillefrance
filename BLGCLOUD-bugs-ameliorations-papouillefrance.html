@@ -72,6 +72,11 @@
   .fix-item h4 { font-size: 15px; margin-bottom: 6px; }
   .fix-item p { font-size: 14px; color: var(--muted); }
 
+  .execution-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px; }
+  .execution-card { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+  .execution-card h4 { font-size: 14px; margin-bottom: 6px; color: var(--text); }
+  .execution-card p { font-size: 13px; color: var(--muted); }
+
   .semrush-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
   .semrush-card { background: var(--bg); border-radius: 8px; padding: 16px; text-align: center; }
   .semrush-card .value { font-size: 24px; font-weight: 700; }
@@ -127,6 +132,33 @@
       <div class="label">Améliorations proposées (6 SEO + 8 DL)</div>
     </div>
   </div>
+
+  <!-- Cadre d'exécution BLGCLOUD -->
+  <section>
+    <h2>Cadre d'exécution BLGCLOUD</h2>
+    <p>Ce rapport sert de base de travail pour l'équipe BLGCLOUD. Le périmètre couvre les points techniques : canonical, sitemap, robots, codes HTTP, redirections, performances, balisage schema, DataLayer et implémentation GTM.</p>
+    <p>Le rapport sépare la responsabilité d'exécution : BLGCLOUD corrige les défauts techniques. Papouille valide les livraisons et pilote les priorités métier.</p>
+
+    <div class="execution-grid">
+      <div class="execution-card">
+        <h4>P0 — Délai cible 14 jours</h4>
+        <p>Corriger canonical, aligner sitemap et og:url, nettoyer les URLs en erreur, poser noindex sur pages d'erreur.</p>
+      </div>
+      <div class="execution-card">
+        <h4>P1 — Délai cible 45 jours</h4>
+        <p>Corriger le balisage schema, réduire les erreurs 4xx/5xx, améliorer les performances templates et stabiliser les routes indexables.</p>
+      </div>
+      <div class="execution-card">
+        <h4>P2 — Délai cible 90 jours</h4>
+        <p>Fiabiliser DataLayer e-commerce, ajouter les tests de non-régression SEO et sécuriser la routine de recette avant mise en production.</p>
+      </div>
+    </div>
+
+    <div class="contourne">
+      <h4>Règle de preuve par ticket</h4>
+      <p>Chaque ticket BLGCLOUD doit inclure : URL testée, preuve avant/après, résultat du test et date de mise en production. Sans preuve, le ticket reste ouvert.</p>
+    </div>
+  </section>
 
   <!-- Contexte SEO -->
   <section>

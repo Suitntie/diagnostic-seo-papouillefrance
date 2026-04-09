@@ -1,0 +1,10 @@
+KPI,Definition,Source,Frequence,Valeur_initiale,Cible_30j,Cible_60j,Cible_90j,Valeur_actuelle,Tendance,Commentaire
+Canonical_vers_4xx,Nombre de pages avec canonical vers URL en erreur,Semrush/GSC,Hebdo,3656,<500,<100,0,,,
+URLs_sitemap_invalides,Nombre d'URLs en erreur dans sitemap,Semrush/GSC,Hebdo,2204,<500,<100,<2%,,,
+Erreurs_4xx,Nombre total d'erreurs 4xx internes,Semrush,Hebdo,3263,Baisse,Baisse,Baisse,,,
+Erreurs_5xx,Nombre de pages en erreur serveur,Semrush,Hebdo,29,Baisse,Baisse,Proche 0,,,
+Erreurs_schema,Pages avec erreurs structured data,Semrush,Hebdo,1452,Baisse,Baisse,Baisse,,,
+CLS_template,CLS moyen sur templates critiques,PageSpeed/GSC,Hebdo,0.32,<0.25,<0.18,<0.1,,,
+LCP_template,Temps LCP sur templates critiques,PageSpeed/GSC,Hebdo,"à améliorer",Baisse,Baisse,Baisse,,,
+View_cart_present,Présence event view_cart sur panier,GTM/GA4,Hebdo,Non,Oui,Oui,Oui,,,
+RemoveFromCart_valide,Event removeFromCart sans valeurs nulles,GTM/GA4,Hebdo,Non,Oui,Oui,Oui,,,
