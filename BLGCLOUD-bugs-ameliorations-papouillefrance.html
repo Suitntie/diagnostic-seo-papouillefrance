@@ -1131,8 +1131,27 @@
       <p><strong>Action BLGCLOUD :</strong> Modifier le générateur de sitemap pour exclure les articles ayant le tag <code>usertag_75b1o</code> (Non diffusé). Idéalement, appliquer la même logique de filtrage que le module e-shop : tout article exclu de l'affichage public doit être exclu du sitemap.</p>
     </div>
 
+    <div class="fix-item" style="border-left-color: var(--warning);">
+      <h4>BLG-9 — Hiérarchie Hn cassée sur les pages catégorie et fiches produit</h4>
+      <p><strong>Constat — pages de listing (~130 pages catégorie/sous-catégorie) :</strong> Les labels de la sidebar de filtrage (<em>Catégorie</em>, <em>Marque</em>, <em>Autres</em>) sont balisés en <code>&lt;h3&gt;</code>. Les noms des produits dans le listing ne sont dans aucune balise Hn — ils sont de simples liens texte. Un H3 vide est également présent (label sans texte).</p>
+      <p><strong>Résultat :</strong> La hiérarchie sémantique perçue par Google est : <code>H1 (catégorie) → H3 (Catégorie) → H3 (vide) → H3 (Marque) → H3 (Autres)</code>. Les filtres polluent la structure headings et les produits sont invisibles.</p>
+      <p><strong>Constat — fiches produit (~6 700 pages) :</strong> La hiérarchie est <code>H1 (nom produit) → H2 (sous-catégorie)</code> mais le <strong>H3 est absent</strong>. Le logo marque (<code>&lt;img class="actualBrand" alt="Sélection"&gt;</code>) n'est pas balisé en Hn. Il manque un H3 pour la marque avec un texte descriptif (pas juste une image).</p>
+      <p><strong>Impact SEO :</strong> Google utilise les balises Hn pour comprendre la structure du contenu. Sur les listings, il interprète les filtres comme le contenu principal. Sur les fiches produit, la hiérarchie est tronquée (H1 → H2, pas de H3).</p>
+      <p><strong>Action BLGCLOUD :</strong></p>
+      <ul>
+        <li><strong>Pages de listing :</strong> Remplacer les <code>&lt;h3&gt;</code> des filtres sidebar par des <code>&lt;span class="filter-title"&gt;</code> ou <code>&lt;label&gt;</code>. Baliser les noms de produits dans le listing en <code>&lt;h3&gt;</code>. Supprimer le H3 vide.</li>
+        <li><strong>Fiches produit (~6 700 pages) :</strong> La hiérarchie actuelle est <code>H1 (produit) → H2 (sous-catégorie)</code> puis plus rien. Ajouter :
+          <ul>
+            <li><code>&lt;h3&gt;</code> pour la <strong>marque</strong> — en texte lisible (ex : <code>&lt;h3&gt;Sélection Papouille&lt;/h3&gt;</code>), pas seulement un <code>&lt;img alt="Sélection"&gt;</code></li>
+            <li><code>&lt;h3&gt;</code> pour le bloc <strong>Caractéristiques</strong> (actuellement un simple texte en gras, pas balisé)</li>
+            <li><code>&lt;h3&gt;</code> pour la section <strong>Produits similaires</strong> / <strong>Vous aimerez aussi</strong> (le carrousel en bas de page)</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
     <!-- ===== RECAPITULATIF ===== -->
-    <h3>Récapitulatif — 8 corrections BLGCLOUD</h3>
+    <h3>Récapitulatif — 9 corrections BLGCLOUD</h3>
     <table>
       <thead>
         <tr><th>Ref</th><th>Action</th><th>Type</th><th>Volume</th><th>Priorité</th></tr>
@@ -1146,12 +1165,13 @@
         <tr><td>BLG-8</td><td>Sitemap pollué par articles « Non diffusé »</td><td>Sitemap</td><td>33 URLs</td><td class="priority-haute">Haute</td></tr>
         <tr><td>BLG-6</td><td>Open Graph incomplet (produits)</td><td>Template</td><td>6 712 pages</td><td class="priority-moyenne">Moyenne</td></tr>
         <tr><td>BLG-7</td><td>Hreflang absent</td><td>Template</td><td>Global</td><td class="priority-moyenne">Moyenne</td></tr>
+        <tr><td>BLG-9</td><td>Hiérarchie Hn cassée (listings : filtres en H3, produits sans Hn · fiches : H3 marque absent)</td><td>Template</td><td>~6 830 pages</td><td class="priority-haute">Haute</td></tr>
       </tbody>
     </table>
 
     <div class="contourne">
       <h4>Résumé pour l'équipe BLGCLOUD</h4>
-      <p>Ce rapport contient <strong>uniquement les 8 corrections qui nécessitent un développement BLGCLOUD</strong> (templates, routing, sitemap). Les corrections GTM / Analytics (DataLayer UA→GA4, purchase prix=0) et les corrections faisables par Papouille (API, contenu) sont traitées séparément par l'équipe Papouille.</p>
+      <p>Ce rapport contient <strong>uniquement les 9 corrections qui nécessitent un développement BLGCLOUD</strong> (templates, routing, sitemap). Les corrections GTM / Analytics (DataLayer UA→GA4, purchase prix=0) et les corrections faisables par Papouille (API, contenu) sont traitées séparément par l'équipe Papouille.</p>
     </div>
   </section>
 
