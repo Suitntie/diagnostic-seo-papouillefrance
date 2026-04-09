@@ -1,0 +1,19 @@
+Bonjour,
+
+Merci de prendre en charge le cahier des charges transmis ce jour.
+Ce plan couvre les correctifs SEO et tracking côté BLGCLOUD.
+
+Merci de confirmer sous 48h :
+- L'owner technique
+- Le planning de livraison
+- Le format de preuve fourni par ticket
+- La date du premier comité hebdo
+
+Cahier des charges :
+https://docs.google.com/document/d/1AzFaLL7u4Lx8G4MyaRRYWkklSRsGPL3JfQJ4vC2tE-Q/edit?usp=sharing
+
+Présentation Bugs & Améliorations SEO + DataLayer avec KPI :
+https://htmlpreview.github.io/?https://raw.githubusercontent.com/Suitntie/diagnostic-seo-papouillefrance/main/BLGCLOUD-bugs-ameliorations-papouillefrance.html
+
+Cordialement,
+Papouille
