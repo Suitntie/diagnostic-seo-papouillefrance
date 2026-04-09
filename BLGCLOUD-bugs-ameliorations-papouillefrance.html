@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bugs &amp; Améliorations SEO + DataLayer — BLGCLOUD / Papouille France</title>
+<style>
+  :root {
+    --primary: #1a73e8;
+    --success: #0d904f;
+    --danger: #d93025;
+    --warning: #e37400;
+    --bg: #f8f9fa;
+    --card: #ffffff;
+    --text: #202124;
+    --muted: #5f6368;
+    --border: #dadce0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .container { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
+
+  header { background: linear-gradient(135deg, #1a73e8 0%, #174ea6 100%); color: white; padding: 40px 0; margin-bottom: 32px; }
+  header .container { display: flex; justify-content: space-between; align-items: center; }
+  header h1 { font-size: 26px; font-weight: 600; }
+  header .subtitle { font-size: 15px; opacity: 0.9; margin-top: 4px; }
+  header .meta { font-size: 14px; opacity: 0.85; text-align: right; }
+  header .meta div { margin-bottom: 4px; }
+
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+  .badge-success { background: #e6f4ea; color: var(--success); }
+  .badge-danger { background: #fce8e6; color: var(--danger); }
+  .badge-warning { background: #fef7e0; color: var(--warning); }
+  .badge-info { background: #e8f0fe; color: var(--primary); }
+  .badge-muted { background: #f1f3f4; color: var(--muted); }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+  .kpi { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
+  .kpi .number { font-size: 36px; font-weight: 700; }
+  .kpi .label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .kpi.success .number { color: var(--success); }
+  .kpi.danger .number { color: var(--danger); }
+  .kpi.warning .number { color: var(--warning); }
+  .kpi.info .number { color: var(--primary); }
+
+  section { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 28px; margin-bottom: 24px; }
+  section h2 { font-size: 20px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--bg); }
+  section h3 { font-size: 16px; margin: 20px 0 10px; color: var(--primary); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  th { background: var(--bg); text-align: left; padding: 10px 12px; font-weight: 600; border-bottom: 2px solid var(--border); }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:hover { background: #f1f3f4; }
+
+  code { font-family: 'Consolas', 'Monaco', monospace; background: #e8f0fe; padding: 2px 6px; border-radius: 4px; font-size: 13px; }
+
+  .priority-critique { color: var(--danger); font-weight: 700; }
+  .priority-haute { color: var(--warning); font-weight: 700; }
+  .priority-moyenne { color: var(--primary); font-weight: 600; }
+  .priority-basse { color: var(--muted); font-weight: 600; }
+
+  .root-cause { background: #fef7e0; border: 1px solid #f9d67a; border-radius: 8px; padding: 20px; margin: 16px 0; }
+  .root-cause h4 { color: var(--warning); margin-bottom: 8px; }
+
+  .contourne { background: #e6f4ea; border: 1px solid #a8dab5; border-radius: 8px; padding: 20px; margin: 16px 0; }
+  .contourne h4 { color: var(--success); margin-bottom: 8px; }
+
+  .alerte-seo { background: #fce8e6; border: 1px solid #f5b7b1; border-radius: 8px; padding: 20px; margin: 16px 0; }
+  .alerte-seo h4 { color: var(--danger); margin-bottom: 8px; }
+
+  .fix-item { background: var(--bg); border-radius: 8px; padding: 16px; margin: 12px 0; border-left: 4px solid var(--primary); }
+  .fix-item h4 { font-size: 15px; margin-bottom: 6px; }
+  .fix-item p { font-size: 14px; color: var(--muted); }
+
+  .semrush-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+  .semrush-card { background: var(--bg); border-radius: 8px; padding: 16px; text-align: center; }
+  .semrush-card .value { font-size: 24px; font-weight: 700; }
+  .semrush-card .trend { font-size: 14px; margin-top: 2px; }
+  .semrush-card .trend.down { color: var(--danger); }
+  .semrush-card .trend.stable { color: var(--muted); }
+  .semrush-card .metric-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  footer { text-align: center; padding: 24px; color: var(--muted); font-size: 13px; }
+
+  @media (max-width: 768px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .semrush-grid { grid-template-columns: 1fr; }
+    header .container { flex-direction: column; text-align: center; }
+    header .meta { text-align: center; margin-top: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div>
+      <h1>Bugs &amp; Améliorations SEO + DataLayer</h1>
+      <p class="subtitle">Rapport à destination de BLGCLOUD — www.papouillefrance.com</p>
+    </div>
+    <div class="meta">
+      <div>Date : 9 avril 2026 — <strong>Mise à jour GA4 + Semrush Site Audit</strong></div>
+      <div>Source : Audit SEO + GSC + Semrush Site Audit + Ranxplorer + GA4 (09/04/2026)</div>
+      <div>Demandeur : Anthony Canavero — support@papouillefrance.com</div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- KPIs -->
+  <div class="kpi-grid">
+    <div class="kpi danger">
+      <div class="number">19/100</div>
+      <div class="label">Score Performance mobile (PageSpeed)</div>
+    </div>
+    <div class="kpi danger">
+      <div class="number">-42%</div>
+      <div class="label">Trafic organique (Semrush, 12 mois)</div>
+    </div>
+    <div class="kpi warning">
+      <div class="number">44</div>
+      <div class="label">Bugs identifiés (35 SEO + 9 DataLayer)</div>
+    </div>
+    <div class="kpi info">
+      <div class="number">14</div>
+      <div class="label">Améliorations proposées (6 SEO + 8 DL)</div>
+    </div>
+  </div>
+
+  <!-- Contexte SEO -->
+  <section>
+    <h2>Contexte SEO — Situation critique</h2>
+    <p>L'audit SEO technique du site <strong>papouillefrance.com</strong> révèle des problèmes structurels graves qui impactent directement le référencement naturel. Les données Semrush et <strong>Google Search Console</strong> confirment une <strong>dégradation continue du trafic organique</strong> :</p>
+
+    <div class="semrush-grid">
+      <div class="semrush-card">
+        <div class="value">25</div>
+        <div class="metric-label">Authority Score (Semrush)</div>
+      </div>
+      <div class="semrush-card">
+        <div class="value">7 200</div>
+        <div class="trend down">▼ -42 % sur 12 mois</div>
+        <div class="metric-label">Trafic organique (Semrush)</div>
+      </div>
+      <div class="semrush-card">
+        <div class="value">29 704</div>
+        <div class="trend down">▼ -26 % vs mois précédent</div>
+        <div class="metric-label">Trafic SEO estimé (Ranxplorer)</div>
+      </div>
+    </div>
+    <div class="semrush-grid">
+      <div class="semrush-card">
+        <div class="value">6 100</div>
+        <div class="trend down">▼ -8 % sur 12 mois</div>
+        <div class="metric-label">Mots-clés (Semrush)</div>
+      </div>
+      <div class="semrush-card">
+        <div class="value">14 527</div>
+        <div class="trend down">▼ -3 % vs mois précédent</div>
+        <div class="metric-label">Mots-clés (Ranxplorer)</div>
+      </div>
+      <div class="semrush-card">
+        <div class="value">1 719</div>
+        <div class="trend down">▼ -2 % vs mois précédent</div>
+        <div class="metric-label">URLs positionnées (Ranxplorer)</div>
+      </div>
+    </div>
+
+    <h3>Google Search Console — Indexation (au 06/04/2026)</h3>
+    <div class="semrush-grid">
+      <div class="semrush-card">
+        <div class="value" style="color: var(--success);">4 574</div>
+        <div class="metric-label">Pages indexées</div>
+      </div>
+      <div class="semrush-card">
+        <div class="value" style="color: var(--danger);">35 039</div>
+        <div class="metric-label">Pages NON indexées (88 %)</div>
+      </div>
+      <div class="semrush-card">
+        <div class="value" style="color: var(--danger);">3 656</div>
+        <div class="metric-label">Pages 404 (canonicals cassés)</div>
+      </div>
+    </div>
+    <div class="semrush-grid">
+      <div class="semrush-card">
+        <div class="value" style="color: var(--warning);">13 274</div>
+        <div class="metric-label">Bloquées par robots.txt</div>
+      </div>
+      <div class="semrush-card">
+        <div class="value" style="color: var(--warning);">10 850</div>
+        <div class="metric-label">Explorées, non indexées</div>
+      </div>
+      <div class="semrush-card">
+        <div class="value" style="color: var(--warning);">1 334</div>
+        <div class="metric-label">Canonical ignoré par Google</div>
+      </div>
+    </div>
+
+    <h3>Google Search Console — Performances (16 mois)</h3>
+    <div class="semrush-grid">
+      <div class="semrush-card">
+        <div class="value">186 082</div>
+        <div class="metric-label">Clics totaux</div>
+      </div>
+      <div class="semrush-card">
+        <div class="value" style="color: var(--danger);">1,6 %</div>
+        <div class="metric-label">CTR moyen</div>
+      </div>
+      <div class="semrush-card">
+        <div class="value" style="color: var(--warning);">16,9</div>
+        <div class="metric-label">Position moyenne (page 2)</div>
+      </div>
+    </div>
+    <p style="margin-top: 8px; font-size: 14px; color: var(--muted);">Le trafic est très majoritairement de marque : "papouille" (3 636 clics), "papouilles" (584), "papouille france" (249). La première requête non-brand ("poussette 4 places") ne génère que 106 clics sur 16 mois. Le trafic organique non-brand est quasi inexistant.</p>
+
+    <h3>Semrush Site Audit (07/04/2026)</h3>
+    <div class="semrush-grid">
+      <div class="semrush-card">
+        <div class="value" style="color: var(--danger);">60%</div>
+        <div class="trend down">▼ -13 pts vs précédent</div>
+        <div class="metric-label">Santé du site</div>
+      </div>
+      <div class="semrush-card">
+        <div class="value" style="color: var(--danger);">60%</div>
+        <div class="metric-label">Explorabilité</div>
+      </div>
+      <div class="semrush-card">
+        <div class="value" style="color: var(--danger);">3 242</div>
+        <div class="trend down">+3 239 vs précédent</div>
+        <div class="metric-label">Pages rompues</div>
+      </div>
+    </div>
+    <div class="semrush-grid">
+      <div class="semrush-card">
+        <div class="value" style="color: var(--danger);">14 622</div>
+        <div class="trend down">+12 793 erreurs</div>
+        <div class="metric-label">Erreurs totales</div>
+      </div>
+      <div class="semrush-card">
+        <div class="value" style="color: var(--success);">95%</div>
+        <div class="metric-label">HTTPS</div>
+      </div>
+      <div class="semrush-card">
+        <div class="value" style="color: var(--success);">97%</div>
+        <div class="metric-label">Balisage</div>
+      </div>
+    </div>
+
+    <h3>Google Analytics 4 — Données e-commerce (28 jours, 12 mars – 8 avril 2026)</h3>
+    <div class="semrush-grid">
+      <div class="semrush-card">
+        <div class="value">4 109</div>
+        <div class="metric-label">Sessions totales</div>
+      </div>
+      <div class="semrush-card">
+        <div class="value" style="color: var(--success);">1 507 €</div>
+        <div class="metric-label">Revenu total GA4</div>
+      </div>
+      <div class="semrush-card">
+        <div class="value">51</div>
+        <div class="metric-label">Événements clés (conversions)</div>
+      </div>
+    </div>
+    <div class="semrush-grid">
+      <div class="semrush-card">
+        <div class="value" style="color: var(--danger);">81 %</div>
+        <div class="metric-label">Revenu via canal "Unassigned"</div>
+      </div>
+      <div class="semrush-card">
+        <div class="value" style="color: var(--warning);">1 410</div>
+        <div class="metric-label">Sessions /cart (page panier)</div>
+      </div>
+      <div class="semrush-card">
+        <div class="value" style="color: var(--danger);">0,37 %</div>
+        <div class="metric-label">Taux de conversion global</div>
+      </div>
+    </div>
+
+    <div class="alerte-seo">
+      <h4>Alerte GA4 : 81 % du revenu attribué au canal "Unassigned" → attribution e-commerce cassée</h4>
+      <p>Sur 1 507 € de revenu GA4, <strong>1 225 € (81 %)</strong> sont attribués au canal "Unassigned" (source/medium non identifié). Ce canal ne représente que 4 % des sessions (180/4 109) mais concentre 58 % des conversions (30/51). Cela indique un <strong>problème d'attribution côté DataLayer</strong> : les événements <code>purchase</code> sont probablement envoyés sans session utilisateur liée (ex : callback serveur, page de confirmation rechargée, ou dataLayer poussé avant le tracking GA4). L'Organic Search, qui représente 23 % du trafic avec le meilleur engagement (1min55s, 71,6 %), ne génère que 281 € (18 % du CA). <strong>La correction du DataLayer e-commerce (bugs #1-#5) est indispensable pour fiabiliser l'attribution des revenus.</strong></p>
+    </div>
+
+    <div class="alerte-seo">
+      <h4>Alerte GA4 : page /cart — 1 410 sessions impactées par le bug removeFromCart</h4>
+      <p>La page panier (<code>/cart</code>) est la 3ème page la plus visitée du site (1 410 sessions/28j). Or le bug DataLayer #1 (removeFromCart avec valeurs nulles) et l'absence d'événement <code>view_cart</code> (bug #6) impactent directement l'analyse du funnel d'achat sur cette page. Avec 785 sessions sur <code>/checkout</code>, le taux d'abandon panier réel est impossible à mesurer sans ces corrections.</p>
+    </div>
+
+    <div class="alerte-seo">
+      <h4>Urgence : canonicals cassés → désindexation massive confirmée par GSC</h4>
+      <p>Toutes les fiches produit déclarent un <code>canonical</code> qui retourne une <strong>404</strong>. La Search Console confirme : <strong>3 656 pages 404</strong> (URLs courtes des canonicals), validation tentée le 09/02/2026 et <strong>échouée</strong> le 10/02/2026. En parallèle, <strong>1 334 pages</strong> ont un canonical ignoré par Google (il a choisi une autre URL). C'est la cause directe de la chute de trafic (-42 %). La correction de ce bug doit être la <strong>priorité absolue n°1</strong>.</p>
+    </div>
+
+    <p style="margin-top: 12px;">Ce rapport est destiné à l'équipe <strong>BLGCLOUD</strong> en charge du développement du site et de l'ERP. Il couvre uniquement les bugs liés au développement (SEO technique + DataLayer e-commerce). Les sujets de configuration (GTM, GA4, Merchant Center) sont gérés en interne par l'équipe Papouille.</p>
+  </section>
+
+  <!-- ===== PARTIE 1 : SEO ===== -->
+
+  <!-- BUGS SEO -->
+  <section>
+    <h2>🔴 Bugs SEO à corriger (priorité n°1)</h2>
+
+    <h3>Cannibalisation &amp; URLs</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:30px">#</th>
+          <th style="width:80px">Priorité</th>
+          <th style="width:120px">Composant</th>
+          <th>Bug / Problème</th>
+          <th>Comportement actuel</th>
+          <th>Comportement attendu</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>U1</strong></td>
+          <td><span class="priority-critique">CRITIQUE</span></td>
+          <td>Canonical</td>
+          <td>Toutes les URLs canonical des fiches produit pointent vers des pages 404</td>
+          <td>Chaque fiche produit est accessible via une URL longue avec chemin catégorie (ex : <code>/articles/repas-21/couverts-375/cuillere-5154</code>) mais déclare un <code>canonical</code> court sans catégorie (ex : <code>/articles/cuillere-5154</code>). <strong>Or cette URL courte retourne une 404.</strong> Google Search Console confirme : <strong>3 656 pages 404</strong> correspondant à ces URLs courtes (validation échouée le 10/02/2026). Pattern systémique sur l'ensemble du catalogue.</td>
+          <td>Deux options : (a) faire fonctionner les URLs courtes en canonical (redirection ou routage) ou (b) mettre l'URL longue (celle qui marche) comme canonical. Option (b) recommandée car plus simple.</td>
+        </tr>
+        <tr>
+          <td><strong>U2</strong></td>
+          <td><span class="priority-critique">CRITIQUE</span></td>
+          <td>Sitemap</td>
+          <td>Contradiction sitemap vs canonical</td>
+          <td>Le sitemap envoie à Google les URLs longues (qui fonctionnent) mais ces pages déclarent un canonical court (qui retourne 404). Google reçoit un signal contradictoire : le sitemap dit "indexe cette URL longue", mais la page dit "ma version canonique est cette URL courte qui n'existe pas".</td>
+          <td>Le sitemap et le canonical doivent pointer vers la même URL. Aligner les deux sur l'URL longue (fonctionnelle).</td>
+        </tr>
+        <tr>
+          <td><strong>U3</strong></td>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>Open Graph</td>
+          <td><code>og:url</code> ≠ <code>canonical</code> sur les fiches produit</td>
+          <td>Sur les fiches produit, <code>og:url</code> pointe vers l'URL longue (ex : <code>/articles/repas-21/couverts-375/cuillere-5154</code>) tandis que <code>canonical</code> pointe vers l'URL courte (<code>/articles/cuillere-5154</code>). Troisième signal contradictoire envoyé aux moteurs.</td>
+          <td><code>og:url</code> et <code>canonical</code> doivent pointer vers la même URL (l'URL longue fonctionnelle).</td>
+        </tr>
+        <tr>
+          <td><strong>U4</strong></td>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>Sitemap</td>
+          <td>Pages internes/administratives dans le sitemap</td>
+          <td>Le sitemap articles contient <strong>16 pages "frais de port"</strong>, <strong>15 pages "bon de réduction"</strong>, et <strong>2 pages "article épuisé/annulé"</strong>. Ces URLs internes (lignes comptables, remises, frais de livraison) sont indexables et visibles par Google. Elles redirigent vers <code>/articles</code> mais polluent le budget de crawl.</td>
+          <td>Exclure du sitemap toutes les URLs de type frais de port, bon de réduction, divers, articles épuisés. Ajouter un <code>noindex</code> sur ces pages ou les bloquer dans <code>robots.txt</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>U5</strong></td>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>Meta title</td>
+          <td>Page <code>/articles</code> : titre incohérent avec le contenu</td>
+          <td>La page principale de listing (<code>/articles</code>) a pour titre <strong>"Puériculture - Chaise haute bébé et Siège Repas"</strong> et pour meta description <code>'Vente Puériculture - Chaise haute bébé...'</code>. Le H1 est "Nos produits". Le title semble hérité d'une sous-catégorie au lieu d'être propre à la page.</td>
+          <td>Le titre doit refléter le contenu réel de la page (ex : "Tous nos produits — Papouille"). Le title et la meta description doivent être spécifiques à chaque page.</td>
+        </tr>
+        <tr>
+          <td><strong>U6</strong></td>
+          <td><span class="priority-moyenne">MOYENNE</span></td>
+          <td>Sitemap</td>
+          <td>Sitemap de 4 433 URLs pour ~3 200 produits</td>
+          <td>Le sitemap articles contient 4 433 URLs uniques (hors images) : 4 312 fiches produit + 109 catégories + 12 pages racine. Les catégories/sous-catégories sont mélangées avec les produits dans les mêmes fichiers sitemap. Certains produits obsolètes ou internes gonflent artificiellement le sitemap.</td>
+          <td>Séparer les sitemaps : un pour les catégories, un pour les produits actifs uniquement. Purger les articles épuisés, bons de réduction, frais de port.</td>
+        </tr>
+        <tr>
+          <td><strong>U7</strong></td>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>Routage / robots.txt</td>
+          <td>Routes backend BLGCLOUD accessibles et indexables (13 274 URLs bloquées)</td>
+          <td>Google Search Console détecte <strong>13 274 pages bloquées par robots.txt</strong>. Le <code>robots.txt</code> bloque <code>/sale*</code>, <code>/invoice*</code>, <code>/fleet*</code>, <code>/equipment*</code>, <code>/opportunity*</code>, <code>/configurator*</code>, <code>/extranet*</code>. Ces routes back-office ne devraient pas être visibles publiquement. Si Google les découvre, c'est que <strong>des liens internes pointent vers ces pages</strong> (menus, templates, ou scripts). Le commentaire <code># disallow indexing for now</code> dans le robots.txt suggère un blocage temporaire non résolu.</td>
+          <td>Bloquer l'accès à ces routes côté serveur (middleware ou firewall applicatif) pour les utilisateurs non connectés. Le robots.txt ne doit pas être la seule barrière. Identifier et supprimer les liens internes vers ces URLs. Retourner un code 403 (Forbidden) plutôt que de compter sur le robots.txt.</td>
+        </tr>
+        <tr>
+          <td><strong>U8</strong></td>
+          <td><span class="priority-moyenne">MOYENNE</span></td>
+          <td>Routage</td>
+          <td>URLs malformées avec paramètres encodés dans le chemin</td>
+          <td>Google Search Console détecte des URLs malformées de type <code>/articles/motricite-19/tapis-408%26title=papouillefrance.com</code> où un paramètre <code>&amp;title=</code> est encodé (<code>%26</code>) et collé dans le chemin au lieu d'être un query parameter. Ces URLs génèrent des pages en double avec canonical mismatch.</td>
+          <td>Identifier la source de ces URLs (backlinks malformés, script interne, ou bug de génération de liens) et mettre en place une redirection 301 vers l'URL propre. Ajouter une règle serveur pour nettoyer les URLs contenant <code>%26</code> dans le chemin.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Core Web Vitals &amp; Performance</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:30px">#</th>
+          <th style="width:80px">Priorité</th>
+          <th style="width:120px">Composant</th>
+          <th>Bug / Problème</th>
+          <th>Comportement actuel</th>
+          <th>Comportement attendu</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>S1</strong></td>
+          <td><span class="priority-critique">CRITIQUE</span></td>
+          <td>Performance</td>
+          <td>CLS (Cumulative Layout Shift) = 0,32</td>
+          <td>Le score CLS mesuré par PageSpeed Insights est de <strong>0,32</strong>. Le seuil "bon" est &lt; 0,1. Causes : images sans dimensions, chargement tardif d'éléments, décalages de mise en page. Google Search Console confirme : <strong>1 541 URLs desktop "à améliorer" + 28 lentes</strong> (vs mobile OK : 1 707 rapides). Le problème de performance est surtout côté <strong>desktop</strong>.</td>
+          <td>CLS &lt; 0,1. Ajouter <code>width</code> et <code>height</code> sur toutes les balises <code>&lt;img&gt;</code>, réserver l'espace des éléments dynamiques (banners, sliders), éviter les insertions tardives dans le DOM.</td>
+        </tr>
+        <tr>
+          <td><strong>S2</strong></td>
+          <td><span class="priority-critique">CRITIQUE</span></td>
+          <td>Performance</td>
+          <td>Score Performance mobile : 19/100</td>
+          <td>PageSpeed Insights affiche un score de <strong>19/100</strong> (données CrUX) et <strong>46/100</strong> (Lighthouse lab). Problèmes : 5 scripts synchrones bloquant le rendu, CSS inutilisé, JavaScript en double, Total Blocking Time de 800 ms.</td>
+          <td>Score &gt; 50 minimum. Différer les scripts non critiques (<code>defer</code>/<code>async</code>), supprimer le JS en double, purger le CSS inutilisé, optimiser les images (lazy loading, formats modernes WebP/AVIF).</td>
+        </tr>
+        <tr>
+          <td><strong>S3</strong></td>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>Viewport</td>
+          <td><code>user-scalable=no</code> bloque le zoom</td>
+          <td>La meta viewport contient <code>maximum-scale=1.0, user-scalable=no</code> qui empêche les utilisateurs de zoomer. Pénalisé par Google (accessibilité) et impacte le score Lighthouse.</td>
+          <td>Retirer <code>maximum-scale=1.0</code> et <code>user-scalable=no</code>. Viewport : <code>width=device-width, initial-scale=1.0</code> uniquement.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Balisage structuré (Schema.org)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:30px">#</th>
+          <th style="width:80px">Priorité</th>
+          <th style="width:120px">Composant</th>
+          <th>Bug / Problème</th>
+          <th>Comportement actuel</th>
+          <th>Comportement attendu</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>S4</strong></td>
+          <td><span class="priority-critique">CRITIQUE</span></td>
+          <td>Schema.org</td>
+          <td><code>availability</code> : valeur texte au lieu d'URL schema.org</td>
+          <td>Sur les fiches produit, <code>itemprop="availability"</code> contient le texte <strong>"en stock !"</strong>. Google exige une URL schema.org pour comprendre la disponibilité.</td>
+          <td>Utiliser les URLs : <code>https://schema.org/InStock</code>, <code>https://schema.org/OutOfStock</code>, <code>https://schema.org/PreOrder</code> selon le cas. <strong>Cause directe du rejet de 599 produits dans Merchant Center.</strong></td>
+        </tr>
+        <tr>
+          <td><strong>S5</strong></td>
+          <td><span class="priority-critique">CRITIQUE</span></td>
+          <td>Schema.org</td>
+          <td><code>itemCondition</code> : valeurs invalides "Destock" et "CE"</td>
+          <td><code>itemprop="itemCondition"</code> contient <strong>"Destock"</strong> ou <strong>"CE"</strong> au lieu d'URLs schema.org. Google ne peut pas interpréter l'état du produit.</td>
+          <td>Utiliser : <code>https://schema.org/NewCondition</code>, <code>https://schema.org/UsedCondition</code> ou <code>https://schema.org/RefurbishedCondition</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>S6</strong></td>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>Schema.org</td>
+          <td>Aucun JSON-LD sur aucune page</td>
+          <td>Le site utilise uniquement des microdata HTML (ancien format). Aucun script <code>application/ld+json</code> n'est présent sur la homepage, les catégories, ni les fiches produit.</td>
+          <td>Ajouter du JSON-LD <code>Product</code> sur chaque fiche produit, <code>BreadcrumbList</code> et <code>Organization</code> / <code>WebSite</code> sur la homepage. Google recommande le JSON-LD plutôt que les microdata.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Balises HTML &amp; Meta</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:30px">#</th>
+          <th style="width:80px">Priorité</th>
+          <th style="width:120px">Composant</th>
+          <th>Bug / Problème</th>
+          <th>Comportement actuel</th>
+          <th>Comportement attendu</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>S7</strong></td>
+          <td><span class="priority-critique">CRITIQUE</span></td>
+          <td>HTML</td>
+          <td>Homepage : aucune balise <code>&lt;h1&gt;</code></td>
+          <td>La page d'accueil n'a <strong>aucune balise H1</strong>. Les seuls headings sont des H2 ("Promotion", "Destockage"), H3, H4 et H5 utilisés de façon désordonnée. Le contenu principal est en H4/H5.</td>
+          <td>Ajouter un <code>&lt;h1&gt;</code> unique et descriptif sur la homepage (ex : "Papouille — Matériel de puériculture pour crèches et collectivités"). Respecter la hiérarchie H1 &gt; H2 &gt; H3.</td>
+        </tr>
+        <tr>
+          <td><strong>S9</strong></td>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>Meta</td>
+          <td>Meta descriptions avec guillemets mal échappés</td>
+          <td>Les meta descriptions contiennent des guillemets simples d'encadrement et des doubles guillemets simples d'échappement : <code>'De // moustiquaire...d''éveil sur mesure'</code>. Cela s'affiche tel quel dans les résultats Google.</td>
+          <td>Générer les meta descriptions sans guillemets d'encadrement et avec un échappement HTML correct.</td>
+        </tr>
+        <tr>
+          <td><strong>S10</strong></td>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>Meta</td>
+          <td>Page 404 : <code>robots</code> à <code>index, follow</code></td>
+          <td>La page d'erreur 404 a la meta <code>&lt;meta name="robots" content="index, follow"&gt;</code>. Les pages d'erreur indexables polluent l'index Google et gaspillent le budget de crawl.</td>
+          <td>Mettre <code>&lt;meta name="robots" content="noindex"&gt;</code> sur toutes les pages d'erreur (404, 500, etc.).</td>
+        </tr>
+        <tr>
+          <td><strong>S11</strong></td>
+          <td><span class="priority-moyenne">MOYENNE</span></td>
+          <td>Meta</td>
+          <td><code>og:type</code> = "website" sur les fiches produit</td>
+          <td>Toutes les pages (y compris les fiches produit) ont <code>og:type = "website"</code>. Les fiches produit devraient être identifiées comme des produits pour un meilleur affichage sur les réseaux sociaux.</td>
+          <td>Mettre <code>og:type = "product"</code> sur les fiches produit et ajouter les attributs OG produit (<code>product:price:amount</code>, <code>product:price:currency</code>).</td>
+        </tr>
+        <tr>
+          <td><strong>S12</strong></td>
+          <td><span class="priority-moyenne">MOYENNE</span></td>
+          <td>HTML</td>
+          <td>IDs dupliqués dans le DOM</td>
+          <td>Plusieurs éléments partagent le même attribut <code>id</code> (ex : <code>id="5153"</code>, <code>id="js-article-price-5153"</code> apparaissent 2 fois). Les IDs doivent être uniques par spécification HTML.</td>
+          <td>S'assurer que chaque <code>id</code> est unique dans la page. Utiliser des classes CSS ou des <code>data-*</code> attributs pour les éléments répétés.</td>
+        </tr>
+        <tr>
+          <td><strong>S13</strong></td>
+          <td><span class="priority-basse">BASSE</span></td>
+          <td>Meta</td>
+          <td>Pas de balises <code>twitter:card</code></td>
+          <td>Aucune page du site ne contient de balise <code>twitter:card</code>. Le partage sur Twitter/X ne génère pas de carte enrichie.</td>
+          <td>Ajouter <code>&lt;meta name="twitter:card" content="summary_large_image"&gt;</code> + <code>twitter:title</code>, <code>twitter:description</code>, <code>twitter:image</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>S14</strong></td>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>Images</td>
+          <td>Images internes cassées (404)</td>
+          <td>Semrush Site Audit détecte <strong>800 images internes cassées</strong> : ces images sont référencées dans le HTML (balises <code>&lt;img&gt;</code>, CSS, etc.) mais retournent un 404. Google et les utilisateurs ne peuvent pas voir ces éléments visuels.</td>
+          <td>Nettoyer les références vers les images supprimées ou missing. Mettre en place une image par défaut (placeholder) pour les images manquantes. Vérifier que le chemin d'accès aux images (CDN, répertoire static) est correct dans BLGCLOUD.</td>
+        </tr>
+        <tr>
+          <td><strong>S15</strong></td>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>Serveur</td>
+          <td>Erreurs serveur 5xx</td>
+          <td>Semrush Site Audit détecte <strong>29 pages retournant des erreurs serveur 5xx</strong> (500 Internal Server Error, 502 Bad Gateway, 503 Service Unavailable). Ces pages ne sont pas accessibles et générent une mauvaise expérience utilisateur.</td>
+          <td>Investiguer les logs serveur pour identifier la cause des erreurs 5xx (timeout, exception non gérée, crash de processus, manque de ressources). Corriger les bugs sous-jacents côté BLGCLOUD et ajouter du monitoring pour détecter ces erreurs en production.</td>
+        </tr>
+        <tr>
+          <td><strong>S16</strong></td>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>HTML / Liens</td>
+          <td>Attribut <code>nofollow</code> sur tous les liens internes</td>
+          <td>Semrush Site Audit détecte <strong>3 577 pages</strong> avec des liens internes portant l'attribut <code>rel="nofollow"</code>. Cela empêche le transfert de PageRank entre les pages du site et bloque Googlebot pour le crawl de ces liens. C'est probablement un attribut ajouté globalement par le template BLGCLOUD.</td>
+          <td>Retirer l'attribut <code>rel="nofollow"</code> de tous les liens internes. Les liens internes doivent être "dofollow" par défaut pour permettre le crawl et la transmission de PageRank. Vérifier le template de génération des liens dans BLGCLOUD.</td>
+        </tr>
+        <tr>
+          <td><strong>S17</strong></td>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>Protocole</td>
+          <td>Liens internes en HTTP au lieu de HTTPS</td>
+          <td>Semrush Site Audit détecte <strong>3 577 pages</strong> contenant des liens pointant vers des pages HTTP du même site au lieu de HTTPS. Google considère HTTP et HTTPS comme deux URLs distinctes. Cela provoque des redirections inutiles (301 de HTTP vers HTTPS) et dilue le PageRank.</td>
+          <td>Tous les liens internes doivent utiliser le protocole HTTPS. Vérifier les templates de génération d'URL dans BLGCLOUD et s'assurer que la configuration du <code>base_url</code> ou du <code>app_url</code> est définie en HTTPS. Utiliser des URLs relatives ou des fonctions de génération d'URL qui respectent le protocole courant.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Nouveaux bugs Semrush Site Audit (08/04/2026)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:30px">#</th>
+          <th style="width:80px">Priorité</th>
+          <th style="width:120px">Composant</th>
+          <th>Bug / Problème</th>
+          <th>Comportement actuel</th>
+          <th>Comportement attendu</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>S18</strong></td>
+          <td><span class="priority-critique">CRITIQUE</span></td>
+          <td>Liens internes</td>
+          <td>3 286 liens internes cassés (snapshot Semrush 08/04)</td>
+          <td>Semrush détecte <strong>3 286 liens internes cassés</strong> sur 520 324 liens totaux. Explosion depuis le dernier audit (+3 295). Ces liens pointent vers des pages supprimées/archivées. Le maillage interne est sévèrement endommagé : Google crawle des centaines de 404 à chaque passage.</td>
+          <td>Le CMS doit vérifier automatiquement les liens lors de l'archivage d'un produit. Implémenter un nettoyage des liens orphelins dans les templates (liens "produits similaires", breadcrumb, menus).</td>
+        </tr>
+        <tr>
+          <td><strong>S19</strong></td>
+          <td><span class="priority-critique">CRITIQUE</span></td>
+          <td>Pages</td>
+          <td>3 263 erreurs 4xx (snapshot Semrush 08/04)</td>
+          <td>Semrush détecte <strong>3 263 pages en erreur 4xx</strong> (principalement 404). Augmentation massive de +3 208 depuis le dernier audit. Chaque page 404 accessible via un lien interne gaspille le crawl budget de Google.</td>
+          <td>Identifier et traiter les 3 263 URLs 404 : soit les supprimer du maillage, soit créer des redirections 301 vers la sous-catégorie parente. Mettre en place un monitoring automatique des 404.</td>
+        </tr>
+        <tr>
+          <td><strong>S20</strong></td>
+          <td><span class="priority-critique">CRITIQUE</span></td>
+          <td>Sitemap</td>
+          <td>2 204 pages incorrectes dans le sitemap (snapshot Semrush 08/04)</td>
+          <td>Semrush détecte <strong>2 204 URLs</strong> dans le sitemap qui pointent vers des pages en erreur ou inexistantes (sur 2 348 URLs au total). <strong>93 % du sitemap est pollué</strong> par des URLs mortes. Google crawle massivement des pages inaccessibles.</td>
+          <td>Régénérer le sitemap en excluant automatiquement les produits archivés, les URLs en 404 et les redirections. Le sitemap ne doit contenir que les URLs actives retournant un code 200.</td>
+        </tr>
+        <tr>
+          <td><strong>S21</strong></td>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>Meta title</td>
+          <td>127 groupes de balises title dupliquées (-118 vs dernier audit)</td>
+          <td>Semrush détecte <strong>127 groupes de pages</strong> partageant le même title tag (sur 2 607 462 combinaisons analysées). Cannibalisation SEO : Google ne peut pas différencier ces pages dans les SERP.</td>
+          <td>Chaque page doit avoir un title unique. Template suggéré : <code>[Nom produit] - [Sous-famille] | Papouille</code>. Modifier le générateur de balise title dans le CMS.</td>
+        </tr>
+        <tr>
+          <td><strong>S22</strong></td>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>Meta description</td>
+          <td>131 groupes de meta descriptions dupliquées</td>
+          <td>Semrush détecte <strong>131 groupes de pages</strong> partageant la même meta description. Les meta descriptions dupliquées réduisent le CTR dans les SERP car Google peut choisir de ne pas les afficher.</td>
+          <td>Générer des meta descriptions dynamiques à partir des données produit. Template : <code>[Nom produit] pour crèche et collectivité. [Caractéristique clé]. Devis gratuit sur Papouille.</code></td>
+        </tr>
+        <tr>
+          <td><strong>S23</strong></td>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>Contenu</td>
+          <td>115 pages avec contenu dupliqué (-77 vs dernier audit)</td>
+          <td>Semrush détecte <strong>115 pages</strong> ayant un contenu identique ou quasi-identique. Risque de cannibalisation : Google choisit arbitrairement quelle page positionner, souvent la mauvaise.</td>
+          <td>Le CMS doit rendre impossible la création de fiches produit avec une description identique. Alerter l'utilisateur back-office si le contenu est trop similaire à une page existante.</td>
+        </tr>
+        <tr>
+          <td><strong>S24</strong></td>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>Schema.org</td>
+          <td>1 452 pages avec erreurs de structured data (snapshot Semrush 08/04)</td>
+          <td>Semrush détecte <strong>1 452 pages</strong> contenant des données structurées avec des erreurs de balisage (sur 59 013 pages analysées). En augmentation de +304 depuis le dernier audit. Google Rich Results ne s'affichent pas.</td>
+          <td>Corriger le template JSON-LD/microdata : champs obligatoires manquants (price, availability en URL schema.org, image), types de valeurs incorrects. Valider avec le Rich Results Test de Google.</td>
+        </tr>
+        <tr>
+          <td><strong>S25</strong></td>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>Meta title</td>
+          <td>678 titres trop longs (>60 caractères)</td>
+          <td>Semrush détecte <strong>678 pages</strong> avec un title tag dépassant 60 caractères. Google tronque ces titles dans les SERP avec "...", réduisant le CTR et la lisibilité.</td>
+          <td>Limiter la génération automatique du title à 60 caractères max dans le template CMS. Prioriser le nom du produit et la marque.</td>
+        </tr>
+        <tr>
+          <td><strong>S26</strong></td>
+          <td><span class="priority-moyenne">MOYENNE</span></td>
+          <td>Performance</td>
+          <td>26 pages HTML trop lourdes (-23 vs dernier audit)</td>
+          <td>Semrush détecte <strong>26 pages</strong> avec un HTML dépassant 3 MB. Ces pages ralentissent le temps de chargement et le crawl de Google.</td>
+          <td>Optimiser le rendu serveur : paginer les données JSON inline, lazy load des composants, réduire la taille du DOM.</td>
+        </tr>
+        <tr>
+          <td><strong>S27</strong></td>
+          <td><span class="priority-moyenne">MOYENNE</span></td>
+          <td>Maillage</td>
+          <td>842 pages avec un seul lien interne entrant (+58 vs dernier audit)</td>
+          <td>Semrush détecte <strong>842 pages</strong> qui ne reçoivent qu'un seul lien interne. Ces pages sont quasi-orphelines : Google les découvre difficilement et leur attribue peu de PageRank.</td>
+          <td>Ajouter des liens contextuels "produits similaires", "même catégorie", "les clients ont aussi consulté" dans le template fiche produit.</td>
+        </tr>
+        <tr>
+          <td><strong>S28</strong></td>
+          <td><span class="priority-moyenne">MOYENNE</span></td>
+          <td>HTML sémantique</td>
+          <td>697 pages avec faible usage du HTML sémantique (+697, nouveau)</td>
+          <td>Semrush détecte <strong>697 pages</strong> n'utilisant pas correctement les balises HTML5 sémantiques (<code>&lt;article&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;aside&gt;</code>, <code>&lt;main&gt;</code>). Google utilise la structure sémantique pour comprendre le contenu.</td>
+          <td>Restructurer les templates avec des balises HTML5 sémantiques : <code>&lt;main&gt;</code> pour le contenu principal, <code>&lt;nav&gt;</code> pour la navigation, <code>&lt;article&gt;</code> pour les fiches produit.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="root-cause">
+      <h4>Impact cumulé des bugs SEO</h4>
+      <p>Les bugs U1 et U2 (canonicals → 404) provoquent la désindexation progressive de l'ensemble du catalogue produit. Le Semrush Site Audit du 08/04/2026 confirme une explosion des erreurs : <strong>3 286 liens cassés, 3 263 erreurs 4xx, 3 282 canonical cassés, 2 204 pages mortes dans le sitemap, 1 452 erreurs structured data</strong> (snapshot MCP 08/04/2026). Combinés au score Performance de 19/100 et au CLS de 0,32, ces problèmes expliquent la <strong>chute de 42 % du trafic organique</strong> (Semrush) et la <strong>baisse de 26 % du trafic SEO</strong> (Ranxplorer, 29 704/mois). GSC confirme : les pages indexées sont passées de 1 255 à 806 entre janvier et avril 2026 (<strong>-36 %</strong>). La correction des canonicals, du sitemap et des liens internes doit être traitée en <strong>urgence absolue</strong>.</p>
+    </div>
+  </section>
+
+  <!-- AMÉLIORATIONS SEO -->
+  <section>
+    <h2>Améliorations SEO recommandées</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width:30px">#</th>
+          <th style="width:80px">Priorité</th>
+          <th style="width:120px">Composant</th>
+          <th>Amélioration</th>
+          <th>Description</th>
+          <th style="width:90px">Effort</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>S1</strong></td>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>Performance</td>
+          <td>Passer tous les scripts en <code>defer</code> ou <code>async</code></td>
+          <td>Actuellement 5 scripts synchrones bloquent le rendu de la page. Les scripts non critiques (analytics, chat, pop-in) doivent être chargés en <code>defer</code>. Réduirait le Total Blocking Time de 800 ms.</td>
+          <td><span class="badge badge-warning">Moyen</span></td>
+        </tr>
+        <tr>
+          <td><strong>S2</strong></td>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>Performance</td>
+          <td>Ajouter <code>width</code>/<code>height</code> sur toutes les images</td>
+          <td>Les images sans dimensions explicites provoquent des décalages de mise en page (CLS). Seules 4 images sur 57 ont le <code>loading="lazy"</code>. Ajouter les dimensions et le lazy loading sur toutes les images below-the-fold.</td>
+          <td><span class="badge badge-warning">Moyen</span></td>
+        </tr>
+        <tr>
+          <td><strong>S3</strong></td>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>Schema.org</td>
+          <td>Ajouter le JSON-LD <code>Product</code> sur les fiches produit</td>
+          <td>En complément des microdata existantes, ajouter un bloc <code>&lt;script type="application/ld+json"&gt;</code> avec le schema <code>Product</code> complet : name, image, description, sku, brand, offers (price, priceCurrency, availability en URL schema.org). Cela améliore les rich snippets Google.</td>
+          <td><span class="badge badge-warning">Moyen</span></td>
+        </tr>
+        <tr>
+          <td><strong>S4</strong></td>
+          <td><span class="priority-moyenne">MOYENNE</span></td>
+          <td>Performance</td>
+          <td>Supprimer les CSS et JS inutilisés</td>
+          <td>Lighthouse détecte des ressources CSS et JavaScript inutilisées qui alourdissent le chargement. Identifier et supprimer ou différer les fichiers non nécessaires au rendu initial. 188 styles inline détectés — préférer des classes CSS.</td>
+          <td><span class="badge badge-danger">Élevé</span></td>
+        </tr>
+        <tr>
+          <td><strong>S5</strong></td>
+          <td><span class="priority-moyenne">MOYENNE</span></td>
+          <td>Schema.org</td>
+          <td>Ajouter <code>Organization</code> et <code>WebSite</code> en JSON-LD sur la homepage</td>
+          <td>Ajouter un JSON-LD <code>Organization</code> (nom, logo, contact, réseaux sociaux) et <code>WebSite</code> (avec <code>SearchAction</code> pour le sitelinks searchbox) sur la homepage.</td>
+          <td><span class="badge badge-success">Faible</span></td>
+        </tr>
+        <tr>
+          <td><strong>S6</strong></td>
+          <td><span class="priority-basse">BASSE</span></td>
+          <td>Sitemap</td>
+          <td>Ajouter <code>priority</code> et <code>changefreq</code> au sitemap</td>
+          <td>Le sitemap XML est bien structuré (index + sous-sitemaps avec lastmod) mais ne contient ni <code>priority</code> ni <code>changefreq</code>. Bien que non obligatoire, cela aide Google à prioriser le crawl.</td>
+          <td><span class="badge badge-success">Faible</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ===== PARTIE 2 : DATALAYER ===== -->
+
+  <!-- Contexte DataLayer -->
+  <section>
+    <h2>Contexte DataLayer (e-commerce)</h2>
+    <p>Les bugs ci-dessous ont été identifiés lors de l'audit du conteneur GTM (<code>GTM-PNR2PTM</code>) et de la migration e-commerce GA4 du site. Ils concernent le code dataLayer côté serveur (BLGCLOUD).</p>
+    <p style="margin-top: 12px;">Certains problèmes ont été <strong>contournés côté GTM</strong> (variables Custom JavaScript) mais nécessitent une correction côté serveur pour une solution pérenne.</p>
+
+    <div class="contourne">
+      <h4>Éléments déjà contournés côté GTM</h4>
+      <p>Les points suivants fonctionnent grâce à des variables GTM mais restent à corriger côté BLGCLOUD pour une meilleure fiabilité :</p>
+      <ul style="margin-top: 8px; padding-left: 20px; font-size: 14px; color: var(--muted);">
+        <li><strong>Format UA → GA4 :</strong> Variable <code>cjs_ua_to_ga4_items</code> convertit le format Universal Analytics en GA4 items.</li>
+        <li><strong>Frais de port :</strong> Filtrés automatiquement (exclusion des produits avec <code>id: null</code>).</li>
+        <li><strong>currencyCode manquant :</strong> Constante <code>const_Currency = "EUR"</code> utilisée en remplacement.</li>
+        <li><strong>Calcul du value :</strong> Variable <code>cjs_ecom_value</code> calcule le total à partir des produits.</li>
+        <li><strong>remove_from_cart :</strong> Tag GA4 créé avec les mêmes variables de conversion (Version 712).</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- BUGS DataLayer -->
+  <section>
+    <h2>Bugs DataLayer à corriger</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width:30px">#</th>
+          <th style="width:80px">Priorité</th>
+          <th style="width:120px">Composant</th>
+          <th>Bug / Problème</th>
+          <th>Comportement actuel</th>
+          <th>Comportement attendu</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1</strong></td>
+          <td><span class="priority-critique">CRITIQUE</span></td>
+          <td>DataLayer</td>
+          <td><code>removeFromCart</code> — données nulles sur <code>/cart</code></td>
+          <td>Quand on supprime un produit depuis la page panier, l'événement <code>removeFromCart</code> pousse <code>ecommerce.remove.products</code> avec toutes les valeurs à <code>null</code> (id, name, brand, category, price, quantity).</td>
+          <td>L'objet <code>products[]</code> doit contenir les vraies données du produit supprimé (id, name, brand, category, price, quantity).</td>
+        </tr>
+        <tr>
+          <td><strong>2</strong></td>
+          <td><span class="priority-critique">CRITIQUE</span></td>
+          <td>DataLayer</td>
+          <td><code>removeFromCart</code> — <code>price: 0</code> sur fiches produit</td>
+          <td>Quand on retire un produit depuis sa fiche article, l'événement <code>removeFromCart</code> envoie <code>price: "0"</code> alors que les autres champs (id, name, brand, category) sont corrects.</td>
+          <td>Le champ <code>price</code> doit contenir le prix réel du produit (Number, HT ou TTC selon la convention du site).</td>
+        </tr>
+        <tr>
+          <td><strong>3</strong></td>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>DataLayer</td>
+          <td>"Frais de port" injecté comme produit</td>
+          <td>Dans les événements <code>checkout</code> et <code>purchase</code>, les frais de port sont ajoutés comme un élément du tableau <code>products[]</code> avec <code>id: null</code> et <code>name: "Frais de port"</code>.</td>
+          <td>Les frais de port doivent être envoyés dans le champ dédié <code>actionField.shipping</code> et ne pas apparaître dans le tableau <code>products[]</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>4</strong></td>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>DataLayer</td>
+          <td><code>currencyCode</code> absent de la majorité des événements</td>
+          <td>Le champ <code>ecommerce.currencyCode</code> n'est présent que dans l'événement <code>addToCart</code>. Il est absent de <code>productImpressions</code>, <code>productDetailsViews</code>, <code>removeFromCart</code>, <code>checkout</code> et <code>purchase</code>.</td>
+          <td>Chaque événement e-commerce doit inclure <code>ecommerce.currencyCode: "EUR"</code> conformément à la spec Enhanced Ecommerce.</td>
+        </tr>
+        <tr>
+          <td><strong>5</strong></td>
+          <td><span class="priority-moyenne">MOYENNE</span></td>
+          <td>DataLayer</td>
+          <td>Format dataLayer Universal Analytics obsolète</td>
+          <td>Tous les événements e-commerce utilisent le format Enhanced Ecommerce UA (<code>ecommerce.detail.products</code>, <code>ecommerce.add.products</code>, etc.) qui est obsolète depuis juillet 2024.</td>
+          <td>Migrer vers le format natif GA4 (<code>ecommerce.items[]</code> avec <code>item_id</code>, <code>item_name</code>, etc.) pour supprimer la dépendance aux variables de conversion GTM.</td>
+        </tr>
+        <tr>
+          <td><strong>6</strong></td>
+          <td><span class="priority-moyenne">MOYENNE</span></td>
+          <td>DataLayer</td>
+          <td>Aucun événement <code>view_cart</code> sur <code>/cart</code></td>
+          <td>La page panier (<code>/cart</code>) ne pousse aucun événement <code>view_cart</code> dans le dataLayer. Le seul événement présent est <code>removeFromCart</code> (avec des données nulles — cf. bug #1).</td>
+          <td>Un événement <code>view_cart</code> doit être poussé au chargement de la page panier avec la liste des produits présents dans le panier, leur quantité et le total.</td>
+        </tr>
+        <tr>
+          <td><strong>7</strong></td>
+          <td><span class="priority-basse">BASSE</span></td>
+          <td>DataLayer</td>
+          <td>Pas d'événement <code>productClick</code> / <code>select_item</code></td>
+          <td>Aucun événement n'est déclenché quand l'utilisateur clique sur un produit dans une liste (catégorie, recherche, etc.).</td>
+          <td>Un événement <code>select_item</code> (ou <code>productClick</code> en UA) doit être poussé au clic sur un produit dans une liste, avec l'index et la liste d'origine.</td>
+        </tr>
+        <tr>
+          <td><strong>8</strong></td>
+          <td><span class="priority-basse">BASSE</span></td>
+          <td>DataLayer</td>
+          <td>Pas d'événement <code>add_payment_info</code></td>
+          <td>Aucun événement n'est déclenché quand l'utilisateur sélectionne ou valide son moyen de paiement au checkout.</td>
+          <td>Un événement <code>add_payment_info</code> doit être poussé avec le type de paiement (<code>payment_type</code>) et les articles du panier.</td>
+        </tr>
+        <tr>
+          <td><strong>9</strong></td>
+          <td><span class="priority-basse">BASSE</span></td>
+          <td>DataLayer</td>
+          <td>Pas d'événement <code>refund</code></td>
+          <td>Aucun mécanisme n'est en place pour pousser un événement <code>refund</code> (total ou partiel) dans le dataLayer.</td>
+          <td>Un événement <code>refund</code> doit être poussé (côté serveur ou via page de confirmation) avec le <code>transaction_id</code> et, en cas de remboursement partiel, les articles concernés.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="root-cause">
+      <h4>Impact des bugs critiques (#1 et #2)</h4>
+      <p>Le tag GA4 <code>remove_from_cart</code> (Version 712) est actif mais envoie des données incomplètes ou nulles à cause de ces bugs côté dataLayer. Les rapports GA4 "Comportement d'achat" seront faussés pour l'étape "Suppression du panier". La correction côté BLGCLOUD est indispensable pour que le tracking soit fiable.</p>
+    </div>
+  </section>
+
+  <!-- AMÉLIORATIONS DataLayer -->
+  <section>
+    <h2>Améliorations DataLayer recommandées</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width:30px">#</th>
+          <th style="width:80px">Priorité</th>
+          <th style="width:120px">Composant</th>
+          <th>Amélioration</th>
+          <th>Description</th>
+          <th style="width:90px">Effort</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1</strong></td>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>DataLayer</td>
+          <td>Migrer le dataLayer vers le format GA4 natif</td>
+          <td>Remplacer le format Enhanced Ecommerce UA (<code>ecommerce.add.products[]</code>) par le format GA4 (<code>ecommerce.items[]</code> avec <code>item_id</code>, <code>item_name</code>, <code>item_brand</code>, etc.). Permettrait de supprimer les variables de conversion <code>cjs_ua_to_ga4_items</code> et <code>cjs_ecom_value</code> côté GTM.</td>
+          <td><span class="badge badge-warning">Moyen</span></td>
+        </tr>
+        <tr>
+          <td><strong>2</strong></td>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>DataLayer</td>
+          <td>Ajouter <code>transaction_id</code> et <code>shipping</code> dans purchase</td>
+          <td>S'assurer que l'événement <code>purchase</code> inclut <code>actionField.shipping</code> (montant des frais de port) et un <code>transaction_id</code> unique. Actuellement les frais de port sont dans <code>products[]</code> et non dans <code>actionField</code>.</td>
+          <td><span class="badge badge-success">Faible</span></td>
+        </tr>
+        <tr>
+          <td><strong>3</strong></td>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>DataLayer</td>
+          <td>Ajouter <code>tax</code> dans les événements checkout/purchase</td>
+          <td>Inclure le montant de la TVA dans <code>actionField.tax</code> pour les événements <code>checkout</code> et <code>purchase</code> afin de permettre l'analyse HT/TTC dans GA4.</td>
+          <td><span class="badge badge-success">Faible</span></td>
+        </tr>
+        <tr>
+          <td><strong>4</strong></td>
+          <td><span class="priority-moyenne">MOYENNE</span></td>
+          <td>DataLayer</td>
+          <td>Ajouter l'événement <code>view_cart</code></td>
+          <td>Pousser un événement <code>view_cart</code> au chargement de la page panier (<code>/cart</code>) avec la liste complète des produits, quantités et le total du panier. Permet d'analyser le funnel complet dans GA4.</td>
+          <td><span class="badge badge-success">Faible</span></td>
+        </tr>
+        <tr>
+          <td><strong>5</strong></td>
+          <td><span class="priority-moyenne">MOYENNE</span></td>
+          <td>DataLayer</td>
+          <td>Ajouter l'événement <code>select_item</code></td>
+          <td>Pousser un événement <code>select_item</code> (ou <code>productClick</code>) quand un utilisateur clique sur un produit dans une liste. Inclure <code>item_list_name</code> et l'index du produit cliqué.</td>
+          <td><span class="badge badge-warning">Moyen</span></td>
+        </tr>
+        <tr>
+          <td><strong>6</strong></td>
+          <td><span class="priority-moyenne">MOYENNE</span></td>
+          <td>DataLayer</td>
+          <td>Ajouter l'événement <code>add_payment_info</code></td>
+          <td>Pousser un événement <code>add_payment_info</code> quand l'utilisateur sélectionne/valide son moyen de paiement, avec le champ <code>payment_type</code> (ex : "CB", "Virement", "Mandat administratif").</td>
+          <td><span class="badge badge-success">Faible</span></td>
+        </tr>
+        <tr>
+          <td><strong>7</strong></td>
+          <td><span class="priority-basse">BASSE</span></td>
+          <td>DataLayer</td>
+          <td>Implémenter l'événement <code>refund</code></td>
+          <td>Côté back-office ou via webhook, pousser un événement <code>refund</code> avec <code>transaction_id</code> lorsqu'une commande est remboursée. Permet le suivi des remboursements dans GA4. Peut être fait côté serveur via Measurement Protocol.</td>
+          <td><span class="badge badge-warning">Moyen</span></td>
+        </tr>
+        <tr>
+          <td><strong>8</strong></td>
+          <td><span class="priority-basse">BASSE</span></td>
+          <td>DataLayer</td>
+          <td>Ajouter <code>item_list_name</code> aux impressions produit</td>
+          <td>Inclure le nom de la liste (catégorie, recherche, recommandations) dans les objets produits de <code>productImpressions</code> pour permettre l'analyse des performances par liste dans GA4.</td>
+          <td><span class="badge badge-success">Faible</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ===== SYNTHÈSE ===== -->
+
+  <section>
+    <h2>Synthèse par priorité</h2>
+
+    <h3>SEO technique (bugs U1-U8 + S1-S28)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Priorité</th>
+          <th>Bugs URLs</th>
+          <th>Bugs SEO (existants)</th>
+          <th>Bugs SEO (nouveaux Semrush 08/04)</th>
+          <th>Améliorations SEO</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="priority-critique">CRITIQUE</span></td>
+          <td>2 (U1, U2)</td>
+          <td>5 (S1, S2, S4, S5, S7)</td>
+          <td>3 (S18, S19, S20)</td>
+          <td>—</td>
+          <td><strong>10</strong></td>
+        </tr>
+        <tr>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>4 (U3, U4, U5, U7)</td>
+          <td>8 (S3, S6, S9, S10, S14, S15, S16, S17)</td>
+          <td>5 (S21, S22, S23, S24, S25)</td>
+          <td>3 (S1, S2, S3)</td>
+          <td><strong>20</strong></td>
+        </tr>
+        <tr>
+          <td><span class="priority-moyenne">MOYENNE</span></td>
+          <td>2 (U6, U8)</td>
+          <td>2 (S11, S12)</td>
+          <td>3 (S26, S27, S28)</td>
+          <td>2 (S4, S5)</td>
+          <td><strong>9</strong></td>
+        </tr>
+        <tr>
+          <td><span class="priority-basse">BASSE</span></td>
+          <td>—</td>
+          <td>1 (S13)</td>
+          <td>—</td>
+          <td>1 (S6)</td>
+          <td><strong>2</strong></td>
+        </tr>
+        <tr style="background: var(--bg); font-weight: 600;">
+          <td>Sous-total SEO</td>
+          <td>8</td>
+          <td>16</td>
+          <td>11</td>
+          <td>6</td>
+          <td><strong>41</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>DataLayer (e-commerce)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Priorité</th>
+          <th>Bugs</th>
+          <th>Améliorations</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="priority-critique">CRITIQUE</span></td>
+          <td>2 (#1, #2)</td>
+          <td>—</td>
+          <td><strong>2</strong></td>
+        </tr>
+        <tr>
+          <td><span class="priority-haute">HAUTE</span></td>
+          <td>2 (#3, #4)</td>
+          <td>3 (#1, #2, #3)</td>
+          <td><strong>5</strong></td>
+        </tr>
+        <tr>
+          <td><span class="priority-moyenne">MOYENNE</span></td>
+          <td>2 (#5, #6)</td>
+          <td>3 (#4, #5, #6)</td>
+          <td><strong>5</strong></td>
+        </tr>
+        <tr>
+          <td><span class="priority-basse">BASSE</span></td>
+          <td>3 (#7, #8, #9)</td>
+          <td>2 (#7, #8)</td>
+          <td><strong>5</strong></td>
+        </tr>
+        <tr style="background: var(--bg); font-weight: 600;">
+          <td>Sous-total DataLayer</td>
+          <td>9</td>
+          <td>8</td>
+          <td><strong>17</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-top: 24px;">Total général</h3>
+    <table>
+      <tbody>
+        <tr style="background: #fce8e6; font-weight: 700; font-size: 15px;">
+          <td style="width: 200px;">SEO (prioritaire)</td>
+          <td>35 bugs</td>
+          <td>6 améliorations</td>
+          <td><strong>41 items</strong></td>
+        </tr>
+        <tr style="background: var(--bg); font-weight: 600; font-size: 15px;">
+          <td>DataLayer</td>
+          <td>9 bugs</td>
+          <td>8 améliorations</td>
+          <td><strong>17 items</strong></td>
+        </tr>
+        <tr style="background: var(--bg); font-weight: 700; font-size: 16px;">
+          <td>TOTAL</td>
+          <td>44 bugs</td>
+          <td>14 améliorations</td>
+          <td><strong>58 items</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</div>
+
+<footer>
+  Rapport généré le 9 avril 2026 (mis à jour avec GA4 MCP + Semrush Site Audit) — Audit SEO + GTM/GA4 papouillefrance.com — À destination de BLGCLOUD<br>
+  Données : Google Search Console · Semrush Site Audit · Ranxplorer · PageSpeed Insights · Google Analytics 4 (property 275254711)
+</footer>
+
+</body>
+</html>

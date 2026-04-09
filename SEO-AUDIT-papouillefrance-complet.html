@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audit SEO complet — papouillefrance.com — Avril 2026</title>
+<style>
+  :root {
+    --primary: #1a73e8;
+    --success: #0d904f;
+    --danger: #d93025;
+    --warning: #e37400;
+    --bg: #f8f9fa;
+    --card: #ffffff;
+    --text: #202124;
+    --muted: #5f6368;
+    --border: #dadce0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px 16px; }
+
+  header { background: linear-gradient(135deg, #1a237e 0%, #0d47a1 50%, #1565c0 100%); color: white; padding: 50px 0; margin-bottom: 32px; }
+  header .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+  header h1 { font-size: 28px; font-weight: 700; }
+  header .subtitle { font-size: 15px; opacity: 0.9; margin-top: 6px; }
+  header .meta { font-size: 13px; opacity: 0.85; text-align: right; }
+  header .meta div { margin-bottom: 4px; }
+
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+  .badge-critical { background: #fce8e6; color: var(--danger); }
+  .badge-high { background: #fef7e0; color: var(--warning); }
+  .badge-medium { background: #e8f0fe; color: var(--primary); }
+  .badge-low { background: #f1f3f4; color: var(--muted); }
+  .badge-pass { background: #e6f4ea; color: var(--success); }
+  .badge-fail { background: #fce8e6; color: var(--danger); }
+  .badge-warn { background: #fef7e0; color: var(--warning); }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+  .kpi { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
+  .kpi .number { font-size: 32px; font-weight: 700; }
+  .kpi .label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .kpi .delta { font-size: 13px; margin-top: 4px; font-weight: 600; }
+  .kpi .delta.down { color: var(--danger); }
+  .kpi .delta.up { color: var(--success); }
+
+  section { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 28px; margin-bottom: 24px; }
+  section h2 { font-size: 20px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--bg); color: #1a237e; }
+  section h3 { font-size: 16px; margin: 20px 0 10px; color: var(--primary); }
+
+  p { margin-bottom: 12px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+  th { background: var(--bg); text-align: left; padding: 10px 10px; font-weight: 600; border-bottom: 2px solid var(--border); font-size: 12px; }
+  td { padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:hover { background: #f8f9fa; }
+
+  code { font-family: 'Consolas', monospace; background: #e8f0fe; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+
+  .exec-summary { background: linear-gradient(135deg, #e8eaf6 0%, #e3f2fd 100%); border: 1px solid #90caf9; border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+  .exec-summary h2 { border-bottom: 2px solid #90caf9; color: #1a237e; }
+
+  .alert { border-radius: 8px; padding: 16px; margin: 12px 0; }
+  .alert-danger { background: #fce8e6; border-left: 4px solid var(--danger); }
+  .alert-warning { background: #fef7e0; border-left: 4px solid var(--warning); }
+  .alert-success { background: #e6f4ea; border-left: 4px solid var(--success); }
+  .alert-info { background: #e8f0fe; border-left: 4px solid var(--primary); }
+  .alert strong { display: block; margin-bottom: 4px; }
+
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 12px 0; }
+  .metric-card { background: var(--bg); border-radius: 8px; padding: 16px; text-align: center; }
+  .metric-card .value { font-size: 24px; font-weight: 700; }
+  .metric-card .metric-label { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .metric-card .trend { font-size: 12px; margin-top: 2px; font-weight: 600; }
+  .metric-card .trend.down { color: var(--danger); }
+  .metric-card .trend.up { color: var(--success); }
+
+  .priority-critical { color: var(--danger); font-weight: 700; }
+  .priority-high { color: var(--warning); font-weight: 700; }
+  .priority-medium { color: var(--primary); font-weight: 600; }
+  .priority-low { color: var(--muted); font-weight: 600; }
+
+  .winner { background: #e6f4ea; font-weight: 600; }
+  .loser { background: #fce8e6; }
+
+  .action-box { background: var(--bg); border-radius: 8px; padding: 16px; margin: 12px 0; border-left: 4px solid var(--primary); }
+  .action-box h4 { font-size: 14px; margin-bottom: 6px; color: var(--primary); }
+  .action-box p { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+
+  .quick-win { border-left-color: var(--success); }
+  .quick-win h4 { color: var(--success); }
+  .strategic { border-left-color: #6a1b9a; }
+  .strategic h4 { color: #6a1b9a; }
+
+  footer { text-align: center; padding: 24px; color: var(--muted); font-size: 13px; }
+
+  @media (max-width: 768px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: 1fr; }
+    header .container { flex-direction: column; text-align: center; }
+    header .meta { text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div>
+      <h1>Audit SEO complet — papouillefrance.com</h1>
+      <p class="subtitle">Full Site Audit · Keyword Research · Content Gap · Technical SEO · Competitor Analysis</p>
+    </div>
+    <div class="meta">
+      <div>Date : 8 avril 2026</div>
+      <div>Sources : Semrush MCP (API directe) · Semrush Site Audit · Google Search Console · Ranxplorer · PageSpeed Insights</div>
+      <div>Demandeur : Anthony Canavero — support@papouillefrance.com</div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- KPIs -->
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="number" style="color: var(--danger);">6 890</div>
+      <div class="label">Trafic organique Semrush</div>
+      <div class="delta down">Rank #52 489</div>
+    </div>
+    <div class="kpi">
+      <div class="number" style="color: var(--warning);">5 738</div>
+      <div class="label">Mots-clés organiques (Semrush)</div>
+      <div class="delta down">vs 40 342 pour wesco.fr</div>
+    </div>
+    <div class="kpi">
+      <div class="number" style="color: var(--warning);">25</div>
+      <div class="label">Authority Score</div>
+      <div class="delta down">vs 41 pour wesco.fr</div>
+    </div>
+    <div class="kpi">
+      <div class="number" style="color: var(--danger);">63/100</div>
+      <div class="label">Site Audit Score</div>
+      <div class="delta up">▲ +3 pts vs précédent</div>
+    </div>
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="number" style="color: var(--warning);">35 040</div>
+      <div class="label">Clics GSC (90 jours — MCP live)</div>
+      <div class="delta down">~389/jour · CTR 1,65%</div>
+    </div>
+    <div class="kpi">
+      <div class="number" style="color: var(--success);">9,5</div>
+      <div class="label">Position moyenne GSC (avril)</div>
+      <div class="delta up">▲ amélioration vs 12,5 en janvier</div>
+    </div>
+    <div class="kpi">
+      <div class="number" style="color: var(--warning);">4 434</div>
+      <div class="label">URLs indexées (sitemap GSC)</div>
+      <div class="delta down">Impressions ▼ 25k→20k/jour</div>
+    </div>
+    <div class="kpi">
+      <div class="number" style="color: var(--primary);">2 543</div>
+      <div class="label">Backlinks (1 193 domaines)</div>
+      <div class="delta down">vs 61 523 BL wesco.fr</div>
+    </div>
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="number" style="color: var(--danger);">29 704</div>
+      <div class="label">Trafic SEO Ranxplorer</div>
+      <div class="delta down">▼ -26% vs mars</div>
+    </div>
+    <div class="kpi">
+      <div class="number" style="color: var(--warning);">14 527</div>
+      <div class="label">Mots-clés Ranxplorer</div>
+      <div class="delta down">▼ -3%</div>
+    </div>
+    <div class="kpi">
+      <div class="number" style="color: var(--danger);">806</div>
+      <div class="label">Pages dans l'index GSC (coverage)</div>
+      <div class="delta down">▼ -36% (jan→avr)</div>
+    </div>
+    <div class="kpi">
+      <div class="number" style="color: var(--danger);">2,12M</div>
+      <div class="label">Impressions GSC (90 jours)</div>
+      <div class="delta down">▼ en baisse continue</div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- EXECUTIVE SUMMARY -->
+  <!-- ============================================ -->
+  <section class="exec-summary">
+    <h2>Executive Summary</h2>
+    <p>
+      Le site <strong>papouillefrance.com</strong> est dans une situation SEO critique. Semrush (données MCP live) affiche un trafic organique de seulement <strong>6 890 visites/mois</strong> avec 5 738 mots-clés, classé au <strong>rang #52 489</strong> en France. Ranxplorer confirme la tendance baissière : <strong>-26% en un mois</strong> (29 704 visites). Les pages indexées GSC sont passées de 1 255 à 806 en 3 mois (<strong>-36%</strong>). L'Authority Score n'est que de <strong>25</strong> (vs 41 pour wesco.fr). Le Site Audit score est de <strong>63/100</strong> avec des erreurs massives : 3 282 canonical cassés, 3 286 liens internes cassés, 3 263 erreurs 4xx, 2 204 pages mortes dans le sitemap et 1 452 erreurs structured data.
+    </p>
+
+    <div class="alert alert-danger">
+      <strong>Top 3 des priorités à impact immédiat :</strong>
+      <p>1. <strong>Corriger les canonical tags cassés</strong> (3 282 pages — Semrush snapshot) — cause directe de la désindexation massive. Chaque fiche produit déclare un canonical court qui retourne une 404.</p>
+      <p>2. <strong>Nettoyer le sitemap et les liens internes</strong> — 2 204 pages mortes dans le sitemap (93%), 3 286 liens internes cassés (Semrush snapshot).</p>
+      <p>3. <strong>Enrichir le contenu des fiches produit</strong> — 10 850 pages crawlées par Google mais jugées trop minces pour être indexées.</p>
+    </div>
+
+    <p><strong>Donnée GSC live (MCP 08/04/2026) :</strong> Sur 90 jours, le site cumule <strong>35 040 clics</strong> et 2,12M d'impressions (CTR 1,65%). La position moyenne s'améliore de 12,5 en janvier à <strong>9,5 en avril</strong>, mais les impressions chutent de 25 000 à 20 000/jour — signe que Google indexe moins de pages. Le sitemap GSC montre 4 434 URLs indexées.</p>
+
+    <p><strong>Point fort :</strong> Papouille bénéficie d'une position de niche solide (50+ ans d'expertise puériculture professionnelle), d'un blog existant (blog.papouillefrance.com) avec du contenu pertinent, et d'un potentiel de gain massif identifié par Ranxplorer (+30 718 visites/mois en gagnant 5 positions en moyenne). Les pages guides (/page/guide-amenagement, /page/loi-egalim) génèrent plus de clics que les fiches produit — preuve que le contenu informationnel fonctionne.</p>
+
+    <p><strong>Évaluation globale : <span style="color: var(--danger); font-weight: 700;">⚠️ Situation critique</span></strong> — Le site a des fondations (catalogue, marque, blog) mais les problèmes techniques bloquent toute progression SEO. Sans correction urgente des canonical et du sitemap, la tendance baissière va s'accélérer.</p>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- 1. KEYWORD RESEARCH -->
+  <!-- ============================================ -->
+  <section>
+    <h2>1. Keyword Research — Opportunités de mots-clés</h2>
+
+    <h3>Situation actuelle (données Semrush MCP live)</h3>
+    <div class="grid-3">
+      <div class="metric-card">
+        <div class="value" style="color: var(--danger);">5 738</div>
+        <div class="metric-label">Mots-clés organiques (Semrush)</div>
+      </div>
+      <div class="metric-card">
+        <div class="value" style="color: var(--danger);">6 890</div>
+        <div class="metric-label">Trafic organique estimé (Semrush)</div>
+      </div>
+      <div class="metric-card">
+        <div class="value">$1 446</div>
+        <div class="metric-label">Coût organique (valeur equiv. PPC)</div>
+      </div>
+    </div>
+    <div class="grid-3">
+      <div class="metric-card">
+        <div class="value">14 527</div>
+        <div class="metric-label">Mots-clés positionnés (Ranxplorer)</div>
+        <div class="trend down">▼ -3%</div>
+      </div>
+      <div class="metric-card">
+        <div class="value">4 607</div>
+        <div class="metric-label">Mots-clés en top 3 (Ranxplorer)</div>
+      </div>
+      <div class="metric-card">
+        <div class="value">149</div>
+        <div class="metric-label">Mots-clés en position 1 (Ranxplorer)</div>
+        <div class="trend down">▼ -7%</div>
+      </div>
+    </div>
+
+    <h3>Top 20 mots-clés organiques (Semrush MCP — triés par trafic)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Mot-clé</th>
+          <th>Position</th>
+          <th>Volume</th>
+          <th>Trafic %</th>
+          <th>KD</th>
+          <th>CPC</th>
+          <th>URL</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>coconou</strong></td><td>3</td><td>1 900</td><td>2.24%</td><td>7</td><td>0.41€</td><td>/couchage/.../matelas-d-eau-vestibulo-coconou</td></tr>
+        <tr><td><strong>papouilles</strong></td><td>1</td><td>4 400</td><td>2.23%</td><td>34</td><td>—</td><td>/ (homepage)</td></tr>
+        <tr><td><strong>poussette quadruple</strong></td><td>4</td><td>1 900</td><td>1.78%</td><td>11</td><td>0.26€</td><td>/puericulture/.../poussette-quadruple-4-places</td></tr>
+        <tr><td><strong>lit en bois pliant</strong></td><td>2</td><td>720</td><td>1.37%</td><td>12</td><td>0.20€</td><td>/couchage/.../lit-pliant-bois-blanc-pro</td></tr>
+        <tr><td><strong>papouille catalogue</strong></td><td>1</td><td>110</td><td>1.27%</td><td>12</td><td>—</td><td>/page/catalogue/nos-catalogues</td></tr>
+        <tr><td><strong>smartmax animaux</strong></td><td>3</td><td>1 300</td><td>1.21%</td><td>16</td><td>0.16€</td><td>/jouets/.../animaux-ferme-magnetiques</td></tr>
+        <tr><td><strong>équipement accueil jeune enfant</strong></td><td>1</td><td>320</td><td>1.14%</td><td>33</td><td>—</td><td>/page/guide-equipement-creche</td></tr>
+        <tr><td><strong>siège sol</strong></td><td>2</td><td>720</td><td>0.85%</td><td>11</td><td>3.74€</td><td>/mobilier/.../siege-au-sol-tissu-bleu</td></tr>
+        <tr><td><strong>philips avent babyphone</strong></td><td>4</td><td>1 300</td><td>0.82%</td><td>16</td><td>0.29€</td><td>/medical/.../philips-avent-babyphone</td></tr>
+        <tr><td><strong>pierre d'équilibre</strong></td><td>2</td><td>390</td><td>0.74%</td><td>11</td><td>0.18€</td><td>/jeux/.../gonge-pierres-riviere-equilibre</td></tr>
+        <tr><td><strong>parcours motricité bébé</strong></td><td>6</td><td>1 600</td><td>0.69%</td><td>25</td><td>0.19€</td><td>/motricite/.../parcours-de-motricite-bebe</td></tr>
+        <tr><td><strong>panier basket enfant</strong></td><td>6</td><td>1 600</td><td>0.69%</td><td>17</td><td>—</td><td>/jeux/.../panier-de-basket-enfant</td></tr>
+        <tr><td><strong>fauteuil petite enfance</strong></td><td>3</td><td>720</td><td>0.66%</td><td>7</td><td>0.33€</td><td>/mobilier/.../chaise-fauteuil-pour-crche</td></tr>
+        <tr><td><strong>trampoline pour bébé</strong></td><td>3</td><td>1 000</td><td>0.63%</td><td>21</td><td>0.16€</td><td>/motricite/.../trampoline-bebe-12-mois</td></tr>
+        <tr><td><strong>babyphone philips avent</strong></td><td>3</td><td>2 900</td><td>0.58%</td><td>25</td><td>0.26€</td><td>/medical/.../philips-avent-babyphone</td></tr>
+        <tr><td><strong>biberon mam verre</strong></td><td>8</td><td>5 400</td><td>0.53%</td><td>18</td><td>0.11€</td><td>/repas/.../biberon-verre-mam-260ml</td></tr>
+        <tr><td><strong>parcours motricité bébé</strong></td><td>10</td><td>5 400</td><td>0.53%</td><td>24</td><td>—</td><td>/motricite/.../parcours-de-motricite-bebe</td></tr>
+        <tr><td><strong>transat bébé</strong></td><td>10</td><td>18 100</td><td>0.39%</td><td>18</td><td>—</td><td>/puericulture/.../transat-bb-balancelle</td></tr>
+        <tr><td><strong>amenagement micro crèche</strong></td><td>2</td><td>320</td><td>0.37%</td><td>8</td><td>—</td><td>/page/guide-equipement-creche</td></tr>
+        <tr><td><strong>poussette 4 places</strong></td><td>5</td><td>720</td><td>0.36%</td><td>8</td><td>0.22€</td><td>/puericulture/.../poussette-quadruple</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size: 12px; color: var(--muted); margin-top: 8px;">Source : Semrush Organic Research via MCP API — base France — avril 2026</p>
+
+    <div class="alert alert-warning">
+      <strong>Constat clé confirmé par GSC MCP live : trafic quasi-exclusivement de marque</strong>
+      <p>Sur les 28 derniers jours (GSC live via MCP), les 5 premières requêtes sont toutes de marque : "papouille" (1 282 clics, CTR 34.7%), "papouilles" (190), "papouille france" (59), "papouille catalogue" (46), "papuille" (26). La première requête non-brand est "poussette quadruple" à seulement 24 clics. <strong>Le trafic non-brand est quasi inexistant.</strong></p>
+    </div>
+
+    <h3>Top 15 pages par clics (GSC MCP live — 28 derniers jours)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Page</th>
+          <th>Clics</th>
+          <th>Impressions</th>
+          <th>CTR</th>
+          <th>Position</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Homepage /</strong></td><td>1 890</td><td>17 242</td><td>10,96%</td><td>7,1</td></tr>
+        <tr><td>/page/guide-amenagement-structure-accueil</td><td>232</td><td>5 218</td><td>4,45%</td><td>7,0</td></tr>
+        <tr><td>/page/catalogue/nos-catalogues</td><td>221</td><td>6 050</td><td>3,65%</td><td>4,8</td></tr>
+        <tr><td>/page/materiel-psychomotricite</td><td>124</td><td>8 120</td><td>1,53%</td><td>9,9</td></tr>
+        <tr><td>/articles/mobilier/aire-de-jeux-exterieure</td><td>118</td><td>6 213</td><td>1,90%</td><td>15,2</td></tr>
+        <tr><td>/page/mobilier-creche-collectivites</td><td>116</td><td>7 340</td><td>1,58%</td><td>13,8</td></tr>
+        <tr><td>/articles/poussette-quadruple-4-places</td><td>94</td><td>6 135</td><td>1,53%</td><td>9,0</td></tr>
+        <tr><td>/page/comment-ouvrir-structure-accueil</td><td>93</td><td>4 079</td><td>2,28%</td><td>10,6</td></tr>
+        <tr><td>/page/loi-egalim-petite-enfance</td><td>93</td><td>2 088</td><td>4,45%</td><td>7,1</td></tr>
+        <tr><td>/page/guide-equipement-creche</td><td>89</td><td>3 729</td><td>2,39%</td><td>10,9</td></tr>
+        <tr><td>blog: montessori cartes nomenclatures</td><td>83</td><td>2 348</td><td>3,53%</td><td>2,9</td></tr>
+        <tr><td>/page/aquama-nettoyage-creche</td><td>83</td><td>1 882</td><td>4,41%</td><td>5,9</td></tr>
+        <tr><td>/articles/pieces-detachees-porteur</td><td>77</td><td>659</td><td>11,68%</td><td>7,1</td></tr>
+        <tr><td>/articles/figurines-tolo</td><td>73</td><td>2 623</td><td>2,78%</td><td>6,7</td></tr>
+        <tr><td>/articles/assiettes-enfants</td><td>70</td><td>3 071</td><td>2,28%</td><td>8,5</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size: 12px; color: var(--muted);">Source : Google Search Console via MCP API — sc-domain:papouillefrance.com — 28 derniers jours — 8 avril 2026</p>
+
+    <div class="alert alert-info">
+      <strong>Insight GSC : les pages guides surpassent les fiches produits</strong>
+      <p>Les pages éditoriales (/page/guide-amenagement, /page/comment-ouvrir, /page/loi-egalim) génèrent <strong>plus de clics que les catégories produits</strong>. La page "Guide complet aménagement" (232 clics) est la 2e page du site. Cela confirme l'intérêt stratégique de développer le contenu informationnel.</p>
+    </div>
+
+    <h3>Évolution des positions (GSC MCP — comparaison janvier vs mars-avril)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Requête</th>
+          <th>Clics janv.</th>
+          <th>Clics mars-avr.</th>
+          <th>Δ Clics</th>
+          <th>Pos. janv.</th>
+          <th>Pos. mars-avr.</th>
+          <th>Δ Pos.</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>papouille</strong></td><td>1 180</td><td>1 346</td><td style="color: var(--success);">+166 (+14%)</td><td>2,6</td><td>1,9</td><td style="color: var(--success);">+0,7</td></tr>
+        <tr><td>tourniquet enfant</td><td>2</td><td>14</td><td style="color: var(--success);">+12 (+600%)</td><td>9,3</td><td>6,6</td><td style="color: var(--success);">+2,7</td></tr>
+        <tr><td>papouille catalogue</td><td>34</td><td>51</td><td style="color: var(--success);">+17 (+50%)</td><td>1,8</td><td>5,1</td><td style="color: var(--danger);">-3,3</td></tr>
+        <tr class="loser"><td>formation papouille</td><td>48</td><td>1</td><td style="color: var(--danger);">-47 (-98%)</td><td>8,2</td><td>13,4</td><td style="color: var(--danger);">-5,3</td></tr>
+        <tr class="loser"><td>poussette 4 places</td><td>48</td><td>27</td><td style="color: var(--danger);">-21 (-44%)</td><td>9,1</td><td>10,3</td><td style="color: var(--danger);">-1,3</td></tr>
+        <tr class="loser"><td>parcours motricité bébé</td><td>28</td><td>8</td><td style="color: var(--danger);">-20 (-71%)</td><td>12,7</td><td>11,0</td><td style="color: var(--success);">+1,7</td></tr>
+        <tr class="loser"><td>tolo</td><td>44</td><td>24</td><td style="color: var(--danger);">-20 (-46%)</td><td>9,9</td><td>13,7</td><td style="color: var(--danger);">-3,8</td></tr>
+        <tr class="loser"><td>fauteuil d'allaitement</td><td>11</td><td>1</td><td style="color: var(--danger);">-10 (-91%)</td><td>12,2</td><td>14,1</td><td style="color: var(--danger);">-1,9</td></tr>
+        <tr class="loser"><td>vaisselle inox bébé</td><td>14</td><td>6</td><td style="color: var(--danger);">-8 (-57%)</td><td>7,5</td><td>8,8</td><td style="color: var(--danger);">-1,4</td></tr>
+        <tr class="loser"><td>parcours de motricité bébé</td><td>14</td><td>6</td><td style="color: var(--danger);">-8 (-57%)</td><td>11,5</td><td>10,6</td><td style="color: var(--success);">+0,9</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size: 12px; color: var(--muted);">Source : GSC MCP compare_search_periods — Période 1 : 8 jan–7 fév 2026 · Période 2 : 8 mar–7 avr 2026</p>
+
+    <div class="alert alert-danger">
+      <strong>Tendance GSC confirmée : les requêtes non-brand s'effondrent</strong>
+      <p>Malgré une amélioration de la position moyenne globale (12,5 → 9,5), les requêtes non-brand comme "poussette 4 places" (-44%), "parcours motricité bébé" (-71%) et "fauteuil d'allaitement" (-91%) perdent massivement en clics. Cause : la baisse d'impressions (25 000 → 20 000/jour) liée à la désindexation progressive des fiches produit (canonical cassés + sitemap pollué).</p>
+    </div>
+
+    <h3>Mots-clés perdus récemment (Semrush MCP — top 15)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Mot-clé perdu</th>
+          <th>Volume</th>
+          <th>Ancienne position</th>
+          <th>Impact</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>camera bebe</strong></td><td style="color: var(--danger); font-weight: 600;">5 400</td><td>—</td><td><span class="badge badge-critical">Fort volume perdu</span></td></tr>
+        <tr><td><strong>amenagement micro creche</strong></td><td>320</td><td>—</td><td><span class="badge badge-high">Requête cœur de cible B2B</span></td></tr>
+        <tr><td>tapis puzzle bebe</td><td>1 300</td><td>—</td><td><span class="badge badge-high">Catégorie motricité</span></td></tr>
+        <tr><td>verre apprentissage bebe</td><td>720</td><td>—</td><td><span class="badge badge-medium">Catégorie repas</span></td></tr>
+        <tr><td>poussette double</td><td>5 400</td><td>—</td><td><span class="badge badge-critical">Très fort volume</span></td></tr>
+        <tr><td>matelas sol bebe</td><td>720</td><td>—</td><td><span class="badge badge-medium">Catégorie couchage</span></td></tr>
+        <tr><td>portique bebe</td><td>1 900</td><td>—</td><td><span class="badge badge-high">Fort volume</span></td></tr>
+        <tr><td>lit bebe pliant</td><td>1 000</td><td>—</td><td><span class="badge badge-high">Catégorie couchage</span></td></tr>
+        <tr><td>barriere de lit bebe</td><td>2 400</td><td>—</td><td><span class="badge badge-critical">Fort volume</span></td></tr>
+        <tr><td>table a langer murale</td><td>1 600</td><td>—</td><td><span class="badge badge-high">Produit pro crèche</span></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size: 12px; color: var(--muted);">Source : Semrush lost keywords via MCP API — papouillefrance.com — avril 2026. 30 mots-clés perdus récupérés au total.</p>
+
+    <div class="alert alert-danger">
+      <strong>Alerte : perte de visibilité massive sur des requêtes à fort volume</strong>
+      <p>Papouille a perdu des positions sur des mots-clés cumulant <strong>+20 000 de volume mensuel</strong>. La perte de "camera bebe" (5 400), "poussette double" (5 400) et "barriere de lit bebe" (2 400) représente un manque à gagner considérable. Ces pertes sont directement liées aux problèmes techniques (canonical cassés, pages 404, contenu mince) qui empêchent Google de maintenir les positions.</p>
+    </div>
+
+    <h3>Keyword Opportunity Table</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Mot-clé</th>
+          <th>Difficulté</th>
+          <th>Opportunité</th>
+          <th>Pos. actuelle</th>
+          <th>Intent</th>
+          <th>Contenu recommandé</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>coussin d'allaitement</td>
+          <td><span class="badge badge-high">KD 19</span></td>
+          <td><span class="badge badge-pass">HAUTE</span></td>
+          <td>8 (Semrush)</td>
+          <td>Commercial</td>
+          <td>Fiche produit enrichie + guide comparatif</td>
+        </tr>
+        <tr>
+          <td>barrière sécurité bébé</td>
+          <td><span class="badge badge-high">KD 17</span></td>
+          <td><span class="badge badge-pass">HAUTE</span></td>
+          <td>6</td>
+          <td>Commercial</td>
+          <td>Landing page catégorie + guide d'achat</td>
+        </tr>
+        <tr>
+          <td>parc bébé pliable</td>
+          <td><span class="badge badge-high">KD 24</span></td>
+          <td><span class="badge badge-pass">HAUTE</span></td>
+          <td>6</td>
+          <td>Transactionnel</td>
+          <td>Fiche produit enrichie + comparatif</td>
+        </tr>
+        <tr>
+          <td>transat bébé</td>
+          <td><span class="badge badge-high">KD 19</span></td>
+          <td><span class="badge badge-pass">HAUTE</span></td>
+          <td>10 (vol: 18 100)</td>
+          <td>Commercial</td>
+          <td>Fiche catégorie enrichie — volume énorme, position à améliorer</td>
+        </tr>
+        <tr>
+          <td>parcours motricité bébé</td>
+          <td><span class="badge badge-high">KD 22</span></td>
+          <td><span class="badge badge-pass">HAUTE</span></td>
+          <td>6 (vol: 1 600)</td>
+          <td>Commercial</td>
+          <td>Landing catégorie + guide aménagement</td>
+        </tr>
+        <tr>
+          <td>mobilier crèche</td>
+          <td><span class="badge badge-medium">KD 14</span></td>
+          <td><span class="badge badge-pass">HAUTE</span></td>
+          <td>12</td>
+          <td>Commercial</td>
+          <td>Pillar page "Tout le mobilier crèche" + cluster</td>
+        </tr>
+        <tr>
+          <td>matériel puériculture professionnel</td>
+          <td><span class="badge badge-pass">KD 0</span></td>
+          <td><span class="badge badge-pass">HAUTE</span></td>
+          <td>9</td>
+          <td>Commercial</td>
+          <td>Landing page B2B + guide complet — aucune concurrence SEO !</td>
+        </tr>
+        <tr>
+          <td>chaise haute crèche</td>
+          <td><span class="badge badge-pass">KD 0</span></td>
+          <td><span class="badge badge-pass">HAUTE</span></td>
+          <td>6</td>
+          <td>Transactionnel</td>
+          <td>Fiche catégorie enrichie — zéro concurrence, quick win !</td>
+        </tr>
+        <tr>
+          <td>équipement crèche</td>
+          <td><span class="badge badge-pass">KD 0</span></td>
+          <td><span class="badge badge-pass">HAUTE</span></td>
+          <td>1 (vol: 320)</td>
+          <td>Informationnel</td>
+          <td>Pillar page "Équiper sa crèche de A à Z" — zéro difficulté !</td>
+        </tr>
+        <tr>
+          <td>matelas à langer professionnel</td>
+          <td><span class="badge badge-pass">KD 0</span></td>
+          <td><span class="badge badge-pass">HAUTE</span></td>
+          <td>14</td>
+          <td>Transactionnel</td>
+          <td>Fiche enrichie + comparatif normes — zéro concurrence !</td>
+        </tr>
+        <tr>
+          <td>comment ouvrir une micro-crèche</td>
+          <td><span class="badge badge-pass">KD 0</span></td>
+          <td><span class="badge badge-pass">HAUTE</span></td>
+          <td>Non positionné</td>
+          <td>Informationnel</td>
+          <td>Guide complet blog (3000+ mots) — opportunité majeure !</td>
+        </tr>
+        <tr>
+          <td>réglementation crèche 2026</td>
+          <td><span class="badge badge-pass">Facile</span></td>
+          <td><span class="badge badge-high">MOYENNE</span></td>
+          <td>Non positionné</td>
+          <td>Informationnel</td>
+          <td>Article blog (2000+ mots) + FAQ</td>
+        </tr>
+        <tr>
+          <td>comment ouvrir une micro-crèche</td>
+          <td><span class="badge badge-medium">Modéré</span></td>
+          <td><span class="badge badge-high">MOYENNE</span></td>
+          <td>Non positionné</td>
+          <td>Informationnel</td>
+          <td>Guide complet blog (3000+ mots)</td>
+        </tr>
+        <tr>
+          <td>norme NF EN 12221 table à langer</td>
+          <td><span class="badge badge-pass">Facile</span></td>
+          <td><span class="badge badge-high">MOYENNE</span></td>
+          <td>Non positionné</td>
+          <td>Informationnel</td>
+          <td>Article expert + lien vers produits conformes</td>
+        </tr>
+        <tr>
+          <td>meilleure poussette double crèche</td>
+          <td><span class="badge badge-pass">Facile</span></td>
+          <td><span class="badge badge-high">MOYENNE</span></td>
+          <td>Non positionné</td>
+          <td>Commercial</td>
+          <td>Comparatif / article de blog + liens produits</td>
+        </tr>
+        <tr>
+          <td>fauteuil allaitement crèche</td>
+          <td><span class="badge badge-pass">Facile</span></td>
+          <td><span class="badge badge-high">MOYENNE</span></td>
+          <td>8</td>
+          <td>Transactionnel</td>
+          <td>Fiche catégorie enrichie</td>
+        </tr>
+        <tr>
+          <td>lit parapluie crèche norme</td>
+          <td><span class="badge badge-pass">Facile</span></td>
+          <td><span class="badge badge-high">MOYENNE</span></td>
+          <td>Non positionné</td>
+          <td>Informationnel</td>
+          <td>Guide normes + fiches produit conformes</td>
+        </tr>
+        <tr>
+          <td>aménagement salle de motricité crèche</td>
+          <td><span class="badge badge-pass">Facile</span></td>
+          <td><span class="badge badge-high">MOYENNE</span></td>
+          <td>Non positionné</td>
+          <td>Informationnel</td>
+          <td>Guide illustré + liens produits motricité</td>
+        </tr>
+        <tr>
+          <td>vaisselle crèche incassable</td>
+          <td><span class="badge badge-pass">Facile</span></td>
+          <td><span class="badge badge-low">BASSE</span></td>
+          <td>10</td>
+          <td>Transactionnel</td>
+          <td>Fiche catégorie enrichie</td>
+        </tr>
+        <tr>
+          <td>coussin de positionnement bébé</td>
+          <td><span class="badge badge-pass">Facile</span></td>
+          <td><span class="badge badge-low">BASSE</span></td>
+          <td>13</td>
+          <td>Commercial</td>
+          <td>Fiche produit + FAQ</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- 2. ON-PAGE SEO AUDIT -->
+  <!-- ============================================ -->
+  <section>
+    <h2>2. Audit On-Page SEO</h2>
+
+    <h3>Issues identifiées sur les pages clés</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Page</th>
+          <th>Issue</th>
+          <th>Sévérité</th>
+          <th>Correction recommandée</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Toutes fiches produit</td>
+          <td>Canonical tag pointe vers URL courte qui retourne 404</td>
+          <td><span class="badge badge-critical">CRITIQUE</span></td>
+          <td>Aligner le canonical sur l'URL longue fonctionnelle (ex: <code>/articles/repas-21/couverts-375/cuillere-5154</code>)</td>
+        </tr>
+        <tr>
+          <td>Homepage <code>/</code></td>
+          <td>Aucune balise <code>&lt;h1&gt;</code> présente</td>
+          <td><span class="badge badge-critical">CRITIQUE</span></td>
+          <td>Ajouter un H1 unique : "Papouille — Matériel de puériculture pour crèches et collectivités"</td>
+        </tr>
+        <tr>
+          <td>Page <code>/articles</code></td>
+          <td>Title incohérent : "Puériculture - Chaise haute bébé et Siège Repas" sur une page de listing général</td>
+          <td><span class="badge badge-high">HAUTE</span></td>
+          <td>Remplacer par "Tous nos produits — Matériel crèche et puériculture | Papouille"</td>
+        </tr>
+        <tr>
+          <td>Toutes fiches produit</td>
+          <td><code>og:url</code> ≠ <code>canonical</code> (URL longue vs courte)</td>
+          <td><span class="badge badge-high">HAUTE</span></td>
+          <td>Aligner <code>og:url</code> et <code>canonical</code> sur la même URL</td>
+        </tr>
+        <tr>
+          <td>Toutes fiches produit</td>
+          <td><code>og:type = "website"</code> au lieu de <code>"product"</code></td>
+          <td><span class="badge badge-medium">MOYENNE</span></td>
+          <td>Utiliser <code>og:type = "product"</code> sur les fiches + attributs OG produit</td>
+        </tr>
+        <tr>
+          <td>127 groupes de pages</td>
+          <td>Title tags dupliqués — cannibalisation SEO</td>
+          <td><span class="badge badge-high">HAUTE</span></td>
+          <td>Template title unique : <code>[Nom produit] - [Sous-famille] | Papouille</code></td>
+        </tr>
+        <tr>
+          <td>131 groupes de pages</td>
+          <td>Meta descriptions dupliquées</td>
+          <td><span class="badge badge-high">HAUTE</span></td>
+          <td>Générer des meta descriptions dynamiques à partir des données produit</td>
+        </tr>
+        <tr>
+          <td>678 pages</td>
+          <td>Title tag trop long (>60 caractères) — tronqué dans les SERP</td>
+          <td><span class="badge badge-medium">MOYENNE</span></td>
+          <td>Limiter la génération du title à 60 caractères max</td>
+        </tr>
+        <tr>
+          <td>Meta descriptions</td>
+          <td>Guillemets mal échappés : <code>'De // moustiquaire...d''éveil'</code></td>
+          <td><span class="badge badge-high">HAUTE</span></td>
+          <td>Corriger l'échappement HTML dans le générateur de meta</td>
+        </tr>
+        <tr>
+          <td>Produits avec "De //"</td>
+          <td>Préfixe "De //" ou "DE/" pollue title, meta, H1, sitemap</td>
+          <td><span class="badge badge-critical">CRITIQUE</span></td>
+          <td>Nettoyer tous les noms de produits dans le back-office</td>
+        </tr>
+        <tr>
+          <td>3 533 images</td>
+          <td>Attribut ALT manquant — perte trafic Google Images</td>
+          <td><span class="badge badge-high">HAUTE</span></td>
+          <td>Ajouter ALT descriptif : "Poussette double Bugaboo pliable pour crèche"</td>
+        </tr>
+        <tr>
+          <td>3 577 pages</td>
+          <td>Liens internes en <code>rel="nofollow"</code></td>
+          <td><span class="badge badge-high">HAUTE</span></td>
+          <td>Retirer nofollow de tous les liens internes pour permettre le crawl et la transmission de PageRank</td>
+        </tr>
+        <tr>
+          <td>3 577 pages</td>
+          <td>Liens internes en HTTP au lieu de HTTPS</td>
+          <td><span class="badge badge-high">HAUTE</span></td>
+          <td>Forcer HTTPS dans tous les liens générés par le CMS</td>
+        </tr>
+        <tr>
+          <td>78 liens</td>
+          <td>Liens sans texte d'ancrage</td>
+          <td><span class="badge badge-medium">MOYENNE</span></td>
+          <td>Ajouter un texte d'ancrage descriptif (éviter "cliquez ici")</td>
+        </tr>
+        <tr>
+          <td>842 pages</td>
+          <td>Une seule page pointant vers elles (quasi-orphelines)</td>
+          <td><span class="badge badge-medium">MOYENNE</span></td>
+          <td>Ajouter des blocs "produits similaires" et "même catégorie"</td>
+        </tr>
+        <tr>
+          <td>Page 404</td>
+          <td><code>meta robots = "index, follow"</code> — pages d'erreur indexables</td>
+          <td><span class="badge badge-high">HAUTE</span></td>
+          <td>Mettre <code>noindex</code> sur toutes les pages d'erreur</td>
+        </tr>
+        <tr>
+          <td>115 pages</td>
+          <td>Contenu dupliqué (descriptions identiques)</td>
+          <td><span class="badge badge-high">HAUTE</span></td>
+          <td>Réécrire les descriptions pour chaque fiche produit — contenu unique obligatoire</td>
+        </tr>
+        <tr>
+          <td>3 577 pages</td>
+          <td>Ratio texte/HTML trop faible</td>
+          <td><span class="badge badge-medium">MOYENNE</span></td>
+          <td>Enrichir le contenu textuel, réduire le JS/CSS inline</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- 3. CONTENT GAP ANALYSIS -->
+  <!-- ============================================ -->
+  <section>
+    <h2>3. Content Gap Analysis</h2>
+
+    <div class="alert alert-info">
+      <strong>Observation : blog existant mais déconnecté du site principal</strong>
+      <p>Papouille a un blog sur <code>blog.papouillefrance.com</code> avec du contenu pertinent (guides, conseils, actualités petite enfance). Mais ce sous-domaine est séparé du site principal, ce qui empêche le transfert de PageRank. Le blog devrait idéalement être intégré au domaine principal (<code>www.papouillefrance.com/blog</code>).</p>
+    </div>
+
+    <h3>Content Gaps identifiés</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Sujet / Mot-clé</th>
+          <th>Pourquoi c'est important</th>
+          <th>Format recommandé</th>
+          <th>Priorité</th>
+          <th>Effort</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Guide complet "Équiper sa crèche de A à Z"</td>
+          <td>Requête informationelle à fort volume, couvre tout le catalogue. Wesco a une page similaire bien positionnée.</td>
+          <td>Pillar page (3000+ mots) + liens vers sous-catégories</td>
+          <td><span class="priority-high">HAUTE</span></td>
+          <td>Substantiel (2-3 jours)</td>
+        </tr>
+        <tr>
+          <td>Réglementation crèche 2026</td>
+          <td>Forte demande saisonnière, contenu informationnel qui attire les professionnels. Déjà couvert par blogdecreche.com et lesprosdelapetiteenfance.fr.</td>
+          <td>Article blog (2000+ mots) + FAQ + MAJ régulière</td>
+          <td><span class="priority-high">HAUTE</span></td>
+          <td>Modéré (1/2 journée)</td>
+        </tr>
+        <tr>
+          <td>Comment ouvrir une micro-crèche</td>
+          <td>Requête longue traîne à très fort volume. Les porteurs de projet sont des clients potentiels directs.</td>
+          <td>Guide complet (3000+ mots) + checklist téléchargeable</td>
+          <td><span class="priority-high">HAUTE</span></td>
+          <td>Substantiel (2-3 jours)</td>
+        </tr>
+        <tr>
+          <td>Comparatifs produits (poussettes, lits, chaises hautes)</td>
+          <td>Wesco et madeinbebe ont des pages comparatives bien positionnées. Papouille n'en a aucune.</td>
+          <td>Pages comparatives par catégorie avec tableau + avis</td>
+          <td><span class="priority-high">HAUTE</span></td>
+          <td>Modéré par page (1/2 journée)</td>
+        </tr>
+        <tr>
+          <td>Normes de sécurité (NF EN 12221, NF EN 716, etc.)</td>
+          <td>Contenu expert que les concurrents n'ont pas. Forte valeur ajoutée B2B.</td>
+          <td>Articles blog par norme + lien vers produits conformes</td>
+          <td><span class="priority-medium">MOYENNE</span></td>
+          <td>Modéré (1/2 journée par article)</td>
+        </tr>
+        <tr>
+          <td>Aménagement salle de motricité</td>
+          <td>Requête en croissance, liée à la réforme petite enfance. Opportunité de vente croisée.</td>
+          <td>Guide illustré + liens produits motricité</td>
+          <td><span class="priority-medium">MOYENNE</span></td>
+          <td>Modéré (1/2 journée)</td>
+        </tr>
+        <tr>
+          <td>Guide des aides financières crèche</td>
+          <td>Les collectivités et entrepreneurs recherchent activement ces informations. Papouille peut se positionner comme expert.</td>
+          <td>Article blog (2000+ mots)</td>
+          <td><span class="priority-medium">MOYENNE</span></td>
+          <td>Modéré (1/2 journée)</td>
+        </tr>
+        <tr>
+          <td>Descriptions catégories enrichies</td>
+          <td>Les pages catégories n'ont aucun texte — Google les considère comme du thin content. Wesco a 150-300 mots par catégorie.</td>
+          <td>Texte SEO 150-300 mots par page catégorie</td>
+          <td><span class="priority-critical">CRITIQUE</span></td>
+          <td>Quick win (1-2h par catégorie)</td>
+        </tr>
+        <tr>
+          <td>FAQ par catégorie de produit</td>
+          <td>Opportunité FAQ schema (rich snippets). Aucun concurrent n'a de FAQ structurée.</td>
+          <td>Bloc FAQ (5-10 questions) par catégorie avec JSON-LD</td>
+          <td><span class="priority-medium">MOYENNE</span></td>
+          <td>Quick win (1h par catégorie)</td>
+        </tr>
+        <tr>
+          <td>Glossaire puériculture professionnelle</td>
+          <td>Contenu evergreen, capte la longue traîne informationnelle. Aucun concurrent n'en a.</td>
+          <td>Page glossaire A-Z avec liens vers produits</td>
+          <td><span class="priority-low">BASSE</span></td>
+          <td>Substantiel (1-2 jours)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Analyse du tunnel de conversion (funnel gaps)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Étape du funnel</th>
+          <th>Contenu existant</th>
+          <th>Gap identifié</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Découverte</strong> (awareness)</td>
+          <td>Blog sur sous-domaine (déconnecté SEO)</td>
+          <td class="loser">Aucun contenu informationnel sur le domaine principal. Pas de guides, pas d'articles sur les réglementations.</td>
+        </tr>
+        <tr>
+          <td><strong>Considération</strong> (research)</td>
+          <td>Pages catégories sans texte</td>
+          <td class="loser">Pas de comparatifs, pas de guides d'achat, pas de tableaux de spécifications.</td>
+        </tr>
+        <tr>
+          <td><strong>Décision</strong> (purchase)</td>
+          <td>Fiches produit (trop minces)</td>
+          <td class="loser">Descriptions trop courtes (<100 mots), pas de FAQ, pas d'avis clients, pas de vidéos produit.</td>
+        </tr>
+        <tr>
+          <td><strong>Fidélisation</strong> (retention)</td>
+          <td>Newsletter, catalogue papier</td>
+          <td>Correct mais pas exploité en SEO — pas de page de témoignages, pas de contenu post-achat.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- 4. TECHNICAL SEO CHECKLIST -->
+  <!-- ============================================ -->
+  <section>
+    <h2>4. Technical SEO Checklist</h2>
+
+    <h3>Semrush Site Audit — Score global (snapshot 08/04/2026)</h3>
+    <div class="grid-3">
+      <div class="metric-card">
+        <div class="value" style="color: var(--danger);">63/100</div>
+        <div class="metric-label">Site Health Score</div>
+        <div class="trend down">Sous le seuil acceptable (75)</div>
+      </div>
+      <div class="metric-card">
+        <div class="value">9 208</div>
+        <div class="metric-label">Pages crawlées</div>
+      </div>
+      <div class="metric-card">
+        <div class="value" style="color: var(--danger);">102</div>
+        <div class="metric-label">Issues détectées (erreurs + warnings + notices)</div>
+      </div>
+    </div>
+
+    <h3>Top erreurs Semrush Site Audit (données snapshot réelles)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Issue</th>
+          <th>Type</th>
+          <th>Pages touchées</th>
+          <th>Sévérité</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Liens internes cassés (broken internal links)</td>
+          <td>ERROR</td>
+          <td><strong>3 286</strong></td>
+          <td><span class="badge badge-critical">CRITIQUE</span></td>
+        </tr>
+        <tr>
+          <td>Canonical vers pages 4xx (broken canonicals)</td>
+          <td>ERROR</td>
+          <td><strong>3 282</strong></td>
+          <td><span class="badge badge-critical">CRITIQUE</span></td>
+        </tr>
+        <tr>
+          <td>Erreurs 4xx internes (pages en 404)</td>
+          <td>ERROR</td>
+          <td><strong>3 263</strong></td>
+          <td><span class="badge badge-critical">CRITIQUE</span></td>
+        </tr>
+        <tr>
+          <td>Pages sitemap renvoyant 4xx</td>
+          <td>ERROR</td>
+          <td><strong>2 204</strong></td>
+          <td><span class="badge badge-critical">CRITIQUE</span></td>
+        </tr>
+        <tr>
+          <td>Erreurs structured data / markup</td>
+          <td>ERROR</td>
+          <td><strong>1 452</strong></td>
+          <td><span class="badge badge-high">HAUTE</span></td>
+        </tr>
+        <tr>
+          <td>ALT images manquants</td>
+          <td>WARNING</td>
+          <td><strong>3 533</strong></td>
+          <td><span class="badge badge-high">HAUTE</span></td>
+        </tr>
+        <tr>
+          <td>Liens internes nofollow</td>
+          <td>WARNING</td>
+          <td><strong>3 577</strong></td>
+          <td><span class="badge badge-high">HAUTE</span></td>
+        </tr>
+        <tr>
+          <td>Liens internes HTTP (au lieu de HTTPS)</td>
+          <td>WARNING</td>
+          <td><strong>3 577</strong></td>
+          <td><span class="badge badge-high">HAUTE</span></td>
+        </tr>
+        <tr>
+          <td>Title dupliqués</td>
+          <td>WARNING</td>
+          <td><strong>127 groupes</strong></td>
+          <td><span class="badge badge-high">HAUTE</span></td>
+        </tr>
+        <tr>
+          <td>Images internes cassées (404)</td>
+          <td>ERROR</td>
+          <td><strong>800</strong></td>
+          <td><span class="badge badge-high">HAUTE</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size: 12px; color: var(--muted);">Source : Semrush Site Audit snapshot 69d65ec7 — projet #9843436 — 8 avril 2026</p>
+
+    <h3>Checklist technique détaillée</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 250px;">Vérification</th>
+          <th style="width: 80px;">Status</th>
+          <th>Détails</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>HTTPS</td>
+          <td><span class="badge badge-pass">PASS</span></td>
+          <td>Site en HTTPS. Certificat valide. Score HTTPS Semrush : 95%.</td>
+        </tr>
+        <tr>
+          <td>Robots.txt</td>
+          <td><span class="badge badge-warn">WARN</span></td>
+          <td>Présent et pointe vers le sitemap. Mais bloque <code>/sale*</code>, <code>/invoice*</code>, <code>/fleet*</code>, <code>/equipment*</code> etc. — 13 274 URLs bloquées dont certaines sont des routes backend qui ne devraient pas être accessibles publiquement.</td>
+        </tr>
+        <tr>
+          <td>Sitemap XML</td>
+          <td><span class="badge badge-fail">FAIL</span></td>
+          <td>101 fichiers sitemap, mais <strong>2 204 URLs pointent vers des pages mortes</strong> (Semrush snapshot — 93% pollué). Pages admin (frais de port, bons de réduction) incluses. Tous les lastmod à la même date.</td>
+        </tr>
+        <tr>
+          <td>Canonical tags</td>
+          <td><span class="badge badge-fail">FAIL</span></td>
+          <td><strong>3 282 canonical cassés</strong> (Semrush snapshot). Les canonicals pointent vers des URLs courtes qui retournent 404. Cause directe de la désindexation.</td>
+        </tr>
+        <tr>
+          <td>Redirections</td>
+          <td><span class="badge badge-warn">WARN</span></td>
+          <td>4 682 redirections 301 en place (scripts internes). Pas de chaînes de redirections détectées (Semrush : 0). Mais 30 permanent redirects à vérifier.</td>
+        </tr>
+        <tr>
+          <td>Erreurs serveur (5xx)</td>
+          <td><span class="badge badge-fail">FAIL</span></td>
+          <td><strong>29 pages retournent 5xx</strong>. Problèmes serveur à investiguer dans les logs.</td>
+        </tr>
+        <tr>
+          <td>Erreurs client (4xx)</td>
+          <td><span class="badge badge-fail">FAIL</span></td>
+          <td><strong>3 263 erreurs 4xx</strong> (Semrush snapshot). Explosion massive de 404.</td>
+        </tr>
+        <tr>
+          <td>Liens internes</td>
+          <td><span class="badge badge-fail">FAIL</span></td>
+          <td><strong>3 286 liens internes cassés</strong> (Semrush snapshot) sur 520 324 liens totaux. Maillage sévèrement endommagé.</td>
+        </tr>
+        <tr>
+          <td>Images cassées</td>
+          <td><span class="badge badge-fail">FAIL</span></td>
+          <td><strong>800 images internes en 404</strong> + 5 images externes cassées.</td>
+        </tr>
+        <tr>
+          <td>Structured data (Schema.org)</td>
+          <td><span class="badge badge-fail">FAIL</span></td>
+          <td><strong>1 452 pages avec erreurs markup</strong> (Semrush snapshot). Microdata obsolètes, pas de JSON-LD. <code>availability</code> en texte au lieu d'URL schema.org. <code>itemCondition</code> avec valeurs "Destock"/"CE" invalides.</td>
+        </tr>
+        <tr>
+          <td>Page speed (mobile)</td>
+          <td><span class="badge badge-fail">FAIL</span></td>
+          <td>Score PageSpeed : <strong>19/100 mobile</strong>, 46/100 Lighthouse. 5 scripts synchrones bloquants. TBT 800ms.</td>
+        </tr>
+        <tr>
+          <td>Core Web Vitals — CLS</td>
+          <td><span class="badge badge-fail">FAIL</span></td>
+          <td>CLS = <strong>0,32</strong> (seuil "bon" < 0,1). Images sans dimensions, éléments qui bougent au chargement.</td>
+        </tr>
+        <tr>
+          <td>Core Web Vitals — LCP</td>
+          <td><span class="badge badge-warn">WARN</span></td>
+          <td>LCP à améliorer. Images non optimisées, pas de lazy loading, pas de formats modernes (WebP/AVIF).</td>
+        </tr>
+        <tr>
+          <td>Mobile-friendliness</td>
+          <td><span class="badge badge-warn">WARN</span></td>
+          <td>Viewport inclut <code>user-scalable=no</code> et <code>maximum-scale=1.0</code> — pénalisé par Google (accessibilité).</td>
+        </tr>
+        <tr>
+          <td>Hreflang / multilingue</td>
+          <td><span class="badge badge-pass">PASS</span></td>
+          <td>Site monolingue (fr). Pas de hreflang nécessaire.</td>
+        </tr>
+        <tr>
+          <td>HTML sémantique</td>
+          <td><span class="badge badge-warn">WARN</span></td>
+          <td><strong>697 pages</strong> avec faible usage des balises sémantiques HTML5 (article, section, nav, main).</td>
+        </tr>
+        <tr>
+          <td>JS/CSS optimisation</td>
+          <td><span class="badge badge-fail">FAIL</span></td>
+          <td>3 577 pages chargent des JS/CSS non minifiés et non mis en cache. Total size trop importante.</td>
+        </tr>
+        <tr>
+          <td>Noindex/nofollow</td>
+          <td><span class="badge badge-fail">FAIL</span></td>
+          <td>Page 404 en <code>index, follow</code> (devrait être noindex). Liens internes en nofollow (3 577 pages).</td>
+        </tr>
+        <tr>
+          <td>Duplicate content</td>
+          <td><span class="badge badge-warn">WARN</span></td>
+          <td>115 pages à contenu dupliqué. 127 title dupliqués. 131 meta descriptions dupliquées.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- 5. COMPETITOR COMPARISON -->
+  <!-- ============================================ -->
+  <section>
+    <h2>5. Competitor SEO Comparison</h2>
+
+    <h3>Vue d'ensemble Semrush MCP (données live — 8 avril 2026)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>papouillefrance.com</th>
+          <th>wesco.fr</th>
+          <th>Écart</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Rang Semrush (France)</td>
+          <td class="loser">#52 489</td>
+          <td class="winner">#4 558</td>
+          <td>Wesco 11,5× mieux classé</td>
+        </tr>
+        <tr>
+          <td>Trafic organique (Semrush)</td>
+          <td class="loser">6 890</td>
+          <td class="winner">120 080</td>
+          <td style="color: var(--danger); font-weight: 700;">×17,4</td>
+        </tr>
+        <tr>
+          <td>Mots-clés organiques</td>
+          <td class="loser">5 738</td>
+          <td class="winner">40 342</td>
+          <td style="color: var(--danger); font-weight: 700;">×7,0</td>
+        </tr>
+        <tr>
+          <td>Authority Score</td>
+          <td class="loser">25</td>
+          <td class="winner">41</td>
+          <td>+64%</td>
+        </tr>
+        <tr>
+          <td>Backlinks totaux</td>
+          <td class="loser">2 543</td>
+          <td class="winner">61 523</td>
+          <td style="color: var(--danger); font-weight: 700;">×24,2</td>
+        </tr>
+        <tr>
+          <td>Domaines référents</td>
+          <td class="loser">1 193</td>
+          <td class="winner">2 702</td>
+          <td>×2,3</td>
+        </tr>
+        <tr>
+          <td>Coût organique (valeur PPC)</td>
+          <td class="loser">$1 446</td>
+          <td class="winner">$16 969</td>
+          <td>×11,7</td>
+        </tr>
+        <tr>
+          <td>Site Audit Score</td>
+          <td class="loser">63/100</td>
+          <td>—</td>
+          <td>Sous le seuil acceptable (75)</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size: 12px; color: var(--muted);">Source : Semrush domain_rank + backlinks_overview via MCP API — base France — 8 avril 2026</p>
+
+    <h3>Données complémentaires (Ranxplorer avril 2026)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>papouillefrance.com</th>
+          <th>wesco.fr</th>
+          <th>madeinbebe.com</th>
+          <th>les3ours.fr</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Trafic SEO Ranxplorer</td>
+          <td class="loser">29 704</td>
+          <td>255 388</td>
+          <td class="winner">329 956</td>
+          <td>14 817</td>
+        </tr>
+        <tr>
+          <td>Mots-clés positionnés</td>
+          <td class="loser">14 527</td>
+          <td>86 439</td>
+          <td class="winner">109 995</td>
+          <td>6 248</td>
+        </tr>
+        <tr>
+          <td>Mots-clés top 10</td>
+          <td class="loser">4 607</td>
+          <td class="winner">28 603</td>
+          <td>27 219</td>
+          <td>1 623</td>
+        </tr>
+        <tr>
+          <td>Pages positionnées</td>
+          <td class="loser">1 719</td>
+          <td>8 916</td>
+          <td class="winner">8 976</td>
+          <td>1 050</td>
+        </tr>
+        <tr>
+          <td>Premières positions (P1)</td>
+          <td class="loser">149</td>
+          <td class="winner">1 040</td>
+          <td>984</td>
+          <td>29</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Top 15 concurrents organiques (Semrush MCP — mots-clés communs)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Concurrent</th>
+          <th>Mots-clés communs</th>
+          <th>Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td><strong>amazon.fr</strong></td><td>1 517</td><td>Marketplace généraliste</td></tr>
+        <tr><td>2</td><td><strong>cdiscount.com</strong></td><td>989</td><td>Marketplace généraliste</td></tr>
+        <tr><td>3</td><td><strong>vertbaudet.fr</strong></td><td>634</td><td>Puériculture B2C</td></tr>
+        <tr><td>4</td><td><strong>wesco.fr</strong></td><td>583</td><td>Équipement collectivités (B2B)</td></tr>
+        <tr><td>5</td><td><strong>bebe9.com</strong></td><td>451</td><td>Puériculture B2C</td></tr>
+        <tr><td>6</td><td><strong>aubert.com</strong></td><td>439</td><td>Puériculture B2C</td></tr>
+        <tr><td>7</td><td><strong>madeinbebe.com</strong></td><td>434</td><td>Puériculture B2C/B2B</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size: 12px; color: var(--muted);">Source : Semrush domain_organic_organic via MCP API — 8 avril 2026</p>
+
+    <div class="alert alert-danger">
+      <strong>Écart critique confirmé par les données Semrush MCP live</strong>
+      <p>En données Semrush : Papouille génère <strong>17,4× moins de trafic</strong> et a <strong>7× moins de mots-clés</strong> que wesco.fr. L'écart en backlinks est abyssal : <strong>2 543 vs 61 523</strong> (×24). L'Authority Score de 25 vs 41 confirme un déficit d'autorité majeur. La cause n'est pas la taille du catalogue mais l'accumulation de problèmes techniques (canonical, liens cassés, sitemap pollué) combinée à un contenu trop mince et une absence de stratégie de netlinking.</p>
+    </div>
+
+    <div class="alert alert-warning">
+      <strong>Insight clé : les concurrents organiques #1 à #3 sont des marketplaces</strong>
+      <p>Amazon (1 517 KW communs), Cdiscount (989) et Vertbaudet (634) occupent les top positions. Papouille ne peut pas les concurrencer en volume global, mais peut les surclasser sur les requêtes <strong>B2B/professionnelles</strong> où ces acteurs sont absents. Les mots-clés comme "mobilier crèche", "équipement crèche", "matériel puériculture professionnel" ont un <strong>KD = 0</strong> (zéro concurrence) : c'est la niche à exploiter.</p>
+    </div>
+
+    <h3>Avantages concurrentiels de wesco.fr (principal concurrent B2B)</h3>
+    <div class="action-box">
+      <h4>Ce que Wesco fait mieux</h4>
+      <p><strong>Blog intégré au domaine principal</strong> — transfert de PageRank direct, contrairement au sous-domaine de Papouille.</p>
+      <p><strong>Architecture de navigation profonde</strong> — mega menu avec sous-catégories très granulaires, facilitant le crawl et l'indexation.</p>
+      <p><strong>Contenu de catégories</strong> — textes SEO de 150-300 mots sur chaque page catégorie, là où Papouille n'a aucun texte.</p>
+      <p><strong>Contenu éditorial</strong> — articles de type "Comment aménager sa classe flexible ?" qui captent du trafic informationnel.</p>
+      <p><strong>24× plus de backlinks</strong> — 61 523 vs 2 543, avec 2 702 domaines référents vs 1 193.</p>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- 5b. AI SEARCH READINESS (skill: ai-seo) -->
+  <!-- ============================================ -->
+  <section>
+    <h2>5b. AI Search Readiness — Visibilité dans les IA génératives</h2>
+    <p style="font-size: 12px; color: var(--muted);">Basé sur le framework ai-seo : optimisation pour être cité par ChatGPT, Perplexity, Google AI Overviews, Claude</p>
+
+    <h3>Évaluation actuelle</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Critère AI-SEO</th>
+          <th>Status</th>
+          <th>Détail</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Robots.txt — accès bots IA</td>
+          <td><span class="badge badge-warn">WARN</span></td>
+          <td>Vérifier si GPTBot, PerplexityBot, ClaudeBot, Google-Extended sont autorisés. Actuellement 13 274 URLs bloquées — risque de bloquer les crawlers IA.</td>
+        </tr>
+        <tr>
+          <td>Contenu extractible (passages autonomes)</td>
+          <td><span class="badge badge-fail">FAIL</span></td>
+          <td>Les fiches produit contiennent trop peu de texte (<100 mots). Les IA ne peuvent pas extraire de passages citables. Il faut 150-300 mots structurés par page.</td>
+        </tr>
+        <tr>
+          <td>Sources et citations dans le contenu</td>
+          <td><span class="badge badge-fail">FAIL</span></td>
+          <td>Aucune citation de source, norme ou étude dans les fiches. Ajouter des références (+40% de visibilité IA selon Princeton Research).</td>
+        </tr>
+        <tr>
+          <td>Statistiques et données chiffrées</td>
+          <td><span class="badge badge-fail">FAIL</span></td>
+          <td>Pas de données chiffrées dans le contenu (dimensions, poids, conformité). +37% de visibilité IA avec des statistiques.</td>
+        </tr>
+        <tr>
+          <td>Attribution d'expertise</td>
+          <td><span class="badge badge-warn">WARN</span></td>
+          <td>Pas d'auteur identifié sur les pages guides. Ajouter des bios d'experts (+30% de citations IA).</td>
+        </tr>
+        <tr>
+          <td>Schema.org JSON-LD</td>
+          <td><span class="badge badge-fail">FAIL</span></td>
+          <td>Microdata obsolètes avec erreurs. Pas de JSON-LD. Les IA utilisent le schema pour comprendre les entités.</td>
+        </tr>
+        <tr>
+          <td>Contenu de type "comparatif"</td>
+          <td><span class="badge badge-fail">FAIL</span></td>
+          <td>Aucune page comparative. Les comparatifs représentent ~33% des contenus cités par les IA.</td>
+        </tr>
+        <tr>
+          <td>FAQ structurées</td>
+          <td><span class="badge badge-fail">FAIL</span></td>
+          <td>Aucune FAQ avec JSON-LD. Les FAQ sont un format privilégié par les IA pour extraire des réponses directes.</td>
+        </tr>
+        <tr>
+          <td>Présence sur plateformes tierces</td>
+          <td><span class="badge badge-warn">WARN</span></td>
+          <td>Papouille est peu présent sur les forums, annuaires et plateformes où les IA cherchent des confirmations.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert alert-warning">
+      <strong>Score AI-Readiness estimé : 15/100</strong>
+      <p>Papouille est quasi-invisible pour les IA génératives. Le site manque de contenu extractible, de données structurées, de citations et de contenu comparatif. C'est un axe de différenciation majeur : aucun concurrent B2B puériculture ne semble optimisé pour l'IA non plus.</p>
+    </div>
+
+    <h3>Actions prioritaires AI-SEO</h3>
+    <div class="action-box quick-win">
+      <h4>AI-1. Vérifier et autoriser les bots IA dans robots.txt</h4>
+      <p>S'assurer que GPTBot, PerplexityBot, ClaudeBot et Google-Extended ne sont pas bloqués.</p>
+    </div>
+    <div class="action-box quick-win">
+      <h4>AI-2. Ajouter des FAQ JSON-LD sur les 20 pages catégories principales</h4>
+      <p>5-8 questions/réponses par catégorie. Format idéal pour extraction par les IA. Double bénéfice : rich snippets Google + citations IA.</p>
+    </div>
+    <div class="action-box strategic">
+      <h4>AI-3. Créer 5 pages comparatives ("Meilleure poussette crèche", "Comparatif chaises hautes"...)</h4>
+      <p>Les comparatifs = 33% des contenus cités par les IA. Format : tableau comparatif + verdict + liens produits.</p>
+    </div>
+    <div class="action-box strategic">
+      <h4>AI-4. Enrichir les fiches avec sources, normes et statistiques</h4>
+      <p>Citer les normes (NF EN 12221, NF EN 716...), ajouter dimensions/poids/certifications. +40% visibilité IA.</p>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- 5c. SCHEMA JSON-LD RECOMMENDATIONS (skill: schema-markup) -->
+  <!-- ============================================ -->
+  <section>
+    <h2>5c. Recommandations Schema JSON-LD</h2>
+    <p style="font-size: 12px; color: var(--muted);">Basé sur le framework schema-markup : implémentation structured data pour rich results Google + compréhension IA</p>
+
+    <h3>Situation actuelle</h3>
+    <div class="alert alert-danger">
+      <strong>1 452 pages avec erreurs de structured data (Semrush snapshot)</strong>
+      <p>Le site utilise du <strong>Microdata obsolète</strong> avec des valeurs invalides (<code>availability: "En stock"</code> au lieu de <code>https://schema.org/InStock</code>, <code>itemCondition: "Destock"</code> invalide). Aucun JSON-LD. Pas de BreadcrumbList, pas de FAQPage, pas d'Organization.</p>
+    </div>
+
+    <h3>Schemas à implémenter (par priorité)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Schema</th>
+          <th>Pages</th>
+          <th>Priorité</th>
+          <th>Rich Result attendu</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Product</strong> (JSON-LD)</td>
+          <td>Toutes fiches produit (~4 000)</td>
+          <td><span class="badge badge-critical">CRITIQUE</span></td>
+          <td>Prix, disponibilité, avis dans les SERP</td>
+        </tr>
+        <tr>
+          <td><strong>BreadcrumbList</strong></td>
+          <td>Toutes les pages</td>
+          <td><span class="badge badge-high">HAUTE</span></td>
+          <td>Fil d'Ariane dans les SERP</td>
+        </tr>
+        <tr>
+          <td><strong>Organization</strong></td>
+          <td>Homepage</td>
+          <td><span class="badge badge-high">HAUTE</span></td>
+          <td>Knowledge Panel Google</td>
+        </tr>
+        <tr>
+          <td><strong>FAQPage</strong></td>
+          <td>Pages catégories + guides</td>
+          <td><span class="badge badge-high">HAUTE</span></td>
+          <td>FAQ déroulantes dans les SERP</td>
+        </tr>
+        <tr>
+          <td><strong>Article / BlogPosting</strong></td>
+          <td>Blog articles</td>
+          <td><span class="badge badge-medium">MOYENNE</span></td>
+          <td>Date, auteur dans les SERP</td>
+        </tr>
+        <tr>
+          <td><strong>WebSite</strong> (SearchAction)</td>
+          <td>Homepage</td>
+          <td><span class="badge badge-medium">MOYENNE</span></td>
+          <td>Barre de recherche dans les SERP</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Exemple JSON-LD Product (à implémenter par BLGCloud)</h3>
+    <pre style="background: #f5f5f5; padding: 16px; border-radius: 8px; font-size: 12px; overflow-x: auto;"><code>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Product",
+      "name": "Lit pliant bois blanc professionnel",
+      "image": "https://www.papouillefrance.com/images/lit-pliant-bois.jpg",
+      "description": "Lit pliant en bois massif pour crèche...",
+      "sku": "LIT-5154",
+      "brand": { "@type": "Brand", "name": "Papouille" },
+      "offers": {
+        "@type": "Offer",
+        "price": "189.00",
+        "priceCurrency": "EUR",
+        "availability": "https://schema.org/InStock",
+        "itemCondition": "https://schema.org/NewCondition",
+        "seller": { "@type": "Organization", "name": "Papouille" }
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.papouillefrance.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Couchage", "item": "https://www.papouillefrance.com/articles/couchage-15" },
+        { "@type": "ListItem", "position": 3, "name": "Lits pliants", "item": "https://www.papouillefrance.com/articles/couchage-15/lits-pliants-330" }
+      ]
+    }
+  ]
+}
+&lt;/script&gt;</code></pre>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- 5d. SITE ARCHITECTURE (skill: site-architecture) -->
+  <!-- ============================================ -->
+  <section>
+    <h2>5d. Architecture du site et maillage interne</h2>
+    <p style="font-size: 12px; color: var(--muted);">Basé sur le framework site-architecture : hiérarchie, navigation, liens internes hub-and-spoke</p>
+
+    <h3>Architecture actuelle</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Critère</th>
+          <th>Status</th>
+          <th>Détail</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Profondeur de navigation</td>
+          <td><span class="badge badge-warn">WARN</span></td>
+          <td>Certaines fiches produit sont à 4+ clics de la homepage. Règle des 3 clics non respectée.</td>
+        </tr>
+        <tr>
+          <td>Pages orphelines</td>
+          <td><span class="badge badge-fail">FAIL</span></td>
+          <td><strong>842 pages</strong> avec un seul lien entrant (quasi-orphelines). Google les crawle mal.</td>
+        </tr>
+        <tr>
+          <td>Maillage interne</td>
+          <td><span class="badge badge-fail">FAIL</span></td>
+          <td><strong>3 286 liens cassés</strong> + <strong>3 577 pages</strong> avec liens nofollow internes. Le PageRank ne circule pas.</td>
+        </tr>
+        <tr>
+          <td>Structure URL</td>
+          <td><span class="badge badge-pass">PASS</span></td>
+          <td>Format lisible : <code>/articles/famille/sous-famille/produit</code>. Cohérent et SEO-friendly.</td>
+        </tr>
+        <tr>
+          <td>Navigation principale</td>
+          <td><span class="badge badge-warn">WARN</span></td>
+          <td>7 catégories principales. Pas de mega menu — les sous-catégories nécessitent 2+ clics.</td>
+        </tr>
+        <tr>
+          <td>Blog intégré</td>
+          <td><span class="badge badge-fail">FAIL</span></td>
+          <td>Blog sur sous-domaine (<code>blog.papouillefrance.com</code>) — isolé du domaine principal, pas de transfert de PageRank.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Recommandations architecture (modèle hub-and-spoke)</h3>
+    <div class="action-box">
+      <h4>ARCH-1. Créer des pages "hub" par thématique</h4>
+      <p>Chaque catégorie principale (Mobilier, Couchage, Repas, Motricité, Puériculture) doit avoir une page hub enrichie (300+ mots) qui lie vers toutes ses sous-catégories et fiches produit. Ces hubs deviennent les pillar pages du topic cluster.</p>
+    </div>
+    <div class="action-box">
+      <h4>ARCH-2. Ajouter des blocs "Produits similaires" et "Même catégorie"</h4>
+      <p>Chaque fiche produit doit avoir 2 blocs de liens internes : (1) "Produits similaires" (3-5 liens), (2) "Autres produits de cette catégorie" (5-10 liens). Cela désorphelinise les 842 pages et distribue le PageRank.</p>
+    </div>
+    <div class="action-box">
+      <h4>ARCH-3. Implémenter un mega menu</h4>
+      <p>Remplacer la navigation actuelle par un mega menu exposant les sous-catégories en 1 clic. Wesco utilise ce pattern avec succès. Réduit la profondeur à 2 clics max pour toute fiche produit.</p>
+    </div>
+    <div class="action-box">
+      <h4>ARCH-4. Retirer le nofollow des liens internes</h4>
+      <p>3 577 pages ont des liens internes en <code>rel="nofollow"</code>. Cela bloque la circulation du PageRank. Tous les liens internes doivent être en <code>dofollow</code>.</p>
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- 6. PRIORITIZED ACTION PLAN -->
+  <!-- ============================================ -->
+  <section>
+    <h2>6. Plan d'action priorisé</h2>
+
+    <h3>🟢 Quick Wins — Cette semaine (impact immédiat)</h3>
+
+    <div class="action-box quick-win">
+      <h4>QW1. Nettoyer les noms de produits "De //"</h4>
+      <p><strong>Impact :</strong> Haute · <strong>Effort :</strong> 2-3 heures · <strong>Dépendance :</strong> Accès back-office</p>
+      <p>Supprimer le préfixe "De //" ou "DE/" de tous les noms de produits. Impact direct sur les title tags, meta descriptions, H1, sitemap et OG tags.</p>
+    </div>
+
+    <div class="action-box quick-win">
+      <h4>QW2. Demander à BLGCloud la correction urgente des canonical tags</h4>
+      <p><strong>Impact :</strong> Critique · <strong>Effort :</strong> 30 min (demande) · <strong>Dépendance :</strong> BLGCloud</p>
+      <p>Envoyer le rapport BLGCloud avec priorité absolue sur le bug U1 (canonical → 404). C'est la cause directe de la désindexation de 3 282 pages.</p>
+    </div>
+
+    <div class="action-box quick-win">
+      <h4>QW3. Ajouter les ALT images sur les 50 fiches produit les plus visitées</h4>
+      <p><strong>Impact :</strong> Haute · <strong>Effort :</strong> 2-3 heures · <strong>Dépendance :</strong> Accès back-office</p>
+      <p>Commencer par les fiches produit les plus visitées (top 50 GSC). Format : "[Nom produit] [caractéristique] pour crèche - Papouille".</p>
+    </div>
+
+    <div class="action-box quick-win">
+      <h4>QW4. Rédiger les textes de 10 pages catégories principales</h4>
+      <p><strong>Impact :</strong> Haute · <strong>Effort :</strong> 4-5 heures · <strong>Dépendance :</strong> Aucune</p>
+      <p>Rédiger 150-300 mots par page catégorie (puériculture, mobilier, couchage, repas, etc.). Inclure les mots-clés cibles identifiés dans le keyword research.</p>
+    </div>
+
+    <div class="action-box quick-win">
+      <h4>QW5. Soumettre les URLs prioritaires à la réindexation GSC</h4>
+      <p><strong>Impact :</strong> Haute · <strong>Effort :</strong> 30 min · <strong>Dépendance :</strong> Après correction canonical</p>
+      <p>Utiliser l'outil "Inspection de l'URL" dans GSC pour demander la réindexation des 25-30 pages les plus importantes (homepage, catégories principales).</p>
+    </div>
+
+    <h3>🟣 Investissements stratégiques — Ce trimestre</h3>
+
+    <div class="action-box strategic">
+      <h4>ST1. Enrichir toutes les fiches produit (300+ mots uniques)</h4>
+      <p><strong>Impact :</strong> Critique · <strong>Effort :</strong> 4-6 semaines · <strong>Dépendance :</strong> Aucune</p>
+      <p>Objectif : faire indexer les 10 850 pages actuellement ignorées par Google. Structure : description détaillée + caractéristiques techniques + FAQ (2-3 questions). Commencer par les 200 produits les mieux positionnés sur Ranxplorer.</p>
+    </div>
+
+    <div class="action-box strategic">
+      <h4>ST2. Migrer le blog vers le domaine principal</h4>
+      <p><strong>Impact :</strong> Haute · <strong>Effort :</strong> Substantiel (1-2 semaines, coordination BLGCloud) · <strong>Dépendance :</strong> BLGCloud</p>
+      <p>Déplacer <code>blog.papouillefrance.com</code> vers <code>www.papouillefrance.com/blog</code>. Mettre en place des redirections 301 de toutes les anciennes URLs. Cela permettra de transférer le PageRank du blog vers les pages produit.</p>
+    </div>
+
+    <div class="action-box strategic">
+      <h4>ST3. Créer 3 pillar pages (topic clusters)</h4>
+      <p><strong>Impact :</strong> Haute · <strong>Effort :</strong> 3-4 semaines · <strong>Dépendance :</strong> Aucune</p>
+      <p>1) "Équiper sa crèche de A à Z" (mobilier, puériculture, repas, motricité), 2) "Réglementation crèche 2026" (normes, sécurité, obligations), 3) "Guide d'achat matériel petite enfance" (comparatifs par catégorie). Chaque pillar page relie 5-10 articles de support.</p>
+    </div>
+
+    <div class="action-box strategic">
+      <h4>ST4. Implémenter le JSON-LD Product sur toutes les fiches</h4>
+      <p><strong>Impact :</strong> Haute · <strong>Effort :</strong> Modéré (coordination BLGCloud) · <strong>Dépendance :</strong> BLGCloud</p>
+      <p>Ajouter un bloc <code>&lt;script type="application/ld+json"&gt;</code> avec le schema Product complet : name, image, description, sku, brand, offers (price, priceCurrency, availability). Ajouter BreadcrumbList et Organization sur la homepage.</p>
+    </div>
+
+    <div class="action-box strategic">
+      <h4>ST5. Lancer une stratégie de netlinking</h4>
+      <p><strong>Impact :</strong> Haute · <strong>Effort :</strong> Continu (3-6 mois) · <strong>Dépendance :</strong> Aucune</p>
+      <p>Identifier 10-15 partenaires : annuaires professionnels petite enfance, blogs parentalité, sites réglementaires. Produire du contenu "linkable" (études, infographies, guides). Objectif : 200+ backlinks de qualité en 6 mois.</p>
+    </div>
+
+    <div class="action-box strategic">
+      <h4>ST6. Publier 2-4 articles de blog par mois</h4>
+      <p><strong>Impact :</strong> Moyenne → Haute (cumulatif) · <strong>Effort :</strong> Continu · <strong>Dépendance :</strong> ST2 (migration blog)</p>
+      <p>Thématiques : réglementation crèche, guides d'achat, comparatifs, aménagement espaces, activités enfants. Chaque article doit intégrer des liens vers 3-5 fiches produit pertinentes. Inclure des FAQ avec JSON-LD pour les rich snippets.</p>
+    </div>
+
+    <h3>Métriques cibles</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Métrique</th>
+          <th>Actuel (avril 2026)</th>
+          <th>Cible juillet 2026</th>
+          <th>Cible octobre 2026</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Trafic SEO (Ranxplorer)</td>
+          <td style="color: var(--danger); font-weight: 600;">29 704</td>
+          <td>35 000</td>
+          <td style="color: var(--success); font-weight: 600;">60 000+</td>
+        </tr>
+        <tr>
+          <td>Mots-clés en position 1</td>
+          <td>149</td>
+          <td>200</td>
+          <td>350+</td>
+        </tr>
+        <tr>
+          <td>Mots-clés en top 10</td>
+          <td>4 607</td>
+          <td>6 000</td>
+          <td>10 000+</td>
+        </tr>
+        <tr>
+          <td>Pages indexées (GSC)</td>
+          <td style="color: var(--danger); font-weight: 600;">806</td>
+          <td>5 000</td>
+          <td style="color: var(--success); font-weight: 600;">15 000+</td>
+        </tr>
+        <tr>
+          <td>CTR moyen (GSC MCP live)</td>
+          <td>1,65%</td>
+          <td>2,5%</td>
+          <td>3,5%+</td>
+        </tr>
+        <tr>
+          <td>Clics/jour (GSC MCP live)</td>
+          <td>389</td>
+          <td>500</td>
+          <td>800+</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</div>
+
+<footer>
+  Audit SEO complet — papouillefrance.com — Généré le 8 avril 2026<br>
+  Sources : <strong>Semrush MCP API (données live)</strong> · Semrush Site Audit snapshot 69d65ec7 (projet #9843436) · <strong>Google Search Console MCP API (données live)</strong> · Ranxplorer · PageSpeed Insights · Scan manuel<br>
+  Données Semrush : domain_rank · organic_research · backlinks_overview · domain_organic_organic · siteaudit_snapshot · phrase_kdi<br>
+  Données GSC : list_properties · get_performance_overview (90j) · get_search_analytics (queries + pages 28j) · compare_search_periods · get_sitemaps · check_indexing_issues<br>
+  Demandeur : Anthony Canavero — support@papouillefrance.com
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,1786 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit interne Papouille France — Axes d'amélioration & corrections</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #0d904f 0%, #0a6e3c 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 12px;
+            margin-bottom: 50px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            margin: 8px 0;
+            opacity: 0.95;
+        }
+
+        .header-meta {
+            margin-top: 20px;
+            font-size: 0.95em;
+            opacity: 0.85;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 15px;
+        }
+
+        /* KPI GRID */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .kpi {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #0d904f;
+        }
+
+        .kpi-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #0d904f;
+            margin-bottom: 10px;
+        }
+
+        .kpi-label {
+            font-size: 0.95em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .kpi-delta {
+            font-size: 0.9em;
+            color: #e74c3c;
+            font-weight: 600;
+        }
+
+        .kpi-delta.positive {
+            color: #27ae60;
+        }
+
+        /* SECTIONS */
+        section {
+            margin-bottom: 60px;
+        }
+
+        h2 {
+            font-size: 2em;
+            margin-bottom: 30px;
+            color: #1a1a1a;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #0d904f;
+        }
+
+        h3 {
+            font-size: 1.4em;
+            margin: 30px 0 20px 0;
+            color: #2c3e50;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        /* SEMRUSH GRID */
+        .semrush-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .semrush-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid #0d904f;
+        }
+
+        .semrush-card-label {
+            font-size: 0.9em;
+            color: #888;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .semrush-card-value {
+            font-size: 2em;
+            font-weight: 700;
+            color: #0d904f;
+        }
+
+        .semrush-card-delta {
+            font-size: 0.85em;
+            color: #e74c3c;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        /* TABLES */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        thead {
+            background: #f5f5f5;
+            border-bottom: 2px solid #ddd;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.95em;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            font-size: 0.95em;
+        }
+
+        tbody tr:hover {
+            background: #fafafa;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Bold rows for main product */
+        tbody tr.highlight {
+            background: #f0f8f3;
+            font-weight: 600;
+        }
+
+        tbody tr.highlight:hover {
+            background: #e8f5f0;
+        }
+
+        /* ALERTS */
+        .alerte-seo {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            color: #856404;
+        }
+
+        .alerte-seo.rouge {
+            background: #f8d7da;
+            border-left-color: #e74c3c;
+            color: #721c24;
+        }
+
+        .alerte-seo.vert {
+            background: #d4edda;
+            border-left-color: #27ae60;
+            color: #155724;
+        }
+
+        .alerte-seo-title {
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+
+        /* PRIORITY BADGES */
+        .priority-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .priority-critique {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .priority-haute {
+            background: #e67e22;
+            color: white;
+        }
+
+        .priority-moyenne {
+            background: #3498db;
+            color: white;
+        }
+
+        .priority-basse {
+            background: #95a5a6;
+            color: white;
+        }
+
+        /* PHASE BOXES */
+        .phase-box {
+            background: white;
+            border-left: 5px solid;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .phase-box.urgent {
+            border-left-color: #e74c3c;
+        }
+
+        .phase-box.urgent h4 {
+            color: #e74c3c;
+        }
+
+        .phase-box.optimization {
+            border-left-color: #e67e22;
+        }
+
+        .phase-box.optimization h4 {
+            color: #e67e22;
+        }
+
+        .phase-box.growth {
+            border-left-color: #27ae60;
+        }
+
+        .phase-box.growth h4 {
+            color: #27ae60;
+        }
+
+        .phase-box h4 {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        .phase-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .phase-box li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .phase-box li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            color: #0d904f;
+        }
+
+        /* FOOTER */
+        footer {
+            background: #f5f5f5;
+            border-top: 1px solid #ddd;
+            padding: 30px;
+            margin-top: 60px;
+            text-align: center;
+            color: #888;
+            font-size: 0.9em;
+            border-radius: 10px;
+        }
+
+        /* UTILITY CLASSES */
+        .root-cause {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+
+        .contourne {
+            color: #f39c12;
+            font-weight: 600;
+        }
+
+        .success {
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .header {
+                padding: 40px 20px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 0.85em;
+            }
+
+            th, td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <header class="header">
+            <h1>Audit interne — Axes d'amélioration & corrections</h1>
+            <p><strong>Rapport à destination de l'équipe Papouille — www.papouillefrance.com</strong></p>
+            <div class="header-meta">
+                <p><strong>Demandeur :</strong> Anthony Canavero — support@papouillefrance.com</p>
+                <p><strong>Date du rapport :</strong> 9 avril 2026 — <strong>Mis à jour avec GA4 + Semrush MCP + GSC MCP (données live)</strong></p>
+                <p><strong>Sources :</strong> Audit SEO + <strong>Google Analytics 4 (live 09/04/2026)</strong> + <strong>Google Search Console MCP API (live)</strong> + <strong>Semrush MCP API (live)</strong> + Semrush Site Audit + Ranxplorer + GTM/GA4 + API BLGCLOUD (4 682 redirections)</p>
+            </div>
+        </header>
+
+        <!-- KPIs -->
+        <div class="kpi-grid">
+            <div class="kpi">
+                <div class="kpi-value">29 704</div>
+                <div class="kpi-label">Trafic SEO estimé (Ranxplorer)</div>
+                <div class="kpi-delta">▼-26%</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-value">149</div>
+                <div class="kpi-label">Mots-clés en position 1</div>
+                <div class="kpi-delta">▼-7%</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-value">+30 718</div>
+                <div class="kpi-label">Gain de trafic potentiel</div>
+                <div class="kpi-label" style="font-size: 0.85em; margin-top: 5px;">(Ranxplorer simulateur)</div>
+            </div>
+            <div class="kpi">
+                <div class="kpi-value">88%</div>
+                <div class="kpi-label">Pages NON indexées</div>
+                <div class="kpi-label" style="font-size: 0.85em; margin-top: 5px;">(35 039 / 39 613)</div>
+            </div>
+        </div>
+
+        <!-- SECTION 1: Situation SEO actuelle -->
+        <section>
+            <h2>Section 1 : Situation SEO actuelle</h2>
+
+            <p>
+                Le trafic organique de papouillefrance.com est en déclin significatif sur les trois derniers mois.
+                Selon Semrush, le trafic organique a chuté de -42% sur 12 mois, passant de ~12 400 visites en avril 2025
+                à 7 200 en avril 2026. Ranxplorer confirme cette tendance avec une estimation de 29 704 visites (-26% vs mars).
+                L'indexation reste critique avec 88% des pages connues par Google bloquées ou non indexées.
+            </p>
+
+            <h3>Semrush (avril 2026)</h3>
+            <div class="semrush-grid">
+                <div class="semrush-card">
+                    <div class="semrush-card-label">Authority Score</div>
+                    <div class="semrush-card-value">25</div>
+                </div>
+                <div class="semrush-card">
+                    <div class="semrush-card-label">Trafic organique</div>
+                    <div class="semrush-card-value">7 200</div>
+                    <div class="semrush-card-delta">▼-42% sur 12 mois</div>
+                </div>
+                <div class="semrush-card">
+                    <div class="semrush-card-label">Mots-clés</div>
+                    <div class="semrush-card-value">6 100</div>
+                    <div class="semrush-card-delta">▼-8%</div>
+                </div>
+            </div>
+
+            <h3>Ranxplorer (avril 2026)</h3>
+            <div class="semrush-grid">
+                <div class="semrush-card">
+                    <div class="semrush-card-label">Trafic SEO estimé</div>
+                    <div class="semrush-card-value">29 704</div>
+                    <div class="semrush-card-delta">▼-26% vs mars</div>
+                </div>
+                <div class="semrush-card">
+                    <div class="semrush-card-label">Mots-clés positionnés</div>
+                    <div class="semrush-card-value">14 527</div>
+                    <div class="semrush-card-delta">▼-3%</div>
+                </div>
+                <div class="semrush-card">
+                    <div class="semrush-card-label">URLs positionnées</div>
+                    <div class="semrush-card-value">1 719</div>
+                    <div class="semrush-card-delta">▼-2%</div>
+                </div>
+            </div>
+
+            <h3>Google Search Console — Performances (GSC MCP live 08/04/2026)</h3>
+            <div class="semrush-grid">
+                <div class="semrush-card">
+                    <div class="semrush-card-label">Clics (90 jours)</div>
+                    <div class="semrush-card-value">35 040</div>
+                    <div class="semrush-card-delta">~389/jour</div>
+                </div>
+                <div class="semrush-card">
+                    <div class="semrush-card-label">CTR moyen</div>
+                    <div class="semrush-card-value">1,65%</div>
+                    <div class="semrush-card-delta">(très faible)</div>
+                </div>
+                <div class="semrush-card">
+                    <div class="semrush-card-label">Position moyenne (avril)</div>
+                    <div class="semrush-card-value" style="color: #27ae60;">9,5</div>
+                    <div class="semrush-card-delta">▲ vs 12,5 en janvier</div>
+                </div>
+            </div>
+            <div class="semrush-grid">
+                <div class="semrush-card">
+                    <div class="semrush-card-label">Impressions (90 jours)</div>
+                    <div class="semrush-card-value">2,12M</div>
+                    <div class="semrush-card-delta">▼ 25k→20k/jour</div>
+                </div>
+                <div class="semrush-card">
+                    <div class="semrush-card-label">URLs sitemap indexées</div>
+                    <div class="semrush-card-value">4 434</div>
+                    <div class="semrush-card-delta">Sitemap valid GSC</div>
+                </div>
+                <div class="semrush-card">
+                    <div class="semrush-card-label">Trafic brand vs non-brand</div>
+                    <div class="semrush-card-value" style="color: #e74c3c;">~90% brand</div>
+                    <div class="semrush-card-delta">"papouille" = 1 282 clics/28j</div>
+                </div>
+            </div>
+
+            <h3>Google Analytics 4 — Trafic & e-commerce (GA4 live 09/04/2026)</h3>
+
+            <h4 style="margin-top: 16px; color: #555; font-size: 0.95em;">Évolution mensuelle (90 jours)</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mois</th>
+                        <th>Sessions</th>
+                        <th>Utilisateurs</th>
+                        <th>Pages vues</th>
+                        <th>Taux rebond</th>
+                        <th>Durée moy.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Janvier 2026</td>
+                        <td>3 700</td>
+                        <td>2 515</td>
+                        <td>16 911</td>
+                        <td>32,1 %</td>
+                        <td>5 min 03 s</td>
+                    </tr>
+                    <tr>
+                        <td>Février 2026</td>
+                        <td>4 238</td>
+                        <td>2 882</td>
+                        <td>19 737</td>
+                        <td>31,9 %</td>
+                        <td>5 min 02 s</td>
+                    </tr>
+                    <tr style="background: #e8f5e9;">
+                        <td><strong>Mars 2026</strong></td>
+                        <td><strong>4 984</strong></td>
+                        <td><strong>3 171</strong></td>
+                        <td><strong>24 278</strong></td>
+                        <td>33,3 %</td>
+                        <td>5 min 34 s</td>
+                    </tr>
+                    <tr>
+                        <td>Avril 2026 (partiel, 9j)</td>
+                        <td>1 051</td>
+                        <td>779</td>
+                        <td>4 781</td>
+                        <td>44,1 %</td>
+                        <td>9 min 09 s</td>
+                    </tr>
+                    <tr style="background: #f5f5f5; font-weight: 600;">
+                        <td>Tendance jan→mars</td>
+                        <td colspan="5" style="color: #27ae60;">▲ +35 % de sessions — croissance régulière sur 3 mois</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4 style="margin-top: 20px; color: #555; font-size: 0.95em;">Acquisition par canal (28 jours : 12 mars – 8 avril)</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Canal</th>
+                        <th>Sessions</th>
+                        <th>% total</th>
+                        <th>Taux engag.</th>
+                        <th>Durée moy.</th>
+                        <th>Conversions</th>
+                        <th>Revenu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="background: #f5f5f5; font-weight: 600;">
+                        <td>Total</td>
+                        <td>4 109</td>
+                        <td>100 %</td>
+                        <td>64,1 %</td>
+                        <td>1 min 15 s</td>
+                        <td>51</td>
+                        <td>1 507 €</td>
+                    </tr>
+                    <tr>
+                        <td>Direct</td>
+                        <td>2 707</td>
+                        <td>65,9 %</td>
+                        <td>64,9 %</td>
+                        <td>1 min 03 s</td>
+                        <td>12</td>
+                        <td>0 €</td>
+                    </tr>
+                    <tr style="background: #e8f5e9;">
+                        <td><strong>Organic Search</strong></td>
+                        <td><strong>927</strong></td>
+                        <td><strong>22,6 %</strong></td>
+                        <td><strong>71,6 %</strong></td>
+                        <td><strong>1 min 55 s</strong></td>
+                        <td>9</td>
+                        <td>282 €</td>
+                    </tr>
+                    <tr style="background: #fff3e0;">
+                        <td>Unassigned ⚠️</td>
+                        <td>180</td>
+                        <td>4,4 %</td>
+                        <td>16,1 %</td>
+                        <td>1 min 03 s</td>
+                        <td><strong>30</strong></td>
+                        <td><strong>1 225 €</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>154</td>
+                        <td>3,7 %</td>
+                        <td>67,5 %</td>
+                        <td>1 min 16 s</td>
+                        <td>0</td>
+                        <td>0 €</td>
+                    </tr>
+                    <tr>
+                        <td>Referral</td>
+                        <td>119</td>
+                        <td>2,9 %</td>
+                        <td>67,2 %</td>
+                        <td>1 min 00 s</td>
+                        <td>0</td>
+                        <td>0 €</td>
+                    </tr>
+                    <tr>
+                        <td>Cross-network</td>
+                        <td>26</td>
+                        <td>0,6 %</td>
+                        <td>0 %</td>
+                        <td>6 s</td>
+                        <td>0</td>
+                        <td>0 €</td>
+                    </tr>
+                    <tr>
+                        <td>Organic Social</td>
+                        <td>3</td>
+                        <td>0,1 %</td>
+                        <td>66,7 %</td>
+                        <td>38 s</td>
+                        <td>0</td>
+                        <td>0 €</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4 style="margin-top: 20px; color: #555; font-size: 0.95em;">Répartition par appareil (28 jours)</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Appareil</th>
+                        <th>Users</th>
+                        <th>% total</th>
+                        <th>Taux engag.</th>
+                        <th>Durée moy.</th>
+                        <th>Conversions</th>
+                        <th>Revenu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Mobile</td>
+                        <td>1 573</td>
+                        <td>60,5 %</td>
+                        <td>60,4 %</td>
+                        <td>41 s</td>
+                        <td>19</td>
+                        <td>383 €</td>
+                    </tr>
+                    <tr style="background: #e8f5e9;">
+                        <td><strong>Desktop</strong></td>
+                        <td><strong>1 013</strong></td>
+                        <td><strong>39,0 %</strong></td>
+                        <td><strong>70,6 %</strong></td>
+                        <td><strong>3 min 58 s</strong></td>
+                        <td><strong>32</strong></td>
+                        <td><strong>1 124 €</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Tablet</td>
+                        <td>16</td>
+                        <td>0,6 %</td>
+                        <td>56,5 %</td>
+                        <td>1 min 44 s</td>
+                        <td>0</td>
+                        <td>0 €</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4 style="margin-top: 20px; color: #555; font-size: 0.95em;">Top 10 pages les plus visitées (90 jours)</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Page</th>
+                        <th>Sessions</th>
+                        <th>Pages vues</th>
+                        <th>Taux rebond</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>/</td><td>2 944</td><td>4 167</td><td>11,6 %</td></tr>
+                    <tr><td>/search</td><td>1 707</td><td>5 108</td><td>6,9 %</td></tr>
+                    <tr><td>/cart</td><td>1 410</td><td>3 042</td><td>8,7 %</td></tr>
+                    <tr><td>/login</td><td>955</td><td>1 465</td><td>6,8 %</td></tr>
+                    <tr><td>/distribution</td><td>796</td><td>2 064</td><td>7,2 %</td></tr>
+                    <tr><td>/checkout</td><td>785</td><td>2 691</td><td>8,8 %</td></tr>
+                    <tr><td>/page/mobilier-creche-et-collectivites…</td><td>530</td><td>1 042</td><td>4,9 %</td></tr>
+                    <tr><td>/page/materiel-psychomotricite…</td><td>460</td><td>888</td><td>4,6 %</td></tr>
+                    <tr><td>/articles</td><td>403</td><td>685</td><td>13,9 %</td></tr>
+                    <tr><td>/page/repas-de-bebe-vaisselle…</td><td>370</td><td>680</td><td>1,6 %</td></tr>
+                </tbody>
+            </table>
+
+            <div class="alert" style="background: #fff3e0; border-left: 4px solid #f57c00; padding: 16px 20px; border-radius: 6px; margin: 20px 0;">
+                <strong>⚠️ Alerte GA4 — Attribution e-commerce cassée :</strong> 81 % du revenu (1 225 € sur 1 507 €) est attribué au canal "Unassigned" qui ne représente que 4 % des sessions. Cela indique un problème de DataLayer e-commerce : les événements <code>purchase</code> ne sont pas correctement liés aux sessions utilisateurs. Les corrections DataLayer côté BLGCLOUD (cf. rapport BLGCLOUD bugs #1-#5) sont indispensables pour fiabiliser les données de revenu.
+            </div>
+
+            <div class="alert" style="background: #e8f5e9; border-left: 4px solid #27ae60; padding: 16px 20px; border-radius: 6px; margin: 20px 0;">
+                <strong>✅ Point positif — Organic Search :</strong> Meilleur taux d'engagement de tous les canaux (71,6 %, durée 1min55s, 14,4 events/session). Le desktop génère 75 % du revenu malgré seulement 39 % des utilisateurs → <strong>les professionnels (crèches, collectivités) achètent depuis un ordinateur de bureau.</strong> Optimiser le parcours desktop et le SEO non-brand est le levier de croissance principal.
+            </div>
+
+            <p>
+                <strong>Observation critique :</strong> Le trafic est très majoritairement de marque.
+                Les trois requêtes de marque dominent : 'papouille' (3 636 clics), 'papouilles' (584), 'papouille france' (249).
+                La première requête non-marque significative est 'poussette 4 places' qui ne génère que 106 clics sur 16 mois.
+                <span class="root-cause">Le trafic organique non-marque est quasi inexistant.</span>
+                Cela indique que le site n'est pas visible sur les requêtes transactionnelles et informationnelles que recherchent les clients potentiels.
+            </p>
+
+            <h3>Google Search Console — Indexation (au 06/04/2026)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Raison</th>
+                        <th>Pages</th>
+                        <th>Source</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Bloquée par robots.txt</td>
+                        <td>13 274</td>
+                        <td>Site Web</td>
+                    </tr>
+                    <tr>
+                        <td>Explorée, actuellement non indexée</td>
+                        <td>10 850</td>
+                        <td>Google</td>
+                    </tr>
+                    <tr>
+                        <td>Autre page avec canonique correcte</td>
+                        <td>4 102</td>
+                        <td>Site Web</td>
+                    </tr>
+                    <tr>
+                        <td>Introuvable (404)</td>
+                        <td>3 656</td>
+                        <td>Site Web</td>
+                    </tr>
+                    <tr>
+                        <td>Google a choisi un autre canonical</td>
+                        <td>1 334</td>
+                        <td>Google</td>
+                    </tr>
+                    <tr>
+                        <td>Détectée, non indexée</td>
+                        <td>978</td>
+                        <td>Google</td>
+                    </tr>
+                    <tr>
+                        <td>Page avec redirection</td>
+                        <td>761</td>
+                        <td>Site Web</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="alerte-seo rouge">
+                <div class="alerte-seo-title">⚠️ Situation critique : 88% des pages non indexées</div>
+                <p>
+                    L'analyse montre que 35 039 pages sur 39 613 ne sont pas indexées par Google.
+                    Les canonicals cassés (3 656 pages 404) et le robots.txt bloquant 13 274 URLs sont des bugs de développement
+                    traités dans le rapport BLGCLOUD (sections U1, U2, U3).
+                </p>
+                <p style="margin-top: 10px;">
+                    <strong>Action Papouille :</strong> Les 10 850 pages 'explorées mais non indexées' nécessitent un travail de contenu
+                    et d'optimisation on-page côté équipe Papouille. Ce point sera développé en section 5.
+                </p>
+            </div>
+            <h3>Semrush Site Audit (08/04/2026) — Nouvelles données</h3>
+            <div class="semrush-grid">
+                <div class="semrush-card">
+                    <div class="semrush-card-label">Pages crawlées</div>
+                    <div class="semrush-card-value">9 107</div>
+                </div>
+                <div class="semrush-card">
+                    <div class="semrush-card-label">Erreurs 4xx</div>
+                    <div class="semrush-card-value" style="color: #e74c3c;">3 263</div>
+                    <div class="semrush-card-delta">Snapshot Semrush MCP 08/04</div>
+                </div>
+                <div class="semrush-card">
+                    <div class="semrush-card-label">Liens internes cassés</div>
+                    <div class="semrush-card-value" style="color: #e74c3c;">3 286</div>
+                    <div class="semrush-card-delta">Snapshot Semrush MCP 08/04</div>
+                </div>
+            </div>
+            <div class="semrush-grid">
+                <div class="semrush-card">
+                    <div class="semrush-card-label">Canonical URLs cassés</div>
+                    <div class="semrush-card-value" style="color: #e74c3c;">3 282</div>
+                    <div class="semrush-card-delta">Snapshot Semrush MCP 08/04</div>
+                </div>
+                <div class="semrush-card">
+                    <div class="semrush-card-label">Pages mortes dans sitemap</div>
+                    <div class="semrush-card-value" style="color: #e74c3c;">2 204</div>
+                    <div class="semrush-card-delta">93% du sitemap pollué</div>
+                </div>
+                <div class="semrush-card">
+                    <div class="semrush-card-label">Structured data en erreur</div>
+                    <div class="semrush-card-value" style="color: #e74c3c;">1 452</div>
+                    <div class="semrush-card-delta">Snapshot Semrush MCP 08/04</div>
+                </div>
+            </div>
+            <div class="semrush-grid">
+                <div class="semrush-card">
+                    <div class="semrush-card-label">Images internes cassées</div>
+                    <div class="semrush-card-value" style="color: #e74c3c;">800</div>
+                    <div class="semrush-card-delta">+800 (nouveau)</div>
+                </div>
+                <div class="semrush-card">
+                    <div class="semrush-card-label">Titles dupliqués</div>
+                    <div class="semrush-card-value" style="color: #e67e22;">127 groupes</div>
+                    <div class="semrush-card-delta">-118 vs dernier audit</div>
+                </div>
+                <div class="semrush-card">
+                    <div class="semrush-card-label">Meta descriptions dupliquées</div>
+                    <div class="semrush-card-value" style="color: #e67e22;">131 groupes</div>
+                    <div class="semrush-card-delta">-55 vs dernier audit</div>
+                </div>
+            </div>
+            <div class="semrush-grid">
+                <div class="semrush-card">
+                    <div class="semrush-card-label">Contenu dupliqué</div>
+                    <div class="semrush-card-value" style="color: #e67e22;">115 pages</div>
+                    <div class="semrush-card-delta">-77 vs dernier audit</div>
+                </div>
+                <div class="semrush-card">
+                    <div class="semrush-card-label">Nofollow sur liens internes</div>
+                    <div class="semrush-card-value" style="color: #e67e22;">3 577 pages</div>
+                </div>
+                <div class="semrush-card">
+                    <div class="semrush-card-label">ALT images manquants</div>
+                    <div class="semrush-card-value" style="color: #e67e22;">3 533</div>
+                    <div class="semrush-card-delta">+47 vs dernier audit</div>
+                </div>
+            </div>
+
+            <div class="alerte-seo rouge">
+                <div class="alerte-seo-title">⚠️ Explosion des erreurs Semrush depuis le dernier audit</div>
+                <p>
+                    Le Semrush Site Audit (snapshot MCP 08/04/2026) révèle une <strong>dégradation massive</strong> : 3 286 liens internes cassés,
+                    3 263 erreurs 4xx, 3 282 canonical cassés, 2 204 pages mortes dans le sitemap. Les bugs techniques (canonicals, sitemap, liens cassés)
+                    sont traités dans le rapport BLGCLOUD. <strong>Côté Papouille</strong>, les actions prioritaires sont :
+                    les 3 533 ALT images manquants, les 115 pages à contenu dupliqué, et le contenu trop mince
+                    responsable des 10 850 pages non indexées.
+                </p>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Analyse concurrentielle -->
+        <section>
+            <h2>Section 2 : Analyse concurrentielle (Ranxplorer)</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Concurrent</th>
+                        <th>Trafic</th>
+                        <th>Mots positionnés</th>
+                        <th>Mots en top 10</th>
+                        <th>Premières positions</th>
+                        <th>Pages positionnées</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>amazon.fr</td>
+                        <td>111 742 241</td>
+                        <td>24 386 803</td>
+                        <td>8 793 412</td>
+                        <td>1 620 289</td>
+                        <td>7 069 582</td>
+                    </tr>
+                    <tr>
+                        <td>madeinbebe.com</td>
+                        <td>329 956</td>
+                        <td>109 995</td>
+                        <td>27 219</td>
+                        <td>984</td>
+                        <td>8 976</td>
+                    </tr>
+                    <tr>
+                        <td>wesco.fr</td>
+                        <td>255 388</td>
+                        <td>86 439</td>
+                        <td>28 603</td>
+                        <td>1 040</td>
+                        <td>8 916</td>
+                    </tr>
+                    <tr class="highlight">
+                        <td><strong>papouillefrance.com</strong></td>
+                        <td><strong>29 704</strong></td>
+                        <td><strong>14 527</strong></td>
+                        <td><strong>4 607</strong></td>
+                        <td><strong>149</strong></td>
+                        <td><strong>1 719</strong></td>
+                    </tr>
+                    <tr>
+                        <td>les3ours-mobilier-creche.fr</td>
+                        <td>14 817</td>
+                        <td>6 248</td>
+                        <td>1 623</td>
+                        <td>29</td>
+                        <td>1 050</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>
+                Papouille génère <strong>8,5× moins de trafic que wesco.fr</strong> et <strong>11× moins que madeinbebe.com</strong>,
+                les deux concurrents directs sur le marché de la puériculture collective. L'écart en mots-clés top 10 est encore plus
+                critique : <strong>4 607 pour Papouille vs 28 603 pour wesco.fr (6× moins)</strong>.
+            </p>
+            <p>
+                Cette différence n'est pas liée à la taille du catalogue (Papouille a 1 719 pages positionnées vs 8 916 pour wesco.fr)
+                mais à la performance SEO des pages existantes. <strong>Le principal levier immédiat est le passage des 9 920 mots-clés en position 2-5
+                vers la première page.</strong> C'est l'objectif du simulateur Ranxplorer détaillé en section 3.
+            </p>
+        </section>
+
+        <!-- SECTION 3: Opportunités de gain -->
+        <section>
+            <h2>Section 3 : Opportunités de gain (Simulateur Ranxplorer)</h2>
+
+            <div class="alerte-seo vert">
+                <div class="alerte-seo-title">✓ Potentiel massif identifié</div>
+                <p>
+                    <strong>En gagnant 5 positions en moyenne sur les mots-clés actuels, Papouille pourrait capter +30 718 visites supplémentaires par mois,
+                    soit un doublement du trafic actuel (29 704 → 60 422 visites/mois).</strong>
+                </p>
+                <p style="margin-top: 10px;">
+                    Cette projection est basée sur les volumes de recherche Google et les CTR observés dans GSC.
+                    L'optimisation on-page et technique (sections 5 et 6) vise précisément cet objectif.
+                </p>
+            </div>
+
+            <h3>Top 15 opportunités par gain de trafic potentiel</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mot-clé</th>
+                        <th>Pos. actuelle</th>
+                        <th>Pos. simulée</th>
+                        <th>Trafic actuel</th>
+                        <th>Gain trafic</th>
+                        <th>Volume</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>coussin d'allaitement</td>
+                        <td>8</td>
+                        <td>3</td>
+                        <td>441</td>
+                        <td>+1 029</td>
+                        <td>14 692</td>
+                    </tr>
+                    <tr>
+                        <td>barrière sécurité bébé</td>
+                        <td>6</td>
+                        <td>1</td>
+                        <td>67</td>
+                        <td>+602</td>
+                        <td>—</td>
+                    </tr>
+                    <tr>
+                        <td>parc bebe pliable</td>
+                        <td>6</td>
+                        <td>1</td>
+                        <td>47</td>
+                        <td>+416</td>
+                        <td>1 542</td>
+                    </tr>
+                    <tr>
+                        <td>parc bebe pliant</td>
+                        <td>6</td>
+                        <td>1</td>
+                        <td>42</td>
+                        <td>+376</td>
+                        <td>1 392</td>
+                    </tr>
+                    <tr>
+                        <td>tetine avent natural 3</td>
+                        <td>4</td>
+                        <td>1</td>
+                        <td>177</td>
+                        <td>+354</td>
+                        <td>—</td>
+                    </tr>
+                    <tr>
+                        <td>poussette 4 places</td>
+                        <td>5</td>
+                        <td>1</td>
+                        <td>175</td>
+                        <td>+349</td>
+                        <td>1 745</td>
+                    </tr>
+                    <tr>
+                        <td>gonge</td>
+                        <td>6</td>
+                        <td>1</td>
+                        <td>8</td>
+                        <td>+66</td>
+                        <td>245</td>
+                    </tr>
+                    <tr>
+                        <td>trampoline pour bébé</td>
+                        <td>7</td>
+                        <td>2</td>
+                        <td>13</td>
+                        <td>+65</td>
+                        <td>—</td>
+                    </tr>
+                    <tr>
+                        <td>masque noir protection</td>
+                        <td>5</td>
+                        <td>1</td>
+                        <td>32</td>
+                        <td>+64</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>voiture little tikes</td>
+                        <td>4</td>
+                        <td>1</td>
+                        <td>32</td>
+                        <td>+64</td>
+                        <td>318</td>
+                    </tr>
+                    <tr>
+                        <td>lit en bois pliant</td>
+                        <td>5</td>
+                        <td>1</td>
+                        <td>31</td>
+                        <td>+61</td>
+                        <td>304</td>
+                    </tr>
+                    <tr>
+                        <td>poussette 6 places</td>
+                        <td>3</td>
+                        <td>1</td>
+                        <td>30</td>
+                        <td>+60</td>
+                        <td>297</td>
+                    </tr>
+                    <tr>
+                        <td>barriere securité</td>
+                        <td>7</td>
+                        <td>2</td>
+                        <td>13</td>
+                        <td>+60</td>
+                        <td>—</td>
+                    </tr>
+                    <tr>
+                        <td>draisienne a pedale</td>
+                        <td>6</td>
+                        <td>1</td>
+                        <td>7</td>
+                        <td>+60</td>
+                        <td>222</td>
+                    </tr>
+                    <tr>
+                        <td>poussette siège auto</td>
+                        <td>4</td>
+                        <td>1</td>
+                        <td>30</td>
+                        <td>+59</td>
+                        <td>296</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>
+                Le top 5 des opportunités représente à lui seul <strong>+2 777 visites supplémentaires/mois</strong>.
+                Ces mots-clés sont déjà positionnés mais en page 2-3 (positions 4-8). L'optimisation des fiches produit correspondantes
+                (descriptions enrichies, FAQ, backlinks internes) devrait suffir à les passer en position 1.
+            </p>
+        </section>
+
+        <!-- SECTION 4: Mots-clés en progression -->
+        <section>
+            <h2>Section 4 : Mots-clés en progression (Évolution mars → avril 2026)</h2>
+
+            <p>
+                Malgré la tendance générale à la baisse, certains mots-clés affichent une progression positive.
+                Ces gainers représentent les catégories et produits qui trouvent du traction malgré le trafic général déclinant.
+            </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mot-clé</th>
+                        <th>Pos. mars</th>
+                        <th>Pos. avril</th>
+                        <th>Δ Position</th>
+                        <th>Trafic avril</th>
+                        <th>Δ Trafic</th>
+                        <th>Volume</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>coussin d'allaitement</td>
+                        <td>N.A.</td>
+                        <td>8</td>
+                        <td>New</td>
+                        <td>441</td>
+                        <td>+441</td>
+                        <td>14 692</td>
+                    </tr>
+                    <tr>
+                        <td>smartmax animaux</td>
+                        <td>3</td>
+                        <td>1</td>
+                        <td>+2</td>
+                        <td>320</td>
+                        <td>+251</td>
+                        <td>1 065</td>
+                    </tr>
+                    <tr>
+                        <td>chaise bebe</td>
+                        <td>21</td>
+                        <td>5</td>
+                        <td>+16</td>
+                        <td>175</td>
+                        <td>+174</td>
+                        <td>1 741</td>
+                    </tr>
+                    <tr>
+                        <td>papouille france</td>
+                        <td>N.A.</td>
+                        <td>1</td>
+                        <td>New</td>
+                        <td>142</td>
+                        <td>+142</td>
+                        <td>143</td>
+                    </tr>
+                    <tr>
+                        <td>poussette double joie</td>
+                        <td>24</td>
+                        <td>8</td>
+                        <td>+16</td>
+                        <td>126</td>
+                        <td>+125</td>
+                        <td>4 194</td>
+                    </tr>
+                    <tr>
+                        <td>aménagement micro crèche</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>=</td>
+                        <td>69</td>
+                        <td>+66</td>
+                        <td>227</td>
+                    </tr>
+                    <tr>
+                        <td>babyphone philips</td>
+                        <td>N.A.</td>
+                        <td>5</td>
+                        <td>New</td>
+                        <td>58</td>
+                        <td>+58</td>
+                        <td>577</td>
+                    </tr>
+                    <tr>
+                        <td>parcours motricité bébé</td>
+                        <td>N.A.</td>
+                        <td>17</td>
+                        <td>New</td>
+                        <td>48</td>
+                        <td>+48</td>
+                        <td>5 919</td>
+                    </tr>
+                    <tr>
+                        <td>tapis d'éveil géant</td>
+                        <td>46</td>
+                        <td>5</td>
+                        <td>+41</td>
+                        <td>48</td>
+                        <td>+47</td>
+                        <td>—</td>
+                    </tr>
+                    <tr>
+                        <td>parcours de motricité bébé</td>
+                        <td>N.A.</td>
+                        <td>9</td>
+                        <td>New</td>
+                        <td>46</td>
+                        <td>+46</td>
+                        <td>1 502</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>
+                Les cinq entrées "New" (nouvelles positions) en avril suggèrent que la correction des canonicals
+                et des pages 404 (rapport BLGCLOUD) commence à porter ses fruits. Les pages concernées retrouvent progressivement
+                du positionnement. <strong>L'entrée "papouille france" en position 1</strong> est particulièrement positive,
+                mais elle reste une requête de marque à faible volume.
+            </p>
+            <p>
+                Les progressions d'ampleur (tapis d'éveil géant +41 positions, chaise bébé +16) indiquent que l'optimisation
+                on-page devient graduellement efficace. Ces trajectoires doivent être maintenues et amplifiées en section 5.
+            </p>
+        </section>
+
+        <!-- SECTION 5: Corrections internes Papouille -->
+        <section>
+            <h2>Section 5 : Corrections internes Papouille</h2>
+
+            <p>
+                Cette section détaille les actions que <strong>l'équipe Papouille doit mener elle-même</strong>, indépendamment
+                des corrections techniques de BLGCLOUD. Les actions sont organisées par priorité et domaine (contenu, Merchant Center, SEO on-page, etc.).
+            </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Priorité</th>
+                        <th>Catégorie</th>
+                        <th>Action</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><span class="priority-badge priority-haute">HAUTE</span></td>
+                        <td>Contenu produit</td>
+                        <td>Corriger les noms de produits "De //" et "DE/"</td>
+                        <td>
+                            Plusieurs produits ont un préfixe "De //" ou "DE/" dans leur nom commercial
+                            (ex: "De // moustiquaire pour lit", "DE/ Parasol"). Ce préfixe pollue les titres, meta descriptions,
+                            H1, OG tags et le sitemap. Impact SEO et UX important. Nettoyer les noms produit dans l'ERP/CMS côté Papouille.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><span class="priority-badge priority-haute">HAUTE</span></td>
+                        <td>Contenu produit</td>
+                        <td>Corriger les meta descriptions avec guillemets mal échappés</td>
+                        <td>
+                            Les meta descriptions générées contiennent des guillemets simples d'encadrement et des doubles guillemets
+                            d'échappement SQL ('d''éveil sur mesure'). Cela crée du texte dupliqué et des erreurs dans les snippets Google.
+                            Revoir le template de génération des descriptions dans le moteur de templating CMS. À corriger en priorité
+                            avant la phase de contenu enrichi.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><span class="priority-badge priority-haute">HAUTE</span></td>
+                        <td>Merchant Center</td>
+                        <td>Corriger les 599 produits sans disponibilité valide</td>
+                        <td>
+                            Google Merchant Center rejette 599 produits pour "availability" manquante. Root cause :
+                            le schema.org structuré utilise "en stock !" au lieu de l'URL schema.org complète (ex: SchemaOrg/InStock).
+                            Bug de développement signalé dans rapport BLGCLOUD S4, mais l'import Google Sheet "PRODUCTS SOURCE 2"
+                            doit aussi être vérifié côté Papouille. Vérifier que le mappage des champs est correct.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><span class="priority-badge priority-haute">HAUTE</span></td>
+                        <td>Merchant Center</td>
+                        <td>Corriger les 887 produits sans prix</td>
+                        <td>
+                            Le flux Merchant Center (Google Sheet "PRODUCTS SOURCE 2") a 887 produits sans prix valide.
+                            Erreur bloquante : Google rejette la fiche produit sans GTIN ou prix. Vérifier l'export du Google Sheet
+                            côté Papouille et s'assurer que tous les produits actifs ont un prix renseigné. Nettoyer les doublons
+                            et les produits inactifs du flux avant export.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td><span class="priority-badge priority-haute">HAUTE</span></td>
+                        <td>SEO On-page</td>
+                        <td>Rédiger des contenus optimisés pour les catégories</td>
+                        <td>
+                            Les pages catégories (ex: /categories/poussettes, /categories/lits-pliants) n'ont pas de contenu textuel unique.
+                            Ajouter des descriptions SEO de 150-300 mots par catégorie avec les mots-clés cibles identifiés par Ranxplorer
+                            (section 3). Exemple : pour la catégorie "Poussettes", intégrer les mots "poussette 4 places",
+                            "poussette 6 places", "poussette pliable". Améliore le CTR et la profondeur de crawl.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td><span class="priority-badge priority-haute">HAUTE</span></td>
+                        <td>SEO On-page</td>
+                        <td>Optimiser les 10 850 pages "explorées mais non indexées"</td>
+                        <td>
+                            GSC signale 10 850 pages crawlées par Google mais non indexées. Cause probable : contenu trop mince ou dupliqué.
+                            Enrichir chaque fiche produit avec : (1) description détaillée (200+ mots), (2) caractéristiques produit (specs),
+                            (3) FAQ pertinente ("Qu'est-ce qu'une poussette pliable ?"), (4) avis client si disponible.
+                            Cible : 300+ mots uniques par fiche. Revalider dans GSC après corrections.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td><span class="priority-badge priority-moyenne">MOYENNE</span></td>
+                        <td>GTM/GA4</td>
+                        <td>Valider le tracking GA4 après corrections BLGCLOUD</td>
+                        <td>
+                            Une fois que BLGCLOUD aura corrigé les bugs DataLayer (rapport BLGCLOUD S2),
+                            valider dans GA4 DebugView que tous les événements envoient les bonnes données.
+                            Événements critiques à tester : view_item, add_to_cart, remove_from_cart, begin_checkout, purchase.
+                            S'assurer que les paramètres (product_id, price, quantity) sont bien transmis.
+                            Utilisez "Real-time" en GA4 pour vérifier les conversions.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td><span class="priority-badge priority-moyenne">MOYENNE</span></td>
+                        <td>SEO Stratégie</td>
+                        <td>Créer un blog / contenu éditorial</td>
+                        <td>
+                            Le site n'a aucun contenu éditorial (blog, guides, articles how-to).
+                            Créer une section "Conseils & Guide" avec des articles ciblant les requêtes informationnelles
+                            liées à la puériculture collective. Exemples : "Comment aménager une micro crèche",
+                            "Quel matériel pour ouvrir une crèche", "Norme de sécurité pour jeux bébé".
+                            Ces requêtes longue traîne (5-7 mots) génèrent du trafic qualifié et renforcent l'autorité.
+                            Minimum : 2-4 articles/mois de 800-1200 mots.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td><span class="priority-badge priority-moyenne">MOYENNE</span></td>
+                        <td>SEO Stratégie</td>
+                        <td>Travailler le maillage interne</td>
+                        <td>
+                            Les fiches produit ne semblent pas faire de liens entre elles (produits complémentaires, catégories liées).
+                            Ajouter des modules : (1) "Produits associés" (minimum 3 sur chaque fiche),
+                            (2) "Catégories similaires" dans le footer. Exemple : une fiche "Parc bébé pliable" pourrait linker
+                            vers "Parcs bébé" et "Accessoires rangement". Améliore le PageRank interne et le temps passé sur site.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td><span class="priority-badge priority-moyenne">MOYENNE</span></td>
+                        <td>SEO Backlinks</td>
+                        <td>Développer une stratégie de netlinking</td>
+                        <td>
+                            Authority Score 25 (Semrush) est très faible. Papouille ne peut pas concurrencer des sites avec des backlinks
+                            de qualité. Identifier des partenaires : micro-crèches, collectivités, blogs parentaux, fédérations de crèches.
+                            Proposer des partenariats (échange de liens, mentions dans articles, co-marketing).
+                            Objectif : passer à 40+ d'Authority Score en 6 mois. Commencer par 5-10 partenaires de qualité.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td><span class="priority-badge priority-basse">BASSE</span></td>
+                        <td>Merchant Center</td>
+                        <td>Vérifier le nom d'entreprise dans Merchant Center</td>
+                        <td>
+                            Le compte Google Merchant Center affiche "PAPOUILLE" (en majuscules) au lieu de "Papouille France".
+                            Vérifier dans les paramètres du compte Merchant Center que le nom de l'entreprise correspond à la marque officielle.
+                            Cela n'a pas d'impact SEO direct mais affecte la confiance client dans Google Shopping.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td><span class="priority-badge priority-basse">BASSE</span></td>
+                        <td>SEO Technique</td>
+                        <td>Soumettre les corrections à GSC pour revalidation</td>
+                        <td>
+                            Après chaque correction BLGCLOUD (canonicals, 404, robots.txt), soumettre une validation dans
+                            Google Search Console > "Statut d'indexation" > "Demander une validation".
+                            Cela accélère la réindexation des pages corrigées. À faire après chaque phase de correction
+                            (phases 1 et 2 du plan d'action).
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p style="margin-top: 20px;">
+                <strong>Notes de priorisation :</strong> Les actions HAUTE (1-6) doivent être complétées avant toute autre optimisation,
+                car elles bloquent ou faussent les métriques. Les actions MOYENNE (7-10) constituent le cœur de la stratégie SEO.
+                Les actions BASSE (11-12) sont des refinements sans impact critique.
+            </p>
+        </section>
+
+        <!-- SECTION 5bis: Audit des redirections 301 -->
+        <section>
+            <h2>Section 5bis : Audit des redirections 301 (scripts internes)</h2>
+
+            <p>
+                Audit complet des <strong>4 682 redirections 301</strong> présentes en base BLGCLOUD (via API <code>cms/redirect</code>, effectué le 08/04/2026).
+                Ces redirections sont gérées par les scripts internes Papouille (<code>automatic_redirection.py</code>, <code>gsc_404_manager.py</code>, <code>manual_redirect_import.py</code>).
+                <strong>96,2 % des redirections sont correctes</strong> (format long <code>/articles/famille/sous-famille/produit</code>).
+                Cependant, plusieurs anomalies ont été détectées et doivent être corrigées :
+            </p>
+
+            <div style="background: #e6f4ea; border: 1px solid #a8dab5; border-radius: 8px; padding: 16px; margin: 16px 0;">
+                <h4 style="color: #0d904f; margin-bottom: 8px;">Boucles de redirection corrigées automatiquement</h4>
+                <p>2 boucles de redirection (URL redirigée vers elle-même) ont été <strong>supprimées le 08/04/2026</strong> via l'API :</p>
+                <ul style="margin: 8px 0 0 20px; font-size: 14px;">
+                    <li><code>/articles/jeux-23/balles-et-cubes-d-activites-344</code> → elle-même (ID 39023) — <strong>supprimée</strong></li>
+                    <li><code>/articles/motricit-19/sport-et-gymnastique-443</code> → elle-même (ID 39115) — <strong>supprimée</strong></li>
+                </ul>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:30px">#</th>
+                        <th style="width:80px">Priorité</th>
+                        <th>Problème</th>
+                        <th>Détail</th>
+                        <th>Action recommandée</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>R1</strong></td>
+                        <td><span style="color: #e37400; font-weight: 700;">HAUTE</span></td>
+                        <td>166 redirections vers <code>/</code> (homepage) = soft-404</td>
+                        <td>89 URLs au format court (<code>/articles/slug-id</code>) + 68 URLs d'images (<code>/image/be-article-*</code>) + 9 autres redirigent vers la homepage. Google traite ces redirections comme des <strong>soft-404</strong> : aucun transfert de jus de lien. Toutes créées le 02/07/2025 par le script GSC.</td>
+                        <td>Remplacer chaque redirection vers <code>/</code> par la <strong>catégorie parente pertinente</strong> ou le <strong>produit de remplacement</strong>. Supprimer les 68 redirections d'images (inutiles pour le SEO). Modifier <code>gsc_404_manager.py</code> pour éviter le fallback vers <code>/</code>.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>R2</strong></td>
+                        <td><span style="color: #1a73e8; font-weight: 600;">MOYENNE</span></td>
+                        <td>2 chaînes de redirections (A → B → C)</td>
+                        <td>Chaîne 1 : chaise haute snacker → prima pappa follow me → prima pappa convertible (3 sauts). Chaîne 2 : poussette triple big caboose → poussette 3 places eco → catégorie poussettes (3 sauts). Chaque saut perd du budget crawl et du PageRank.</td>
+                        <td>Aplatir les chaînes : faire pointer A directement vers C. Ajouter une détection de chaînes dans <code>automatic_redirection.py</code> lors de l'archivage d'un produit qui est lui-même une destination de redirection.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>R3</strong></td>
+                        <td><span style="color: #1a73e8; font-weight: 600;">MOYENNE</span></td>
+                        <td>4 redirections vers un format d'URL tronqué</td>
+                        <td>3 sous-familles supprimées redirigent vers <code>/articles/famille-id/</code> (avec trailing slash, format incomplet). Ex : <code>/articles/jeux-23/tunnels-ballons-344</code> → <code>/articles/jeux-23/</code>. Ces destinations risquent d'être des 404.</td>
+                        <td>Corriger manuellement ces 4 redirections vers une sous-famille existante ou la page famille sans trailing slash.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>R4</strong></td>
+                        <td><span style="color: #5f6368; font-weight: 600;">BASSE</span></td>
+                        <td>3 redirections avec query strings dans l'URL source</td>
+                        <td>3 URLs contiennent <code>?_siteName=papouille&amp;_mainSiteName=papouille&amp;_route=article_view</code> dans le champ <code>from</code>. Ces query strings ne matcheront probablement pas côté serveur BLGCLOUD.</td>
+                        <td>Vérifier si BLGCLOUD match les redirections avec query strings. Si non, créer des redirections sans les query strings.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Statistiques globales des redirections</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Métrique</th>
+                        <th>Valeur</th>
+                        <th>%</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Total redirections en base</td><td><strong>4 682</strong></td><td>100 %</td></tr>
+                    <tr><td>Format long correct (produit → catégorie)</td><td>4 437</td><td>94,8 %</td></tr>
+                    <tr><td>Format long correct (produit → produit remplacement)</td><td>74</td><td>1,6 %</td></tr>
+                    <tr><td style="color: #e37400;">Redirections vers homepage <code>/</code></td><td style="color: #e37400;">166</td><td style="color: #e37400;">3,5 %</td></tr>
+                    <tr><td>URLs d'images (<code>/image/</code>)</td><td>68</td><td>1,5 %</td></tr>
+                    <tr><td>URLs au format court (<code>/articles/slug-id</code>)</td><td>89</td><td>1,9 %</td></tr>
+                    <tr><td style="color: #0d904f;">Boucles (corrigées le 08/04)</td><td style="color: #0d904f;">0 (2 supprimées)</td><td>—</td></tr>
+                    <tr><td>Chaînes (A→B→C)</td><td>2</td><td>—</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Chronologie des créations</h3>
+            <p style="font-size: 14px; color: #5f6368;">
+                Pic majeur le <strong>05/01/2026</strong> (3 295 redirections = déploiement initial du script <code>automatic_redirection.py</code>).
+                Puis 330 le 07/01, 230 le 12/01, 346 le 02/04/2026.
+                Les 89 URLs au format court datent toutes du <strong>02/07/2025</strong> (traitement GSC).
+            </p>
+        </section>
+
+        <!-- SECTION 5ter: Audit Semrush Site Audit — Actions internes -->
+        <section>
+            <h2>Section 5ter : Audit Semrush Site Audit — Actions internes</h2>
+
+            <p>
+                Audit complet via <strong>Semrush Site Audit (07/04/2026)</strong> mettant en évidence les actions
+                de <strong>responsabilité Papouille</strong> (contenu, configuration, images). Les données techniques
+                confiées à BLGCLOUD sont traitées dans le rapport technique BLGCLOUD. Cette section compile uniquement
+                les éléments demandant une action de l'équipe Papouille.
+            </p>
+
+            <h3>Semrush Site Audit — Chiffres clés</h3>
+            <div class="semrush-grid">
+                <div class="semrush-card">
+                    <div class="semrush-card-label">Santé globale</div>
+                    <div class="semrush-card-value">60%</div>
+                    <div class="semrush-card-delta">vs 92% moyenne industrie</div>
+                </div>
+                <div class="semrush-card">
+                    <div class="semrush-card-label">Explorabilité</div>
+                    <div class="semrush-card-value">60%</div>
+                </div>
+                <div class="semrush-card">
+                    <div class="semrush-card-label">HTTPS/Sécurité</div>
+                    <div class="semrush-card-value">95%</div>
+                </div>
+                <div class="semrush-card">
+                    <div class="semrush-card-label">Performances</div>
+                    <div class="semrush-card-value">71%</div>
+                </div>
+                <div class="semrush-card">
+                    <div class="semrush-card-label">Liens internes</div>
+                    <div class="semrush-card-value">71%</div>
+                </div>
+                <div class="semrush-card">
+                    <div class="semrush-card-label">Balisage HTML</div>
+                    <div class="semrush-card-value">97%</div>
+                </div>
+                <div class="semrush-card">
+                    <div class="semrush-card-label">Santé IA</div>
+                    <div class="semrush-card-value">55%</div>
+                </div>
+            </div>
+
+            <p>
+                <strong>Interprétation :</strong> Un score de 60% (vs 92% moyenne) indique une <strong>santé du site inférieure
+                à la normale</strong>. Les domaines critiques sont : l'explorabilité (60%), la santé IA (55%),
+                et les performances (71%). Les points forts : balisage HTML (97%) et HTTPS (95%).
+            </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:30px">#</th>
+                        <th style="width:80px">Priorité</th>
+                        <th>Problème</th>
+                        <th>Détail</th>
+                        <th>Action recommandée</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>SM1</strong></td>
+                        <td><span class="priority-badge priority-haute">HAUTE</span></td>
+                        <td>3 533 images sans attribut ALT</td>
+                        <td>
+                            Semrush détecte <strong>3 533 images sans <code>alt</code></strong> sur 81 901 images analysées.
+                            Les attributs <code>alt</code> sont essentiels pour : (1) l'accessibilité (lecteurs d'écran, utilisateurs malvoyants),
+                            (2) le SEO images (indexation Google Images), (3) le contenu alternatif en cas de chargement manqué.
+                            Absence flagrante sur les images produits.
+                        </td>
+                        <td>
+                            Remplir les attributs ALT de <strong>toutes les images produits</strong> dans BLGCLOUD avec une description pertinente.
+                            Format recommandé : <code>alt="[Nom produit] [couleur] [taille]"</code><br/>
+                            Exemples :<br/>
+                            • <code>alt="Poussette pliable grise 4 places"</code><br/>
+                            • <code>alt="Lit de voyage bleu camping"</code><br/>
+                            • <code>alt="Parasol crèche blanc 2x2m"</code><br/>
+                            À intégrer dans le moteur de templating BLGCLOUD pour auto-génération.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>SM2</strong></td>
+                        <td><span class="priority-badge priority-haute">HAUTE</span></td>
+                        <td>678 balises title trop longues</td>
+                        <td>
+                            <strong>678 pages ont un <code>&lt;title&gt;</code> trop long</strong> (dépassant la recommandation de 60-65 caractères maximum
+                            pour affichage complet dans les SERPs Google). Cela entraîne une troncature : les utilisateurs voient un snippet incomplet
+                            et les mots-clés de fin disparaissent. Impacte le CTR et le SEO.
+                        </td>
+                        <td>
+                            Raccourcir les titres des fiches produits. Format recommandé : <code>[Nom produit] - Papouille</code><br/>
+                            Exemples :<br/>
+                            • Au lieu de : <code>Poussette pliable 4 places en gris avec accessoires - Papouille France - Équipement pour crèches</code><br/>
+                            • Utiliser : <code>Poussette 4 places pliable gris - Papouille</code><br/>
+                            Limiter à max 60 caractères. Prioriser : nom produit + attribut principal + marque.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>SM3</strong></td>
+                        <td><span class="priority-badge priority-moyenne">MOYENNE</span></td>
+                        <td>115 pages avec contenu dupliqué</td>
+                        <td>
+                            <strong>115 pages ont du contenu identique ou quasi-identique</strong> à d'autres pages du site.
+                            Probablement des déclinaisons de couleur/taille du même produit réutilisant la même description produit sans modification.
+                            Google pénalise le contenu dupliqué via le filtre Panda.
+                        </td>
+                        <td>
+                            Option 1 (recommandée) : Rédiger des descriptions uniques pour chaque variante coloris/taille
+                            (au moins 50% de contenu différent).<br/>
+                            Option 2 : Utiliser les <code>&lt;link rel="canonical"&gt;</code> pour indiquer la page principale (ex: couleur "noir" comme canonical pour toutes les couleurs).<br/>
+                            Priorité : les 50 pages les plus visitées d'abord.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>SM4</strong></td>
+                        <td><span class="priority-badge priority-moyenne">MOYENNE</span></td>
+                        <td>127 title dupliquées + 131 meta descriptions dupliquées</td>
+                        <td>
+                            <strong>127 pages partagent exactement la même balise <code>&lt;title&gt;</code></strong> qu'une autre page,
+                            et <strong>131 pages ont la même <code>&lt;meta name="description"&gt;</code></strong>.
+                            Chaque page unique doit avoir un title et une description uniques pour maximiser les clics dans les SERPs.
+                            Probablement généré automatiquement sans différenciation.
+                        </td>
+                        <td>
+                            Audit des fiches produits avec noms similaires (ex: "Chaise haute rouge", "Chaise haute bleu", "Chaise haute jaune").
+                            Vérifier les catégories : s'assurer que chaque catégorie a son propre title/description.<br/>
+                            Refonte du moteur de génération : utiliser des tokens dynamiques pour chaque produit
+                            (nom, couleur, modèle, prix range).
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>SM5</strong></td>
+                        <td><span class="priority-badge priority-moyenne">MOYENNE</span></td>
+                        <td>697 pages avec faible usage HTML sémantique</td>
+                        <td>
+                            <strong>697 pages n'utilisent pas suffisamment de balises sémantiques</strong>
+                            (<code>&lt;article&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;aside&gt;</code>, <code>&lt;main&gt;</code>, etc.).
+                            Le balisage sémantique aide Google à comprendre la structure du contenu et améliore l'accessibilité.
+                            Actuellement : trop de <code>&lt;div&gt;</code> non sémantiques.
+                        </td>
+                        <td>
+                            Demander à BLGCLOUD d'améliorer le balisage sémantique des templates (fiche produit, catégorie, etc.).
+                            À signaler aussi côté BLGCLOUD (rapport technique), mais action demandée depuis Papouille.<br/>
+                            Exemple : wrapper le contenu produit dans <code>&lt;article&gt;</code>,
+                            les specs dans <code>&lt;section&gt;</code>, la navigation dans <code>&lt;nav&gt;</code>.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>SM6</strong></td>
+                        <td><span class="priority-badge priority-basse">BASSE</span></td>
+                        <td>82 pages avec contenu non optimisé</td>
+                        <td>
+                            <strong>82 pages ont un contenu qui pourrait être mieux optimisé</strong> pour les moteurs de recherche.
+                            Contenu trop court, absence de structure (H2/H3), manque de mots-clés pertinents, pas de FAQ.
+                        </td>
+                        <td>
+                            Réécrire les descriptions produits des 82 pages identifiées en intégrant les mots-clés pertinents
+                            identifiés par Ranxplorer (section 3). Structure recommandée :<br/>
+                            • Paragraphe 1 : nom du produit + mot-clé principal<br/>
+                            • Paragraphes 2-3 : caractéristiques, usages, bénéfices<br/>
+                            • Paragraphe 4 : mots-clés secondaires (longue traîne)<br/>
+                            • Objectif : 150-300 mots minimum par produit.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p style="margin-top: 20px;">
+                <strong>Notes de priorisation :</strong> Les actions HAUTE (SM1, SM2) doivent être complétées rapidement,
+                car elles bloquent l'indexation images et affectent directement les CTR. Les actions MOYENNE (SM3-SM5) constituent
+                des optimisations importantes pour la qualité du contenu. L'action BASSE (SM6) est un refinement progressif.
+            </p>
+        </section>
+
+        <!-- SECTION 6: Plan d'action -->
+        <section>
+            <h2>Section 6 : Plan d'action recommandé</h2>
+
+            <p>
+                Ci-dessous, le plan d'action pour atteindre l'objectif de doublement du trafic organique
+                (29 704 → 60 000+ visites/mois) en 6 mois.
+            </p>
+
+            <h3>Phase 1 : Urgences (0-2 semaines)</h3>
+            <div class="phase-box urgent">
+                <h4>🔴 Corrections critiques et préalables</h4>
+                <ul>
+                    <li>Suivre les corrections BLGCLOUD sur les canonicals, redirections 404 et robots.txt (rapport BLGCLOUD U1, U2, U3)</li>
+                    <li>Corriger les noms "De //" dans l'ERP (action S5-1)</li>
+                    <li>Corriger les meta descriptions avec guillemets (action S5-2)</li>
+                    <li>Corriger le Google Sheet Merchant Center : 887 produits sans prix, 599 sans disponibilité (actions S5-3, S5-4)</li>
+                    <li>Valider les corrections dans GSC après déploiement</li>
+                </ul>
+                <p style="margin-top: 15px; font-size: 0.95em; color: #555;">
+                    <strong>Responsable :</strong> Équipe Papouille (Contenu) + BLGCLOUD (Tech)<br/>
+                    <strong>Résultat attendu :</strong> Déblocage de ~20 000 pages à réindexer, nettoyage du Merchant Center
+                </p>
+            </div>
+
+            <h3>Phase 2 : Optimisation (1-2 mois)</h3>
+            <div class="phase-box optimization">
+                <h4>🟠 Contenu et on-page SEO</h4>
+                <ul>
+                    <li>Rédiger les contenus catégories (150-300 mots, actions S5-5)</li>
+                    <li>Enrichir les 1 500 fiches produits top (descriptions 300+ mots, FAQ, specs) — action S5-6</li>
+                    <li>Ajouter le maillage interne (produits associés, catégories similaires) — action S5-9</li>
+                    <li>Configurer et valider le tracking GA4 après corrections BLGCLOUD — action S5-7</li>
+                    <li>Soumettre les revalidations GSC par lot (25-30/jour)</li>
+                </ul>
+                <p style="margin-top: 15px; font-size: 0.95em; color: #555;">
+                    <strong>Responsable :</strong> Équipe Papouille (Contenu + SEO)<br/>
+                    <strong>Résultat attendu :</strong> +10 850 pages indexées, +2-3 positions gain moyen, +5 000 visites/mois
+                </p>
+            </div>
+
+            <h3>Phase 3 : Croissance (3-6 mois)</h3>
+            <div class="phase-box growth">
+                <h4>🟢 Stratégie et netlinking</h4>
+                <ul>
+                    <li>Lancer le blog éditorial : 2-4 articles/mois sur thèmes crèches et puériculture (action S5-8)</li>
+                    <li>Développer la stratégie de netlinking : identifier 10-15 partenaires de qualité (action S5-10)</li>
+                    <li>Affiner le maillage interne et l'architecture de catégories basé sur les données Ranxplorer</li>
+                    <li>Monitorer les progressions mensuelles dans Ranxplorer et ajuster les tactiques</li>
+                    <li>Objectif : doublement du trafic (30K → 60K+), Authority Score 25 → 35-40</li>
+                </ul>
+                <p style="margin-top: 15px; font-size: 0.95em; color: #555;">
+                    <strong>Responsable :</strong> Équipe Papouille (Contenu + Partnerships)<br/>
+                    <strong>Résultat attendu :</strong> +25 000 visites/mois supplémentaires, 5-8 positions gain moyen, 200+ backlinks de qualité
+                </p>
+            </div>
+
+            <h3>Métriques de suivi</h3>
+            <p>
+                Mesurer la progression mensuellement avec ces KPIs :
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Métrique</th>
+                        <th>Actuel (avril)</th>
+                        <th>Cible (juillet)</th>
+                        <th>Cible (octobre)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Trafic SEO estimé (Ranxplorer)</td>
+                        <td>29 704</td>
+                        <td>35 000</td>
+                        <td>60 000+</td>
+                    </tr>
+                    <tr>
+                        <td>Mots-clés en position 1</td>
+                        <td>149</td>
+                        <td>200</td>
+                        <td>350+</td>
+                    </tr>
+                    <tr>
+                        <td>Mots-clés en top 10</td>
+                        <td>4 607</td>
+                        <td>6 000</td>
+                        <td>10 000+</td>
+                    </tr>
+                    <tr>
+                        <td>Pages indexées (GSC)</td>
+                        <td>4 574</td>
+                        <td>12 000</td>
+                        <td>20 000+</td>
+                    </tr>
+                    <tr>
+                        <td>Authority Score (Semrush)</td>
+                        <td>25</td>
+                        <td>30</td>
+                        <td>40+</td>
+                    </tr>
+                    <tr>
+                        <td>CTR moyen (GSC)</td>
+                        <td>1,6%</td>
+                        <td>2,5%</td>
+                        <td>3,5%+</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- FOOTER -->
+        <footer>
+            <p>
+                <strong>Rapport généré le 9 avril 2026</strong> (mis à jour avec GA4 + Semrush Site Audit + GSC MCP) — Audit interne papouillefrance.com — Équipe Papouille
+            </p>
+            <p style="margin-top: 10px;">
+                <strong>Données sources :</strong> Google Analytics 4 (property 275254711) · Google Search Console · Semrush MCP + Site Audit · Ranxplorer · PageSpeed Insights
+            </p>
+            <p style="margin-top: 10px; font-size: 0.85em;">
+                Ce rapport est confidentiel. Destiné à l'usage interne de l'équipe Papouille uniquement.
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

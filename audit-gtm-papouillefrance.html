@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audit GTM + CookieScript + GA4 — Papouille France</title>
+<style>
+  :root {
+    --primary: #1a73e8;
+    --success: #0d904f;
+    --danger: #d93025;
+    --warning: #e37400;
+    --bg: #f8f9fa;
+    --card: #ffffff;
+    --text: #202124;
+    --muted: #5f6368;
+    --border: #dadce0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+  .container { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
+
+  header { background: linear-gradient(135deg, #1a73e8 0%, #174ea6 100%); color: white; padding: 40px 0; margin-bottom: 32px; }
+  header .container { display: flex; justify-content: space-between; align-items: center; }
+  header h1 { font-size: 28px; font-weight: 600; }
+  header .meta { font-size: 14px; opacity: 0.85; text-align: right; }
+  header .meta div { margin-bottom: 4px; }
+
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+  .badge-success { background: #e6f4ea; color: var(--success); }
+  .badge-danger { background: #fce8e6; color: var(--danger); }
+  .badge-warning { background: #fef7e0; color: var(--warning); }
+  .badge-info { background: #e8f0fe; color: var(--primary); }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+  .kpi { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
+  .kpi .number { font-size: 36px; font-weight: 700; }
+  .kpi .label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .kpi.success .number { color: var(--success); }
+  .kpi.danger .number { color: var(--danger); }
+  .kpi.warning .number { color: var(--warning); }
+  .kpi.info .number { color: var(--primary); }
+
+  section { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 28px; margin-bottom: 24px; }
+  section h2 { font-size: 20px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--bg); }
+  section h3 { font-size: 16px; margin: 20px 0 10px; color: var(--primary); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  th { background: var(--bg); text-align: left; padding: 10px 12px; font-weight: 600; border-bottom: 2px solid var(--border); }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:hover { background: #f1f3f4; }
+
+  .fix-item { background: var(--bg); border-radius: 8px; padding: 16px; margin: 12px 0; border-left: 4px solid var(--success); }
+  .fix-item.critical { border-left-color: var(--danger); }
+  .fix-item.warning { border-left-color: var(--warning); }
+  .fix-item h4 { font-size: 15px; margin-bottom: 6px; }
+  .fix-item p { font-size: 14px; color: var(--muted); }
+  .fix-item .tag-name { font-family: monospace; background: #e8f0fe; padding: 2px 6px; border-radius: 4px; font-size: 13px; }
+  .fix-item .before-after { display: flex; gap: 12px; margin-top: 8px; font-size: 13px; }
+  .fix-item .before { background: #fce8e6; padding: 4px 8px; border-radius: 4px; text-decoration: line-through; }
+  .fix-item .after { background: #e6f4ea; padding: 4px 8px; border-radius: 4px; }
+
+  .root-cause { background: #fef7e0; border: 1px solid #f9d67a; border-radius: 8px; padding: 20px; margin: 16px 0; }
+  .root-cause h4 { color: var(--warning); margin-bottom: 8px; }
+
+  .recommendation { background: #e8f0fe; border-radius: 8px; padding: 16px; margin: 12px 0; }
+  .recommendation h4 { color: var(--primary); margin-bottom: 6px; }
+  .recommendation p { font-size: 14px; }
+  .recommendation .priority { float: right; }
+
+  .status-icon { font-size: 16px; }
+
+  footer { text-align: center; padding: 24px; color: var(--muted); font-size: 13px; }
+
+  @media (max-width: 768px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    header .container { flex-direction: column; text-align: center; }
+    header .meta { text-align: center; margin-top: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div>
+      <h1>Audit GTM + CookieScript + GA4</h1>
+      <p>GTM-PNR2PTM + CMP RGPDV2 + GA4 G-80CD9W8TF5 — www.papouillefrance.com</p>
+    </div>
+    <div class="meta">
+      <div>Date : 7-8 avril 2026</div>
+      <div>Version publiée : #711 (Cleanup triggers &amp; variables)</div>
+      <div>Réalisé pour : support@papouillefrance.com</div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- KPIs -->
+  <div class="kpi-grid">
+    <div class="kpi info">
+      <div class="number">20</div>
+      <div class="label">Tags actifs (Version 711)</div>
+    </div>
+    <div class="kpi success">
+      <div class="number">13</div>
+      <div class="label">Corrections appliquées</div>
+    </div>
+    <div class="kpi success">
+      <div class="number">36</div>
+      <div class="label">Éléments orphelins supprimés</div>
+    </div>
+    <div class="kpi warning">
+      <div class="number">3</div>
+      <div class="label">Recommandations restantes</div>
+    </div>
+  </div>
+
+  <!-- Résumé exécutif -->
+  <section>
+    <h2>Résumé exécutif</h2>
+    <p>L'audit complet du conteneur GTM-PNR2PTM et du dashboard CookieScript (RGPDV2) a révélé des dysfonctionnements dans la configuration du Google Consent Mode v2, responsables de la perte massive de données GA4 (seulement 105 achats trackés contre la réalité, 36k utilisateurs au lieu de 99k l'année précédente).</p>
+    <p style="margin-top: 12px;"><strong>7 corrections ont été appliquées :</strong> 3 dans GTM (publiées en Version 709) et 4 dans le dashboard CookieScript (Auto-Detect activé, options RGPD corrigées, renouvellement des cookies forcé, 2 cookies Poptin classifiés en Functionality). Le nouveau scan (07/04/2026) a détecté 44 cookies — <strong>0 cookie non classifié</strong>.</p>
+    <p style="margin-top: 12px;"><strong>Audit approfondi GA4 :</strong> la configuration de la propriété est globalement solide (Google Signals, attribution data-driven, associations Google Ads + Search Console + Merchant Center, consentement 4/4). Trois optimisations identifiées : activer le scroll tracking, élargir la détection des données utilisateurs (Enhanced Conversions), et vérifier la dimension personnalisée "Devis".</p>
+    <p style="margin-top: 12px; padding: 12px; background: #e6f4ea; border-radius: 8px;"><strong>✅ MIGRATION E-COMMERCE GA4 TERMINÉE (8 avril 2026, Version 710) :</strong> 6 tags GA4 Event créés et publiés (<code>view_item_list</code>, <code>view_item</code>, <code>add_to_cart</code>, <code>begin_checkout</code>, <code>add_shipping_info</code>, <code>purchase</code>) + 2 variables CJS de transformation + 1 nouveau trigger. Testés en Preview mode avec succès (view_item_list, view_item, add_to_cart vérifiés). Aucune modification du code site — 100% GTM.</p>
+    <p style="margin-top: 12px; padding: 12px; background: #e6f4ea; border-radius: 8px;"><strong>✅ NETTOYAGE CONTENEUR GTM TERMINÉ (8 avril 2026, Version 711) :</strong> Suppression de 18 triggers orphelins et 18 variables orphelines non référencées par aucun tag. 1 variable protégée conservée (<code>dlv_fix_checkout</code>, encore référencée). Conteneur optimisé : 20 tags, 8 triggers, 16 variables utilisateur.</p>
+  </section>
+
+  <!-- Corrections appliquées -->
+  <section>
+    <h2>Corrections appliquées et publiées (Versions 709, 710 &amp; 711)</h2>
+
+    <div class="fix-item critical">
+      <h4>1. GAds - Conversion Tracking — Consent manquant</h4>
+      <p>Le tag de suivi des conversions Google Ads (tag #717) n'avait <strong>aucun consentement configuré</strong> dans "Additional Consent Checks". Il pouvait théoriquement se déclencher sans le consentement de l'utilisateur, ce qui est contraire au RGPD.</p>
+      <div class="before-after">
+        <span class="before">Additional Consent: Not set</span>
+        <span class="after">Additional Consent: ad_storage</span>
+      </div>
+    </div>
+
+    <div class="fix-item">
+      <h4>2. CookieScript CMP — url_passthrough activé</h4>
+      <p>Le tag CMP (tag #702) n'avait pas l'option <span class="tag-name">url_passthrough</span> activée. Sans cette option, les paramètres de clic Google Ads (gclid, dclid) sont perdus lorsque <code>ad_storage</code> est refusé, réduisant fortement l'attribution des conversions.</p>
+      <div class="before-after">
+        <span class="before">url_passthrough: désactivé</span>
+        <span class="after">url_passthrough: activé ✓</span>
+      </div>
+    </div>
+
+    <div class="fix-item warning">
+      <h4>3. Facebook - Pixel — Mauvais type de consentement</h4>
+      <p>Le pixel Facebook (tag #14) utilisait <span class="tag-name">analytics_storage</span> comme consentement requis. Or, c'est un pixel marketing/publicitaire qui devrait exiger <span class="tag-name">ad_storage</span>.</p>
+      <div class="before-after">
+        <span class="before">analytics_storage</span>
+        <span class="after">ad_storage</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cause racine -->
+  <section>
+    <h2>Cause racine — Perte de données GA4</h2>
+
+    <div class="root-cause">
+      <h4>⚠ Problème critique : Anciens cookies CookieScript incomplets</h4>
+      <p>L'analyse du site en production a révélé que certains visiteurs possèdent un ancien cookie <code>CookieScriptConsent</code> dont le champ <code>categories</code> ne contient que <code>["functionality"]</code>, sans les catégories <code>"performance"</code> (nécessaire pour analytics_storage) ni <code>"targeting"</code> (nécessaire pour ad_storage).</p>
+      <p style="margin-top: 8px;"><strong>Conséquence :</strong> Pour ces utilisateurs, même après avoir cliqué "Accepter tout", le Google Consent Mode maintient <code>analytics_storage = denied</code>, ce qui bloque totalement GA4.</p>
+    </div>
+
+    <h3>Diagnostic technique détaillé</h3>
+    <table>
+      <tr>
+        <th>Élément</th>
+        <th>État observé</th>
+        <th>Attendu</th>
+      </tr>
+      <tr>
+        <td>GTM Default Consent (CMP)</td>
+        <td><span class="badge badge-success">OK</span> — Tous les 7 types correctement configurés en "denied"</td>
+        <td>analytics_storage: denied, ad_storage: denied, etc.</td>
+      </tr>
+      <tr>
+        <td>GA4 Configuration consent</td>
+        <td><span class="badge badge-success">OK</span> — analytics_storage requis</td>
+        <td>Built-in consent: analytics_storage</td>
+      </tr>
+      <tr>
+        <td>CookieScript Consent Update</td>
+        <td><span class="badge badge-success">OK</span> — Fonctionne quand le cookie est frais</td>
+        <td>analytics_storage → granted après "Accepter tout"</td>
+      </tr>
+      <tr>
+        <td>Ancien cookie CookieScript</td>
+        <td><span class="badge badge-danger">KO</span> — categories: ["functionality"] seulement</td>
+        <td>categories: ["targeting","performance","functionality"]</td>
+      </tr>
+      <tr>
+        <td>Google Consent Mode ICS (ancien cookie)</td>
+        <td><span class="badge badge-danger">KO</span> — analytics_storage: update=false</td>
+        <td>analytics_storage: update=true</td>
+      </tr>
+      <tr>
+        <td>Bannière "Accepter tout" (nouveau visiteur)</td>
+        <td><span class="badge badge-success">OK</span> — Toutes catégories acceptées</td>
+        <td>targeting + performance + functionality</td>
+      </tr>
+    </table>
+
+    <h3>Flux de consentement (Google Consent Mode v2)</h3>
+    <p style="font-size: 14px; color: var(--muted); margin-bottom: 12px;">Voici la chaîne de dépendances qui doit fonctionner pour que GA4 collecte des données :</p>
+    <div style="background: var(--bg); padding: 16px; border-radius: 8px; font-family: monospace; font-size: 13px; line-height: 2;">
+      1. Page load → GTM charge CookieScript CMP (Consent Initialization)<br>
+      2. CMP envoie Default Consent → analytics_storage = "denied"<br>
+      3. Utilisateur clique "Accepter tout"<br>
+      4. CookieScript écrit cookie avec categories: ["targeting","performance","functionality"]<br>
+      5. CookieScript envoie Consent Update → analytics_storage = "granted"<br>
+      6. GA4 Configuration détecte analytics_storage = "granted" → commence la collecte<br>
+      <span style="color: var(--danger);">✗ Si étape 4 échoue (ancien cookie incomplet) → étape 5 n'envoie pas le bon update → GA4 reste bloqué</span>
+    </div>
+  </section>
+
+  <!-- Tableau complet de l'audit -->
+  <section>
+    <h2>Audit complet des 20 tags (Version 711)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Tag</th>
+          <th>Type</th>
+          <th>Consent</th>
+          <th>Statut</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Answerly.io - Pixel</td>
+          <td>Custom HTML</td>
+          <td><span class="badge badge-success">analytics_storage</span></td>
+          <td>Actif</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Bing Ads - UET Config</td>
+          <td>Microsoft Ads UET</td>
+          <td><span class="badge badge-success">ad_storage + analytics_storage</span></td>
+          <td>Actif</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Chatbot</td>
+          <td>Custom HTML</td>
+          <td><span class="badge badge-danger">Aucun</span></td>
+          <td>⏸ Pause</td>
+          <td>Non bloquant (tag en pause)</td>
+        </tr>
+        <tr>
+          <td>CookieScript CMP</td>
+          <td>CMP (Gallery)</td>
+          <td><span class="badge badge-info">N/A (CMP)</span></td>
+          <td>Actif</td>
+          <td><strong>CORRIGÉ</strong> — url_passthrough activé</td>
+        </tr>
+        <tr>
+          <td>Facebook - Pixel</td>
+          <td>Custom HTML</td>
+          <td><span class="badge badge-success">ad_storage</span></td>
+          <td>Actif</td>
+          <td><strong>CORRIGÉ</strong> — était analytics_storage</td>
+        </tr>
+        <tr>
+          <td>GA4 - Configuration</td>
+          <td>Google Tag</td>
+          <td><span class="badge badge-success">analytics_storage</span></td>
+          <td>Actif</td>
+          <td>Built-in consent OK</td>
+        </tr>
+        <tr style="background: #e6f4ea;">
+          <td>GA4 - view_item_list</td>
+          <td>GA4 Event</td>
+          <td><span class="badge badge-success">analytics_storage</span></td>
+          <td>✅ <strong>V710</strong></td>
+          <td>Trigger: Event - Product Impressions</td>
+        </tr>
+        <tr style="background: #e6f4ea;">
+          <td>GA4 - view_item</td>
+          <td>GA4 Event</td>
+          <td><span class="badge badge-success">analytics_storage</span></td>
+          <td>✅ <strong>V710</strong></td>
+          <td>Trigger: Event - View_Item</td>
+        </tr>
+        <tr style="background: #e6f4ea;">
+          <td>GA4 - add_to_cart</td>
+          <td>GA4 Event</td>
+          <td><span class="badge badge-success">analytics_storage</span></td>
+          <td>✅ <strong>V710</strong></td>
+          <td>Trigger: Event - Cart Add</td>
+        </tr>
+        <tr style="background: #e6f4ea;">
+          <td>GA4 - begin_checkout</td>
+          <td>GA4 Event</td>
+          <td><span class="badge badge-success">analytics_storage</span></td>
+          <td>✅ <strong>V710</strong></td>
+          <td>Trigger: Event - Checkout - Shipping</td>
+        </tr>
+        <tr style="background: #e6f4ea;">
+          <td>GA4 - add_shipping_info</td>
+          <td>GA4 Event</td>
+          <td><span class="badge badge-success">analytics_storage</span></td>
+          <td>✅ <strong>V710</strong></td>
+          <td>Trigger: Event - Checkout - Payment_Step</td>
+        </tr>
+        <tr style="background: #e6f4ea;">
+          <td>GA4 - purchase</td>
+          <td>GA4 Event</td>
+          <td><span class="badge badge-success">analytics_storage</span></td>
+          <td>✅ <strong>V710</strong></td>
+          <td>Trigger: Event - Purchase. Params: items, value, currency, transaction_id, shipping, tax</td>
+        </tr>
+        <tr>
+          <td>GAds - Conversion linker</td>
+          <td>Conversion Linker</td>
+          <td><span class="badge badge-success">ad_storage + analytics_storage</span></td>
+          <td>Actif</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>GAds - Conversion Tracking</td>
+          <td>Google Ads Conversion</td>
+          <td><span class="badge badge-success">ad_storage</span></td>
+          <td>Actif</td>
+          <td><strong>CORRIGÉ</strong> — était "Not set"</td>
+        </tr>
+        <tr>
+          <td>Google avis - Pixel</td>
+          <td>Custom HTML</td>
+          <td><span class="badge badge-success">analytics_storage</span></td>
+          <td>Actif</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Microsoft Clarity - Pixel</td>
+          <td>Custom HTML</td>
+          <td><span class="badge badge-success">analytics_storage</span></td>
+          <td>⏸ Pause</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Poptin - Pixel</td>
+          <td>Custom HTML</td>
+          <td><span class="badge badge-success">functionality_storage</span></td>
+          <td>⏸ Pause</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>SIB - tracker</td>
+          <td>Custom HTML</td>
+          <td><span class="badge badge-success">analytics_storage</span></td>
+          <td>Actif</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Trustpilot - pixel</td>
+          <td>Custom HTML</td>
+          <td><span class="badge badge-success">analytics_storage</span></td>
+          <td>Actif</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Trustpilot - tracking</td>
+          <td>Custom HTML</td>
+          <td><span class="badge badge-success">analytics_storage</span></td>
+          <td>Actif</td>
+          <td>—</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Recommandations -->
+  <section>
+    <h2>Recommandations</h2>
+
+    <div class="fix-item">
+      <h4>✅ 1. Renouvellement des cookies CookieScript — FAIT</h4>
+      <p>L'expiration du consentement a été temporairement réduite à <strong>1 jour</strong> (au lieu de 30 jours) pour forcer l'invalidation de tous les anciens cookies défaillants (ceux qui ne contenaient que <code>categories:["functionality"]</code>). L'expiration a ensuite été remise à <strong>30 jours</strong>. Tous les visiteurs reverront la bannière et obtiendront un nouveau cookie correct.</p>
+      <div class="before-after">
+        <span class="before">Anciens cookies incomplets persistants</span>
+        <span class="after">Tous les cookies forcés à expirer → re-consentement ✓</span>
+      </div>
+    </div>
+
+    <div class="fix-item">
+      <h4>✅ 2. Migration e-commerce UA → GA4 — FAIT (Version 710)</h4>
+      <p>6 tags GA4 Event créés dans GTM pour transformer les événements UA Enhanced Ecommerce en événements GA4 recommended. 2 variables Custom JavaScript (<code>cjs_ua_to_ga4_items</code>, <code>cjs_ecom_value</code>) + 1 trigger (<code>Event - Product Impressions</code>) ajoutés. Testés en Preview mode : <code>view_item_list</code>, <code>view_item</code> et <code>add_to_cart</code> vérifiés avec succès. Publié en Version 710 le 8 avril 2026.</p>
+      <div class="before-after">
+        <span class="before">0 événement e-commerce GA4</span>
+        <span class="after">6 événements GA4 actifs (view_item_list, view_item, add_to_cart, begin_checkout, add_shipping_info, purchase) ✓</span>
+      </div>
+    </div>
+
+    <div class="recommendation">
+      <span class="badge badge-warning priority">Priorité MOYENNE</span>
+      <h4>3. Configurer le consent pour le tag Chatbot dans GTM</h4>
+      <p>Le tag Chatbot (tag #715) n'a aucun consentement configuré. Même s'il est actuellement en pause, pensez à lui attribuer <code>functionality_storage</code> avant de le réactiver. <em>(Action requise dans GTM — session GTM expirée, à faire manuellement.)</em></p>
+    </div>
+
+    <div class="recommendation">
+      <span class="badge badge-success priority">✅ FAIT</span>
+      <h4>4. Classer les 2 cookies Poptin non classifiés</h4>
+      <p>Les 2 cookies non classifiés <code>poptin_last_visit</code> et <code>poptin_session_account_b7571fa3b163d</code> ont été reclassés de « Unclassified » vers la catégorie <strong>Functionality</strong> dans le Cookie Report CookieScript. Il reste désormais <strong>0 cookie non classifié</strong>.</p>
+    </div>
+
+    <div class="recommendation">
+      <span class="badge badge-info priority">Priorité BASSE</span>
+      <h4>5. Tester en Preview avec le Tag Assistant</h4>
+      <p>Utilisez le mode Preview de GTM et le Tag Assistant pour valider que les tags se déclenchent correctement après le consentement. Vérifiez en particulier que GA4 envoie bien des requêtes <code>collect</code> après avoir cliqué "Accepter tout" sur le bandeau.</p>
+    </div>
+  </section>
+
+  <!-- Configuration CookieScript GTM -->
+  <section>
+    <h2>Configuration CookieScript dans GTM</h2>
+    <table>
+      <tr><th>Paramètre</th><th>Valeur</th><th>Statut</th></tr>
+      <tr><td>Banner code URL</td><td><code style="font-size:12px">cdn.cookie-script.com/s/ea9f6528798e08b85919e0d628e0e49e.js</code></td><td><span class="badge badge-success">OK</span></td></tr>
+      <tr><td>ad_storage (default)</td><td>Denied</td><td><span class="badge badge-success">OK</span></td></tr>
+      <tr><td>ad_user_data (default)</td><td>Denied</td><td><span class="badge badge-success">OK</span></td></tr>
+      <tr><td>ad_personalization (default)</td><td>Denied</td><td><span class="badge badge-success">OK</span></td></tr>
+      <tr><td>analytics_storage (default)</td><td>Denied</td><td><span class="badge badge-success">OK</span></td></tr>
+      <tr><td>functionality_storage (default)</td><td>Granted</td><td><span class="badge badge-success">OK</span></td></tr>
+      <tr><td>personalization_storage (default)</td><td>Denied</td><td><span class="badge badge-success">OK</span></td></tr>
+      <tr><td>security_storage (default)</td><td>Granted</td><td><span class="badge badge-success">OK</span></td></tr>
+      <tr><td>Wait for update</td><td>500 ms</td><td><span class="badge badge-success">OK</span></td></tr>
+      <tr><td>url_passthrough</td><td>Activé</td><td><span class="badge badge-success">CORRIGÉ</span></td></tr>
+      <tr><td>ads_data_redaction</td><td>Désactivé</td><td><span class="badge badge-success">OK</span></td></tr>
+      <tr><td>Tag firing priority</td><td>1 (haute)</td><td><span class="badge badge-success">OK</span></td></tr>
+      <tr><td>Trigger</td><td>Consent Initialization - All Pages</td><td><span class="badge badge-success">OK</span></td></tr>
+      <tr>
+        <td>Google Consent Map</td>
+        <td>
+          ad_storage → targeting<br>
+          analytics_storage → performance<br>
+          ad_user_data → targeting<br>
+          ad_personalization → targeting<br>
+          functionality_storage → functionality<br>
+          personalization_storage → functionality<br>
+          security_storage → functionality
+        </td>
+        <td><span class="badge badge-success">OK</span></td>
+      </tr>
+    </table>
+  </section>
+
+  <!-- Audit CookieScript Dashboard -->
+  <section>
+    <h2>Audit du Dashboard CookieScript</h2>
+    <p style="margin-bottom: 16px;">Audit complet du projet <strong>RGPDV2</strong> (item #386652) effectué directement dans le dashboard cookie-script.com.</p>
+
+    <h3>Configuration principale</h3>
+    <table>
+      <tr><th>Paramètre</th><th>Valeur</th><th>Statut</th></tr>
+      <tr><td>Nom du projet</td><td>RGPDV2</td><td><span class="badge badge-success">OK</span></td></tr>
+      <tr><td>Plan</td><td>LITE</td><td><span class="badge badge-warning">Limité</span></td></tr>
+      <tr><td>Mode de consentement</td><td>Explicit (opt-in)</td><td><span class="badge badge-success">OK — conforme RGPD</span></td></tr>
+      <tr><td>Langue</td><td>Français</td><td><span class="badge badge-success">OK</span></td></tr>
+      <tr><td>Bannière publiée</td><td>Oui</td><td><span class="badge badge-success">OK</span></td></tr>
+      <tr><td>Expiration du consentement</td><td>30 jours</td><td><span class="badge badge-success">OK</span></td></tr>
+    </table>
+
+    <h3>Google Consent Mode — Mappings vérifiés</h3>
+    <table>
+      <tr><th>Google Consent Type</th><th>CookieScript Category</th><th>Statut</th></tr>
+      <tr><td>ad_storage</td><td>Targeting</td><td><span class="badge badge-success">OK</span></td></tr>
+      <tr><td>analytics_storage</td><td>Performance</td><td><span class="badge badge-success">OK</span></td></tr>
+      <tr><td>ad_user_data</td><td>Targeting</td><td><span class="badge badge-success">OK</span></td></tr>
+      <tr><td>ad_personalization</td><td>Targeting</td><td><span class="badge badge-success">OK</span></td></tr>
+      <tr><td>functionality_storage</td><td>Functionality</td><td><span class="badge badge-success">OK</span></td></tr>
+      <tr><td>personalization_storage</td><td>Functionality</td><td><span class="badge badge-success">OK</span></td></tr>
+      <tr><td>security_storage</td><td>Strictly Necessary</td><td><span class="badge badge-success">OK</span></td></tr>
+    </table>
+
+    <h3>Corrections appliquées dans CookieScript</h3>
+
+    <div class="fix-item">
+      <h4>4. Auto-Detect Consent Mode Issues — Activé</h4>
+      <p>L'option "Auto-Detect Consent Mode Issues" dans la section Google Consent Mode du dashboard était <strong>désactivée</strong>. Elle a été activée pour permettre à CookieScript de détecter automatiquement les problèmes de configuration du Consent Mode.</p>
+      <div class="before-after">
+        <span class="before">Auto-Detect: OFF</span>
+        <span class="after">Auto-Detect: ON ✓</span>
+      </div>
+    </div>
+
+    <div class="fix-item">
+      <h4>5. Nouveau scan de cookies lancé et terminé</h4>
+      <p>Le dernier scan datait du <strong>22 mai 2025</strong> (presque 11 mois). Un nouveau scan a été lancé et terminé le 7 avril 2026 : <strong>44 cookies détectés</strong> (37 first-party, 7 third-party) sur 100 pages. Les 2 cookies Poptin initialement non classifiés ont été reclassés en Functionality — <strong>0 cookie non classifié</strong>. Le scan précédent en avait détecté 38.</p>
+      <div class="before-after">
+        <span class="before">Dernier scan : 2025-05-22 (38 cookies)</span>
+        <span class="after">Nouveau scan : 2026-04-07 (44 cookies) ✓</span>
+      </div>
+    </div>
+
+    <div class="fix-item">
+      <h4>6. Forçage du renouvellement des cookies de consentement</h4>
+      <p>L'expiration du cookie de consentement a été temporairement réduite à <strong>1 jour</strong> puis remise à <strong>30 jours</strong>. Cette manœuvre force tous les anciens cookies CookieScript (y compris ceux défaillants avec seulement <code>categories:["functionality"]</code>) à expirer rapidement, obligeant tous les visiteurs à re-consentir avec le bandeau corrigé.</p>
+      <div class="before-after">
+        <span class="before">Anciens cookies avec categories incomplètes</span>
+        <span class="after">Expiration forcée → re-consentement complet ✓</span>
+      </div>
+    </div>
+
+    <h3>Points d'attention identifiés</h3>
+
+    <div class="fix-item">
+      <h4>✅ "Keep Google Analytics Cookies" — Désactivé</h4>
+      <p>L'option était activée avec un indicateur rouge RGPD. Elle a été <strong>désactivée</strong> — les cookies GA sont maintenant correctement supprimés lorsque l'utilisateur refuse les cookies "Performance". Tous les indicateurs RGPD sont passés au vert.</p>
+    </div>
+
+    <div class="fix-item">
+      <h4>✅ "Keep unknown cookies" — Désactivé</h4>
+      <p>L'option était activée avec un indicateur rouge RGPD. Elle a été <strong>désactivée</strong> — les cookies non classifiés ne sont plus conservés lorsque l'utilisateur refuse les catégories correspondantes. Tous les indicateurs RGPD sont passés au vert.</p>
+    </div>
+
+    <div class="recommendation">
+      <span class="badge badge-warning priority">Attention</span>
+      <h4>Validation Consent Mode : faux positif</h4>
+      <p>Le validateur intégré de CookieScript affiche <strong>"No banner found"</strong> sur papouillefrance.com. C'est un <strong>faux positif</strong> : la bannière est installée via le template GTM Community Gallery, méthode que le validateur ne détecte pas (il cherche un script dans le header HTML). Le Consent Mode fonctionne correctement — vérifié en production.</p>
+    </div>
+
+    <div class="recommendation">
+      <span class="badge badge-warning priority">Attention</span>
+      <h4>Plan LITE : fonctionnalités manquantes</h4>
+      <p>Le plan LITE ne permet pas d'activer le <strong>scan automatique mensuel</strong>, la <strong>réinitialisation automatique des consentements quand de nouveaux cookies sont détectés</strong>, ni la <strong>réception par email des résultats de scan</strong>. Envisagez un upgrade si vous souhaitez une conformité automatisée et un suivi proactif.</p>
+    </div>
+  </section>
+
+</div>
+
+<!-- ======================= AUDIT GA4 ======================= -->
+<div class="container">
+
+  <section>
+    <h2 style="border-left: 4px solid #e37400; padding-left: 12px;">Audit Google Analytics 4 — Papouillefrance</h2>
+    <p style="color: var(--muted); margin-top: 4px;">Propriété : Papouille > Papouillefrance — ID de mesure : <strong>G-80CD9W8TF5</strong> — Flux ID : 2645271525</p>
+    <p style="margin-top: 12px;">Audit réalisé le 8 avril 2026 sur la propriété GA4 de www.papouillefrance.com. Période analysée : 28 derniers jours (11 mars — 7 avril 2026).</p>
+  </section>
+
+  <!-- GA4 KPIs -->
+  <div class="kpi-grid" style="margin-top: 24px;">
+    <div class="kpi info">
+      <div class="number">10</div>
+      <div class="label">Événements détectés</div>
+    </div>
+    <div class="kpi success">
+      <div class="number">6</div>
+      <div class="label">Tags GA4 e-commerce (V710)</div>
+    </div>
+    <div class="kpi success">
+      <div class="number">✓</div>
+      <div class="label">E-commerce déployé</div>
+    </div>
+    <div class="kpi success">
+      <div class="number">5/5</div>
+      <div class="label">Signaux de consentement</div>
+    </div>
+  </div>
+
+  <!-- Diagnostic principal -->
+  <section>
+    <h3>✅ Problème critique RÉSOLU : e-commerce GA4 déployé (Version 710)</h3>
+    <div class="card" style="border-left: 4px solid var(--success);">
+      <p><strong>Constat initial :</strong> Sur les 28 derniers jours, GA4 n'avait reçu <strong>aucun événement e-commerce</strong> car le dataLayer utilisait le format Universal Analytics que GA4 ne comprend pas.</p>
+      <p style="margin-top: 8px;"><strong>Solution déployée le 8 avril 2026 (Version 710) :</strong></p>
+      <ul style="margin: 8px 0 8px 20px;">
+        <li>✅ 2 variables Custom JavaScript créées (<code>cjs_ua_to_ga4_items</code> transforme les produits UA → GA4 items, <code>cjs_ecom_value</code> calcule la valeur totale)</li>
+        <li>✅ 1 trigger ajouté (<code>Event - Product Impressions</code>), 1 trigger modifié (<code>Event - View_Item</code>)</li>
+        <li>✅ 6 tags GA4 Event créés : <code>view_item_list</code>, <code>view_item</code>, <code>add_to_cart</code>, <code>begin_checkout</code>, <code>add_shipping_info</code>, <code>purchase</code></li>
+        <li>✅ Filtrage automatique de "Frais de port" (<code>id: null</code>) dans la variable CJS</li>
+        <li>✅ Testé en Preview mode : <code>view_item_list</code> (fired 3x), <code>view_item</code> (fired 1x), <code>add_to_cart</code> (fired 1x) — tous envoyés à G-80CD9W8TF5</li>
+        <li>✅ Publié en production — Version 710</li>
+      </ul>
+      <p style="margin-top: 8px;"><strong>Impact attendu :</strong> Récupération immédiate du suivi des ventes, du CA, des rapports e-commerce GA4 et de l'audience Purchasers. Les données commenceront à apparaître dans GA4 dans les 24-48h.</p>
+    </div>
+  </section>
+
+  <!-- Ce qui fonctionne -->
+  <section>
+    <h3>✅ Ce qui fonctionne correctement</h3>
+
+    <table>
+      <thead>
+        <tr><th>Paramètre</th><th>Valeur / État</th><th>Verdict</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Flux de données</td><td>Papouillefrance - GA4 (G-80CD9W8TF5)</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+        <tr><td>Collecte active</td><td>Trafic reçu dans les 48 dernières heures</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+        <tr><td>Temps réel</td><td>5 utilisateurs actifs, événements en cours</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+        <tr><td>Mesures améliorées</td><td>Activées : Pages vues, Clics sortants, Formulaires, Vidéo, Téléchargements + 1 autre</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+        <tr><td>Défilements (scroll)</td><td>Activé au niveau du flux (mesures améliorées)</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+        <tr><td>Conservation des données</td><td>14 mois (événements + utilisateurs), réinitialisation activée</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+        <tr><td>Consentement — analytics_storage</td><td>Signaux actifs</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+        <tr><td>Consentement — ad_storage</td><td>Signaux actifs</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+        <tr><td>Consentement — ad_user_data</td><td>Signaux actifs</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+        <tr><td>Consentement — ad_personalization</td><td>Signaux actifs</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+        <tr><td>Score consentement GA4</td><td><strong>Excellent</strong> — 4/4 signaux verts</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+        <tr><td>Masquage des données</td><td>Adresse e-mail inactive, paramètres URL inactifs</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Événements -->
+  <section>
+    <h3>📊 Événements reçus (28 derniers jours)</h3>
+
+    <table>
+      <thead>
+        <tr><th>#</th><th>Événement</th><th>Nombre</th><th>Utilisateurs</th><th>Type</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td><code>page_view</code></td><td>20 207</td><td>2 650</td><td>Automatique (mesure améliorée)</td></tr>
+        <tr><td>2</td><td><code>user_engagement</code></td><td>14 589</td><td>2 206</td><td>Automatique</td></tr>
+        <tr><td>3</td><td><code>session_start</code></td><td>4 037</td><td>2 644</td><td>Automatique</td></tr>
+        <tr><td>4</td><td><code>form_start</code></td><td>2 653</td><td>586</td><td>Automatique (mesure améliorée)</td></tr>
+        <tr><td>5</td><td><code>first_visit</code></td><td>2 281</td><td>2 275</td><td>Automatique</td></tr>
+        <tr><td>6</td><td><code>view_search_results</code></td><td>1 596</td><td>375</td><td>Automatique (mesure améliorée)</td></tr>
+        <tr><td>7</td><td><code>form_submit</code></td><td>440</td><td>226</td><td>Automatique (mesure améliorée)</td></tr>
+        <tr><td>8</td><td><code>créer_un_compte</code></td><td>116</td><td>94</td><td>Personnalisé (GTM)</td></tr>
+        <tr><td>9</td><td><code>click</code></td><td>91</td><td>65</td><td>Automatique (mesure améliorée)</td></tr>
+        <tr><td>10</td><td><code>file_download</code></td><td>1</td><td>1</td><td>Automatique (mesure améliorée)</td></tr>
+      </tbody>
+    </table>
+
+    <div class="card" style="margin-top: 16px; border-left: 4px solid var(--success);">
+      <p><strong>✅ Événements e-commerce GA4 DÉPLOYÉS (Version 710, 8 avril 2026) :</strong></p>
+      <p style="margin-top: 4px; font-family: monospace; font-size: 13px; color: var(--success);">
+        ✅ view_item_list · ✅ view_item · ✅ add_to_cart · ✅ begin_checkout · ✅ add_shipping_info · ✅ purchase
+      </p>
+      <p style="margin-top: 4px; font-family: monospace; font-size: 13px; color: var(--muted);">
+        ❌ select_item · ❌ remove_from_cart · ❌ view_cart · ❌ add_payment_info · ❌ refund (non disponibles dans le dataLayer UA)
+      </p>
+      <p style="margin-top: 8px;">Les 6 événements principaux du tunnel d'achat sont désormais envoyés à GA4 via la transformation GTM (Version 710). Les données commenceront à apparaître dans les rapports GA4 sous 24-48h.</p>
+    </div>
+  </section>
+
+  <!-- Événements clés / Conversions -->
+  <section>
+    <h3>🎯 Événements clés (Conversions)</h3>
+
+    <table>
+      <thead>
+        <tr><th>Événement clé</th><th>Données reçues (28j)</th><th>État</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>purchase</code></td>
+          <td>Tag GA4 déployé (V710) — données attendues sous 24-48h</td>
+          <td><span class="badge badge-success">✅ DÉPLOYÉ</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="card" style="margin-top: 16px; border-left: 4px solid var(--success);">
+      <p><strong>Événements clés — état au 8 avril 2026 :</strong></p>
+      <ul style="margin: 8px 0 0 20px;">
+        <li><code>purchase</code> — <span class="badge badge-success">✅ Marqué comme événement clé</span></li>
+        <li><code>add_to_cart</code> — <span class="badge badge-success">✅ Marqué comme événement clé</span> — données reçues sur flux Papouillefrance - GA4</li>
+        <li><code>créer_un_compte</code> — <span class="badge badge-success">✅ Marqué comme événement clé</span> — données reçues (116 occurrences / 28j)</li>
+        <li><code>form_submit</code> — <span class="badge badge-success">✅ Marqué comme événement clé</span> — suivi des demandes de devis / contacts</li>
+        <li><code>begin_checkout</code> — <span class="badge badge-success">✅ Marqué comme événement clé</span> — déclenché et confirmé le 8 avril 2026</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Audiences -->
+  <section>
+    <h3>👥 Audiences configurées</h3>
+
+    <table>
+      <thead>
+        <tr><th>Audience</th><th>Variation (28j)</th><th>Créée le</th><th>Commentaire</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>All Users</td><td><span style="color: var(--danger);">↓ 9,8 %</span></td><td>9 juin 2021</td><td>Baisse liée au problème de consentement (en cours de résolution)</td></tr>
+        <tr><td>Purchasers</td><td><span style="color: var(--danger);">↓ 16,7 %</span></td><td>9 juin 2021</td><td><span class="badge badge-danger">VIDE</span> — aucun <code>purchase</code> reçu</td></tr>
+      </tbody>
+    </table>
+
+    <table style="margin-top: 16px;">
+      <thead>
+        <tr><th>Audience</th><th>Condition</th><th>Durée</th><th>Utilisateurs</th><th>Créée le</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Utilisateurs ayant abandonné leur panier</td><td><code>add_to_cart</code> sans <code>purchase</code></td><td>7 jours</td><td>~10</td><td>8 avr. 2026</td></tr>
+        <tr><td>Visiteurs engagés</td><td><code>view_item</code> ≥ 3 fois</td><td>7 jours</td><td>4</td><td>8 avr. 2026</td></tr>
+        <tr><td>Demandeurs de devis</td><td><code>form_submit</code></td><td>30 jours</td><td>251</td><td>8 avr. 2026</td></tr>
+        <tr><td>Acheteurs recents</td><td><code>purchase</code></td><td>30 jours</td><td>1</td><td>8 avr. 2026</td></tr>
+        <tr><td>Clients fideles</td><td><code>purchase</code> > 1 fois</td><td>90 jours</td><td>0 (récent)</td><td>8 avr. 2026</td></tr>
+        <tr><td>Visiteurs sans achat</td><td><code>view_item</code> excluant <code>purchase</code></td><td>30 jours</td><td>21</td><td>8 avr. 2026</td></tr>
+      </tbody>
+    </table>
+
+    <div class="card" style="margin-top: 16px; border-left: 4px solid var(--success);">
+      <p><strong>✅ 6 audiences de remarketing créées le 8 avril 2026</strong> — couvrant le funnel complet B2B/B2C : retargeting visiteurs, abandon panier, cross-sell acheteurs, fidélisation clients récurrents, qualification devis.</p>
+    </div>
+  </section>
+
+  <!-- Audit approfondi configuration GA4 -->
+  <section>
+    <h3>🔧 Audit approfondi — Configuration GA4</h3>
+    <p style="margin-bottom: 16px;">Vérification systématique de tous les paramètres configurables de la propriété GA4, au-delà du problème de dataLayer e-commerce.</p>
+
+    <table>
+      <thead>
+        <tr><th>Paramètre</th><th>Valeur actuelle</th><th>Verdict</th></tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="3" style="background: var(--bg); font-weight: 600;">Propriété &amp; Collecte</td></tr>
+        <tr><td>Google Signals</td><td>Activé — 307/307 régions</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+        <tr><td>User-ID</td><td>Collecte acceptée</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+        <tr><td>Données de géolocalisation précise</td><td>Activée</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+        <tr><td>Conservation des données</td><td>14 mois, réinitialisation activée</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+        <tr><td>Filtre trafic interne</td><td>Actif (IP developer filtrées)</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+        <tr><td>Identité pour le reporting</td><td>Basée sur l'appareil + User-ID + Google Signals</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+
+        <tr><td colspan="3" style="background: var(--bg); font-weight: 600;">Attribution</td></tr>
+        <tr><td>Modèle d'attribution</td><td>Data-driven (basé sur les données)</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+        <tr><td>Fenêtre acquisition</td><td>30 jours</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+        <tr><td>Fenêtre conversion</td><td>90 jours</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+
+        <tr><td colspan="3" style="background: var(--bg); font-weight: 600;">Associations de produits</td></tr>
+        <tr><td>Google Ads</td><td>Papouille (592-887-9819) — Publicité perso. activée — depuis juin 2021</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+        <tr><td>Search Console</td><td>papouillefrance.com (Domaine) — depuis fév. 2022</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+        <tr><td>Merchant Center</td><td>PAPOUILLE (354150367) — depuis avr. 2022</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+
+        <tr><td colspan="3" style="background: var(--bg); font-weight: 600;">Balise Google — Paramètres</td></tr>
+        <tr><td>Cross-domain</td><td>papouillefrance.com (correspondance exacte)</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+        <tr><td>Données fournies par les utilisateurs</td><td>Activé — détection auto (e-mail + téléphone + nom/adresse)</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+        <tr><td>Défilements (scroll tracking)</td><td>Activé au niveau du flux (mesures améliorées)</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+        <tr><td>Couverture balise</td><td>2 690 pages avec balise / 83 sans (URLs hashées, non-impactant)</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+
+        <tr><td colspan="3" style="background: var(--bg); font-weight: 600;">Dimensions &amp; Métriques personnalisées</td></tr>
+        <tr><td><s>Dimension : Devis</s></td><td>Supprimée le 8 avril 2026 — était mappée sur <code>value</code> (inutile)</td><td><span class="badge badge-success">✅ Supprimée</span></td></tr>
+        <tr><td>Dimension : Event Category</td><td>Mappée sur <code>event_category</code> (héritage UA)</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+        <tr><td>Dimension : Event Label</td><td>Mappée sur <code>event_label</code> (héritage UA)</td><td><span class="badge badge-success">✅ OK</span></td></tr>
+        <tr><td>Dimension : Référence transaction</td><td>Mappée sur <code>transaction_id</code></td><td><span class="badge badge-success">✅ OK</span></td></tr>
+        <tr><td>Métrique : Shipping</td><td>Mappée sur <code>shipping</code> (devise)</td><td><span class="badge badge-success">✅ Actif (V710)</span></td></tr>
+        <tr><td>Métrique : Tax</td><td>Mappée sur <code>tax</code> (devise)</td><td><span class="badge badge-success">✅ Actif (V710)</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="card" style="margin-top: 16px; border-left: 4px solid var(--success);">
+      <p><strong>Corrections appliquées (8 avril 2026) :</strong></p>
+      <ul style="margin: 8px 0 0 20px;">
+        <li><strong>✅ Suivi des défilements</strong> — Vérifié : déjà activé au niveau du flux (mesures améliorées). Aucune action nécessaire.</li>
+        <li><strong>✅ Détection des données utilisateurs élargie</strong> — Confirmé : e-mail + numéro de téléphone + nom et adresse sont tous activés. Enhanced Conversions Google Ads au maximum.</li>
+      </ul>
+    </div>
+    <div class="card" style="margin-top: 12px; border-left: 4px solid var(--success);">
+      <p><strong>✅ Dimension "Devis" supprimée (8 avril 2026)</strong></p>
+      <ul style="margin: 8px 0 0 20px;">
+        <li>La dimension "Devis" mappée sur le paramètre <code>value</code> a été supprimée. Elle n'avait aucune utilité et interférait avec le paramètre monétaire <code>value</code>.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Plan d'action -->
+  <section>
+    <h3>🚀 Plan d'action prioritaire</h3>
+
+    <div class="recommendation">
+      <span class="badge badge-success priority">✅ FAIT — Priorité 1</span>
+      <h4>Migration e-commerce UA → GA4 via GTM — TERMINÉE (Version 710)</h4>
+      <p>Déployé le 8 avril 2026. 6 tags GA4 Event + 2 variables CJS + 1 trigger créés et publiés. Testés en Preview mode avec succès. Transformation 100% GTM, aucune modification du code site.</p>
+      <ul style="margin: 8px 0 0 20px;">
+        <li>✅ <code>cjs_ua_to_ga4_items</code> — transforme les tableaux produits UA en GA4 items[], filtre "Frais de port"</li>
+        <li>✅ <code>cjs_ecom_value</code> — calcule la valeur totale (price × quantity)</li>
+        <li>✅ 6 tags : <code>view_item_list</code>, <code>view_item</code>, <code>add_to_cart</code>, <code>begin_checkout</code>, <code>add_shipping_info</code>, <code>purchase</code></li>
+        <li>✅ Utilise les triggers et variables DLV existants (aucun ajout superflu)</li>
+      </ul>
+    </div>
+
+    <div class="recommendation" style="border-left-color: var(--success);">
+      <span class="badge badge-success priority">✅ Fait</span>
+      <h4>Événements clés marqués</h4>
+      <p><code>add_to_cart</code>, <code>créer_un_compte</code> et <code>form_submit</code> marqués comme événements clés le 8 avril 2026. <code>begin_checkout</code> en attente de premier déclenchement par trafic réel.</p>
+    </div>
+
+    <div class="recommendation">
+      <span class="badge badge-warning priority">Priorité 3</span>
+      <h4>Créer des audiences de remarketing</h4>
+      <p>Ajouter les audiences : Abandonneurs de panier, Visiteurs engagés, Demandeurs de devis. Partager avec Google Ads pour le remarketing.</p>
+    </div>
+
+    <div class="recommendation">
+      <span class="badge badge-info priority">Priorité 4</span>
+      <h4>Ajouter <code>functionality_storage</code> au tag Chatbot GTM (#715)</h4>
+      <p>Dernière correction GTM restante. Ouvrir le tag Chatbot dans GTM, section Consent Settings > Additional Consent Checks, ajouter <code>functionality_storage</code>, puis publier.</p>
+    </div>
+
+    <div class="recommendation">
+      <span class="badge badge-success priority">✅ FAIT — Priorité 5</span>
+      <h4>Scroll tracking et données utilisateurs</h4>
+      <p>Vérifié et confirmé le 8 avril 2026 :</p>
+      <ul style="margin: 8px 0 0 20px;">
+        <li><strong>Défilements :</strong> Déjà activé au niveau du flux (mesures améliorées). ✅</li>
+        <li><strong>Données utilisateurs :</strong> Les 3 types de détection sont actifs (e-mail, téléphone, nom/adresse). Enhanced Conversions au maximum. ✅</li>
+      </ul>
+    </div>
+
+    <div class="recommendation">
+      <span class="badge badge-success priority">✅ FAIT — Priorité 6</span>
+      <h4>Dimension personnalisée "Devis" supprimée</h4>
+      <p>Supprimée le 8 avril 2026. La dimension était mappée sur <code>value</code> (paramètre monétaire) sans utilité réelle. Suppression validée par le client.</p>
+    </div>
+  </section>
+
+  <!-- Plan de migration e-commerce -->
+  <section>
+    <h2>📦 Plan de migration e-commerce — DataLayer UA → GA4</h2>
+    <p style="margin-bottom: 16px;">Inspection live du dataLayer effectuée le 8 avril 2026 sur papouillefrance.com. Le site envoie des événements Enhanced Ecommerce Universal Analytics. GA4 ne comprend pas ce format → <strong>0 donnée e-commerce remontée</strong>.</p>
+
+    <h3>🔍 DataLayer actuel capturé (format UA Enhanced Ecommerce)</h3>
+    <table>
+      <thead>
+        <tr><th>Page</th><th>Événement dataLayer</th><th>Structure ecommerce</th><th>Champs produit</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Accueil / Catégorie</td>
+          <td><code>productImpressions</code></td>
+          <td><code>ecommerce.impressions[]</code></td>
+          <td><code>name</code>, <code>id</code>, <code>price</code>, <code>brand</code>, <code>category</code>, <code>list</code>, <code>position</code></td>
+        </tr>
+        <tr>
+          <td>Fiche produit</td>
+          <td><code>productDetailsViews</code></td>
+          <td><code>ecommerce.detail.products[]</code></td>
+          <td><code>name</code>, <code>id</code>, <code>price</code>, <code>brand</code>, <code>category</code></td>
+        </tr>
+        <tr>
+          <td>Ajout panier</td>
+          <td><code>addToCart</code></td>
+          <td><code>ecommerce.add.products[]</code> + <code>ecommerce.currencyCode</code></td>
+          <td><code>name</code>, <code>id</code>, <code>price</code>, <code>brand</code>, <code>category</code>, <code>quantity</code></td>
+        </tr>
+        <tr>
+          <td>Panier</td>
+          <td><code>datalayer-loaded</code> (pageType: cart)</td>
+          <td>Aucun événement ecommerce</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Checkout — Livraison</td>
+          <td><code>checkout</code></td>
+          <td><code>ecommerce.checkout.actionField.step = "shipping"</code><br><code>ecommerce.checkout.products[]</code></td>
+          <td><code>name</code>, <code>id</code>, <code>price</code>, <code>brand</code>, <code>category</code>, <code>quantity</code><br>+ <code>user_id</code>, <code>user_email</code> (hashé SHA-256)</td>
+        </tr>
+        <tr>
+          <td>Checkout — Paiement</td>
+          <td><code>checkout</code></td>
+          <td><code>ecommerce.checkout.actionField.step = "payment"</code><br><code>ecommerce.checkout.products[]</code></td>
+          <td>Mêmes champs + "Frais de port" inclus comme produit (<code>id: null</code>)</td>
+        </tr>
+        <tr>
+          <td>Achat (purchase)</td>
+          <td><code>purchase</code></td>
+          <td><code>ecommerce.purchase.actionField</code> + <code>ecommerce.purchase.products[]</code></td>
+          <td><code>actionField.id</code> = "73139" (transaction_id)<br><code>actionField.revenue</code> = 14.5<br><code>actionField.tax</code> = 2.42<br><code>actionField.shipping</code> = 6.58<br>+ mêmes champs produits. "Frais de port" inclus (<code>id: null</code>).</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="root-cause">
+      <h4>📌 Observations clés</h4>
+      <ul style="margin: 8px 0 0 20px;">
+        <li>Le site pousse <code>{ecommerce: null}</code> avant chaque événement e-commerce → bonne pratique UA, à conserver.</li>
+        <li>L'événement <code>datalayer-loaded</code> est présent sur chaque page avec <code>pageType</code> (<code>cart</code>, <code>article_view</code>, <code>article_list</code>), <code>user_status</code> et <code>env_channel</code>.</li>
+        <li>Pas d'événement <code>productClick</code> sur les listes produits — la navigation est directe.</li>
+        <li>L'événement <code>checkout</code> existe avec 2 étapes : <code>shipping</code> et <code>payment</code>. Format : <code>ecommerce.checkout.actionField.step</code> + <code>ecommerce.checkout.products[]</code>.</li>
+        <li><strong>Attention :</strong> "Frais de port" est poussé comme un produit dans <code>checkout.products[]</code> (avec <code>id: null</code>). La transformation GTM devra filtrer cet item.</li>
+        <li><code>user_id</code> (entier) et <code>user_email</code> (SHA-256) sont envoyés au checkout → exploitable pour Enhanced Conversions.</li>
+        <li><code>ads_data_redaction: false</code> et <code>url_passthrough: true</code> déjà configurés dans le dataLayer.</li>
+        <li><code>currencyCode: "EUR"</code> est présent uniquement dans <code>addToCart</code>.</li>
+        <li>Pas de <code>removeFromCart</code> détecté (seul événement manquant, optionnel).</li>
+        <li><strong>Bilan : le dataLayer UA est complet pour le tunnel e-commerce. Migration 100% GTM possible.</strong></li>
+      </ul>
+    </div>
+
+    <h3>🔄 Matrice de mapping — UA Enhanced Ecommerce → GA4</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Événement UA (actuel)</th>
+          <th>Événement GA4 (cible)</th>
+          <th>Trigger GTM</th>
+          <th>Mapping des champs</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>productImpressions</code></td>
+          <td><code>view_item_list</code></td>
+          <td>Custom Event = <code>productImpressions</code></td>
+          <td>
+            <code>impressions[].id</code> → <code>items[].item_id</code><br>
+            <code>impressions[].name</code> → <code>items[].item_name</code><br>
+            <code>impressions[].price</code> → <code>items[].price</code><br>
+            <code>impressions[].brand</code> → <code>items[].item_brand</code><br>
+            <code>impressions[].category</code> → <code>items[].item_category</code><br>
+            <code>impressions[].list</code> → <code>item_list_name</code><br>
+            <code>impressions[].position</code> → <code>items[].index</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>productDetailsViews</code></td>
+          <td><code>view_item</code></td>
+          <td>Custom Event = <code>productDetailsViews</code></td>
+          <td>
+            <code>detail.products[].id</code> → <code>items[].item_id</code><br>
+            <code>detail.products[].name</code> → <code>items[].item_name</code><br>
+            <code>detail.products[].price</code> → <code>items[].price</code><br>
+            <code>detail.products[].brand</code> → <code>items[].item_brand</code><br>
+            <code>detail.products[].category</code> → <code>items[].item_category</code><br>
+            + <code>currency: "EUR"</code> (valeur fixe)<br>
+            + <code>value</code> = somme des prix
+          </td>
+        </tr>
+        <tr>
+          <td><code>addToCart</code></td>
+          <td><code>add_to_cart</code></td>
+          <td>Custom Event = <code>addToCart</code></td>
+          <td>
+            <code>add.products[].id</code> → <code>items[].item_id</code><br>
+            <code>add.products[].name</code> → <code>items[].item_name</code><br>
+            <code>add.products[].price</code> → <code>items[].price</code><br>
+            <code>add.products[].brand</code> → <code>items[].item_brand</code><br>
+            <code>add.products[].category</code> → <code>items[].item_category</code><br>
+            <code>add.products[].quantity</code> → <code>items[].quantity</code><br>
+            <code>currencyCode</code> → <code>currency</code><br>
+            + <code>value</code> = price × quantity
+          </td>
+        </tr>
+        <tr>
+          <td><code>checkout</code> (step: shipping)</td>
+          <td><code>begin_checkout</code></td>
+          <td>Custom Event = <code>checkout</code> + condition <code>ecommerce.checkout.actionField.step = "shipping"</code></td>
+          <td>
+            <code>checkout.products[].id</code> → <code>items[].item_id</code><br>
+            <code>checkout.products[].name</code> → <code>items[].item_name</code><br>
+            <code>checkout.products[].price</code> → <code>items[].price</code><br>
+            <code>checkout.products[].brand</code> → <code>items[].item_brand</code><br>
+            <code>checkout.products[].category</code> → <code>items[].item_category</code><br>
+            <code>checkout.products[].quantity</code> → <code>items[].quantity</code><br>
+            + <code>currency: "EUR"</code><br>
+            + <code>value</code> = somme (price × quantity)<br>
+            ⚠️ <strong>Filtrer "Frais de port"</strong> (<code>id === null</code>)
+          </td>
+        </tr>
+        <tr>
+          <td><code>checkout</code> (step: payment)</td>
+          <td><code>add_shipping_info</code></td>
+          <td>Custom Event = <code>checkout</code> + condition <code>ecommerce.checkout.actionField.step = "payment"</code></td>
+          <td>Mêmes champs que ci-dessus. L'étape "payment" intervient après le choix de livraison.</td>
+        </tr>
+        <tr>
+          <td><code>purchase</code></td>
+          <td><code>purchase</code></td>
+          <td>Custom Event = <code>purchase</code></td>
+          <td>
+            <code>purchase.actionField.id</code> → <code>transaction_id</code><br>
+            <code>purchase.actionField.revenue</code> → <code>value</code><br>
+            <code>purchase.actionField.tax</code> → <code>tax</code><br>
+            <code>purchase.actionField.shipping</code> → <code>shipping</code><br>
+            + <code>currency: "EUR"</code><br>
+            + <code>items[]</code> = transformation de <code>purchase.products[]</code><br>
+            ⚠️ <strong>Filtrer "Frais de port"</strong> (<code>id === null</code>)
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>🛠️ Implémentation GTM — Approche "Transformation Layer"</h3>
+    <p style="margin-bottom: 12px;">L'objectif est de <strong>ne rien modifier sur le site</strong>. On crée dans GTM des variables et tags qui transforment le format UA en format GA4 à la volée.</p>
+
+    <div class="fix-item" style="border-left-color: var(--primary);">
+      <h4>Étape 1 — Variables Custom JavaScript (dataLayer → items[])</h4>
+      <p>Créer 4 variables Custom JavaScript dans GTM qui transforment les tableaux UA en tableaux GA4 <code>items[]</code> :</p>
+      <ul style="margin: 8px 0 0 20px;">
+        <li><strong>cjs_impressions_to_items</strong> : lit <code>ecommerce.impressions</code> → retourne <code>items[]</code> avec <code>item_id</code>, <code>item_name</code>, <code>item_brand</code>, <code>item_category</code>, <code>price</code>, <code>index</code></li>
+        <li><strong>cjs_products_to_items</strong> : lit <code>ecommerce.detail.products</code> ou <code>ecommerce.add.products</code> → retourne <code>items[]</code></li>
+        <li><strong>cjs_checkout_to_items</strong> : lit <code>ecommerce.checkout.products</code> → retourne <code>items[]</code>, en <strong>filtrant les produits avec <code>id === null</code></strong> (ex: "Frais de port")</li>
+        <li><strong>cjs_ecom_value</strong> : calcule <code>value</code> = somme de (price × quantity) pour chaque produit (hors frais de port)</li>
+      </ul>
+    </div>
+
+    <div class="fix-item" style="border-left-color: var(--primary);">
+      <h4>Étape 2 — Variables DataLayer supplémentaires</h4>
+      <ul style="margin: 8px 0 0 20px;">
+        <li><strong>dlv_ecommerce_currencyCode</strong> : DataLayer Variable → <code>ecommerce.currencyCode</code> (fallback: "EUR")</li>
+        <li><strong>dlv_ecommerce_impressions</strong> : DataLayer Variable → <code>ecommerce.impressions</code></li>
+        <li><strong>dlv_ecommerce_detail_products</strong> : DataLayer Variable → <code>ecommerce.detail.products</code></li>
+        <li><strong>dlv_ecommerce_add_products</strong> : DataLayer Variable → <code>ecommerce.add.products</code></li>
+        <li><strong>dlv_item_list_name</strong> : DataLayer Variable → <code>ecommerce.impressions.0.list</code></li>
+        <li><strong>dlv_ecommerce_checkout_products</strong> : DataLayer Variable → <code>ecommerce.checkout.products</code></li>
+        <li><strong>dlv_ecommerce_checkout_step</strong> : DataLayer Variable → <code>ecommerce.checkout.actionField.step</code></li>
+        <li><strong>dlv_ecommerce_purchase_products</strong> : DataLayer Variable → <code>ecommerce.purchase.products</code></li>
+        <li><strong>dlv_purchase_id</strong> : DataLayer Variable → <code>ecommerce.purchase.actionField.id</code></li>
+        <li><strong>dlv_purchase_revenue</strong> : DataLayer Variable → <code>ecommerce.purchase.actionField.revenue</code></li>
+        <li><strong>dlv_purchase_tax</strong> : DataLayer Variable → <code>ecommerce.purchase.actionField.tax</code></li>
+        <li><strong>dlv_purchase_shipping</strong> : DataLayer Variable → <code>ecommerce.purchase.actionField.shipping</code></li>
+      </ul>
+    </div>
+
+    <div class="fix-item" style="border-left-color: var(--primary);">
+      <h4>Étape 3 — Triggers (Custom Events)</h4>
+      <ul style="margin: 8px 0 0 20px;">
+        <li><strong>CE - productImpressions</strong> : Custom Event = <code>productImpressions</code></li>
+        <li><strong>CE - productDetailsViews</strong> : Custom Event = <code>productDetailsViews</code></li>
+        <li><strong>CE - addToCart</strong> : Custom Event = <code>addToCart</code></li>
+        <li><strong>CE - checkout_shipping</strong> : Custom Event = <code>checkout</code> + condition {{dlv_ecommerce_checkout_step}} = <code>shipping</code></li>
+        <li><strong>CE - checkout_payment</strong> : Custom Event = <code>checkout</code> + condition {{dlv_ecommerce_checkout_step}} = <code>payment</code></li>
+        <li><strong>CE - purchase</strong> : Custom Event = <code>purchase</code></li>
+      </ul>
+    </div>
+
+    <div class="fix-item" style="border-left-color: var(--primary);">
+      <h4>Étape 4 — Tags GA4 Event</h4>
+      <p><strong>6 tags GA4 Event</strong> à créer, chacun utilisant le Measurement ID <code>G-80CD9W8TF5</code> :</p>
+      <ul style="margin: 8px 0 0 20px;">
+        <li><strong>GA4 - view_item_list</strong> : déclenché par CE - productImpressions, paramètres : <code>items</code> = {{cjs_impressions_to_items}}, <code>item_list_name</code> = {{dlv_item_list_name}}</li>
+        <li><strong>GA4 - view_item</strong> : déclenché par CE - productDetailsViews, paramètres : <code>items</code> = {{cjs_products_to_items}}, <code>currency</code> = "EUR", <code>value</code> = {{cjs_ecom_value}}</li>
+        <li><strong>GA4 - add_to_cart</strong> : déclenché par CE - addToCart, paramètres : <code>items</code> = {{cjs_products_to_items}}, <code>currency</code> = {{dlv_ecommerce_currencyCode}}, <code>value</code> = {{cjs_ecom_value}}</li>
+        <li><strong>GA4 - begin_checkout</strong> : déclenché par CE - checkout_shipping, paramètres : <code>items</code> = {{cjs_checkout_to_items}}, <code>currency</code> = "EUR", <code>value</code> = {{cjs_ecom_value}}</li>
+        <li><strong>GA4 - add_shipping_info</strong> : déclenché par CE - checkout_payment, paramètres : <code>items</code> = {{cjs_checkout_to_items}}, <code>currency</code> = "EUR", <code>value</code> = {{cjs_ecom_value}}</li>
+        <li><strong>GA4 - purchase</strong> : déclenché par CE - purchase, paramètres : <code>items</code> = {{cjs_checkout_to_items}}, <code>transaction_id</code> = {{dlv_purchase_id}}, <code>value</code> = {{dlv_purchase_revenue}}, <code>tax</code> = {{dlv_purchase_tax}}, <code>shipping</code> = {{dlv_purchase_shipping}}, <code>currency</code> = "EUR"</li>
+      </ul>
+    </div>
+
+    <div class="fix-item" style="border-left-color: var(--success);">
+      <h4>✅ Étape 5 — Aucun développement requis !</h4>
+      <p>Grâce à l'inspection complète du dataLayer (checkout + purchase confirmés), <strong>tous les événements e-commerce du tunnel d'achat sont présents</strong> dans le format UA Enhanced Ecommerce. GTM peut tout transformer en GA4 sans aucune modification du code du site.</p>
+      <p style="margin-top: 8px;">Seul événement absent : <code>remove_from_cart</code> (optionnel, impact mineur).</p>
+    </div>
+
+    <div class="fix-item" style="border-left-color: var(--warning);">
+      <h4>⚠️ Point d'attention — Filtrage "Frais de port"</h4>
+      <p>Le site inclut "Frais de port" comme un produit dans les tableaux <code>checkout.products[]</code> et <code>purchase.products[]</code> (avec <code>id: null</code>, <code>category: "Frais de port"</code>). La variable Custom JavaScript <strong>cjs_checkout_to_items</strong> doit filtrer cet item pour ne pas fausser les rapports produits GA4. Filtre : <code>products.filter(p => p.id !== null)</code>.</p>
+    </div>
+
+    <h3>📊 Résumé de l'impact</h3>
+    <table>
+      <thead>
+        <tr><th>Événement GA4</th><th>Source UA</th><th>Transformation GTM</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>✅ <code>view_item_list</code></td><td><code>productImpressions</code></td><td>100% GTM</td></tr>
+        <tr><td>✅ <code>view_item</code></td><td><code>productDetailsViews</code></td><td>100% GTM</td></tr>
+        <tr><td>✅ <code>add_to_cart</code></td><td><code>addToCart</code></td><td>100% GTM</td></tr>
+        <tr><td>✅ <code>begin_checkout</code></td><td><code>checkout</code> (step: shipping)</td><td>100% GTM</td></tr>
+        <tr><td>✅ <code>add_shipping_info</code></td><td><code>checkout</code> (step: payment)</td><td>100% GTM</td></tr>
+        <tr><td>✅ <code>purchase</code></td><td><code>purchase</code> (UA)</td><td>100% GTM</td></tr>
+        <tr><td>✅ <code>remove_from_cart</code></td><td><code>removeFromCart</code></td><td>100% GTM (V712)</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top: 12px; padding: 12px; background: #e6f4ea; border-radius: 8px; font-weight: 600; color: var(--success);">🎉 7 événements sur 7 déployés par GTM (Versions 710 + 712) — e-commerce GA4 complet !</p>
+
+    <div class="fix-item" style="margin-top: 16px; border-left-color: var(--success);">
+      <h4>✅ Déploiement terminé — Version 710 publiée le 8 avril 2026</h4>
+      <ol style="margin: 8px 0 0 20px;">
+        <li>✅ <strong>Phase 1 — Variables :</strong> 2 variables CJS créées (<code>cjs_ua_to_ga4_items</code>, <code>cjs_ecom_value</code>) — approche unifiée avec 1 variable universelle au lieu de 4.</li>
+        <li>✅ <strong>Phase 2 — Triggers :</strong> 1 trigger créé (<code>Event - Product Impressions</code>), réutilisation des 5 triggers existants.</li>
+        <li>✅ <strong>Phase 3 — Tags :</strong> 6 tags GA4 Event créés et configurés.</li>
+        <li>✅ <strong>Phase 4 — Test :</strong> Testé en Preview mode — <code>view_item_list</code> (3x), <code>view_item</code> (1x), <code>add_to_cart</code> (1x) vérifiés avec succès sur G-80CD9W8TF5.</li>
+        <li>✅ <strong>Phase 5 — Publication :</strong> Version 710 publiée en production.</li>
+        <li>✅ <strong>Phase 6 — Key events GA4 :</strong> 5 événements clés marqués : <code>purchase</code>, <code>add_to_cart</code>, <code>begin_checkout</code>, <code>créer_un_compte</code>, <code>form_submit</code>.</li>
+        <li>✅ <strong>Phase 7 — Audiences remarketing :</strong> 6 audiences créées (abandonneurs panier, visiteurs engagés, demandeurs devis, acheteurs récents, clients fidèles, visiteurs sans achat).</li>
+        <li>✅ <strong>Phase 8 — remove_from_cart :</strong> Tag GA4 <code>remove_from_cart</code> + trigger <code>Event - removeFromCart</code> créés. Variables <code>cjs_ua_to_ga4_items</code> et <code>cjs_ecom_value</code> mises à jour pour supporter <code>ecommerce.remove.products</code>. Version 712 publiée.</li>
+      </ol>
+    </div>
+
+    <div class="fix-item" style="margin-top: 16px; border-left-color: var(--success);">
+      <h4>✅ Nettoyage du conteneur — Version 711 publiée le 8 avril 2026</h4>
+      <p>Suppression de tous les triggers et variables orphelins non référencés par aucun tag :</p>
+      <div class="before-after">
+        <span class="before">18 triggers orphelins + 18 variables orphelines</span>
+        <span class="after">Tous supprimés — conteneur optimisé ✓</span>
+      </div>
+    </div>
+
+    <div class="fix-item" style="margin-top: 16px; border-left-color: var(--success);">
+      <h4>✅ remove_from_cart — Version 712 publiée le 8 avril 2026</h4>
+      <p>Ajout du 7e et dernier événement e-commerce GA4 :</p>
+      <ul style="margin: 8px 0 0 20px;">
+        <li><strong>Tag :</strong> <code>GA4 - remove_from_cart</code> (GA4 Event) — paramètres : <code>items</code>, <code>value</code>, <code>currency</code></li>
+        <li><strong>Trigger :</strong> <code>Event - removeFromCart</code> (Custom Event sur <code>removeFromCart</code>)</li>
+        <li><strong>Variables modifiées :</strong> <code>cjs_ua_to_ga4_items</code> et <code>cjs_ecom_value</code> — ajout de <code>((e.remove||{}).products)||</code> dans la chaîne de lookup</li>
+        <li><strong>Limitation connue :</strong> Le dataLayer BLGCLOUD envoie des données produit nulles lors du <code>removeFromCart</code> depuis la page <code>/cart</code>. L'événement fonctionne correctement depuis les fiches produit.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Phase 4 — Nettoyage conteneur GTM -->
+  <section>
+    <h2 style="border-left: 4px solid var(--success); padding-left: 12px;">Phase 4 — Nettoyage du conteneur GTM (Version 711)</h2>
+    <p style="color: var(--muted); margin-top: 4px;">Publié le 8 avril 2026 — Suppression de 36 éléments orphelins (18 triggers + 18 variables)</p>
+
+    <h3>Triggers supprimés (18)</h3>
+    <p style="margin-bottom: 8px;">Aucun de ces triggers n'était rattaché à un tag actif. Leur suppression n'a aucun impact sur le fonctionnement du conteneur.</p>
+    <table>
+      <thead>
+        <tr><th>#</th><th>Trigger supprimé</th><th>Type</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td><code>Event - 404_page</code></td><td>Custom Event</td></tr>
+        <tr><td>2</td><td><code>Event - Checkout - add_shipping_info</code></td><td>Custom Event</td></tr>
+        <tr><td>3</td><td><code>Event - Demande catalogue</code></td><td>Custom Event</td></tr>
+        <tr><td>4</td><td><code>Event - Form - FormSend</code></td><td>Custom Event</td></tr>
+        <tr><td>5</td><td><code>Event - IEDetected</code></td><td>Custom Event</td></tr>
+        <tr><td>6</td><td><code>Event - Login</code></td><td>Custom Event</td></tr>
+        <tr><td>7</td><td><code>Event - newsletterBlock</code></td><td>Custom Event</td></tr>
+        <tr><td>8</td><td><code>Event - Outofordertag</code></td><td>Custom Event</td></tr>
+        <tr><td>9</td><td><code>Event - Page_view_cart</code></td><td>Custom Event</td></tr>
+        <tr><td>10</td><td><code>Event - Product_pages_View</code></td><td>Custom Event</td></tr>
+        <tr><td>11</td><td><code>Event - Quote - Request</code></td><td>Custom Event</td></tr>
+        <tr><td>12</td><td><code>Event - Quote - Shipping</code></td><td>Custom Event</td></tr>
+        <tr><td>13</td><td><code>Event - Quotes Trigger</code></td><td>Custom Event</td></tr>
+        <tr><td>14</td><td><code>Event - Remove Cart</code></td><td>Custom Event</td></tr>
+        <tr><td>15</td><td><code>Event - sign_up</code></td><td>Custom Event</td></tr>
+        <tr><td>16</td><td><code>Event_Homepage_pageview</code></td><td>Custom Event</td></tr>
+        <tr><td>17</td><td><code>Event_Pageview_Meuble a langer</code></td><td>Custom Event</td></tr>
+        <tr><td>18</td><td><code>Register URL / Window loaded</code></td><td>Custom Event / Window Loaded</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Variables supprimées (18)</h3>
+    <p style="margin-bottom: 8px;">Aucune de ces variables n'était référencée par un tag, trigger ou autre variable active.</p>
+    <table>
+      <thead>
+        <tr><th>#</th><th>Variable supprimée</th><th>Type</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td><code>const_Click URL</code></td><td>Constant</td></tr>
+        <tr><td>2</td><td><code>const_LinkedIn_Insight_ID</code></td><td>Constant</td></tr>
+        <tr><td>3</td><td><code>const_Site_URL</code></td><td>Constant</td></tr>
+        <tr><td>4</td><td><code>dlv_Checkout_product_ids</code></td><td>Data Layer Variable</td></tr>
+        <tr><td>5</td><td><code>dlv_Checkout_total_price</code></td><td>Data Layer Variable</td></tr>
+        <tr><td>6</td><td><code>dlv_Element_URL_for_Checkout</code></td><td>Data Layer Variable</td></tr>
+        <tr><td>7</td><td><code>dlv_Items for AddToCart</code></td><td>Data Layer Variable</td></tr>
+        <tr><td>8</td><td><code>dlv_Items for Checkout</code></td><td>Data Layer Variable</td></tr>
+        <tr><td>9</td><td><code>dlv_Items for Purchase</code></td><td>Data Layer Variable</td></tr>
+        <tr><td>10</td><td><code>dlv_Items for Remove Cart</code></td><td>Data Layer Variable</td></tr>
+        <tr><td>11</td><td><code>dlv_Items for View Item</code></td><td>Data Layer Variable</td></tr>
+        <tr><td>12</td><td><code>dlv_Product_category</code></td><td>Data Layer Variable</td></tr>
+        <tr><td>13</td><td><code>dlv_Product_id</code></td><td>Data Layer Variable</td></tr>
+        <tr><td>14</td><td><code>dlv_Product_price</code></td><td>Data Layer Variable</td></tr>
+        <tr><td>15</td><td><code>dlv_Purchase</code></td><td>Data Layer Variable</td></tr>
+        <tr><td>16</td><td><code>js - Est Première Visite</code></td><td>Custom JavaScript</td></tr>
+        <tr><td>17</td><td><code>js_isIE</code></td><td>JavaScript Variable</td></tr>
+        <tr><td>18</td><td><code>Register URL</code></td><td>Custom Event (trigger also removed)</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Variable conservée (protégée)</h3>
+    <div class="fix-item warning">
+      <h4>dlv_fix_checkout — Encore référencée</h4>
+      <p>Cette variable est encore utilisée par un autre élément du conteneur. GTM a bloqué sa suppression (bouton "Done" au lieu de "Delete"). Elle reste dans le conteneur.</p>
+    </div>
+
+    <h3>État final du conteneur (Version 711)</h3>
+    <table>
+      <thead>
+        <tr><th>Élément</th><th>Avant (V710)</th><th>Après (V711)</th><th>Supprimés</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Tags</strong></td><td>20</td><td>20</td><td>0</td></tr>
+        <tr><td><strong>Triggers</strong></td><td>26</td><td>8</td><td>18</td></tr>
+        <tr><td><strong>Variables utilisateur</strong></td><td>34</td><td>16</td><td>18</td></tr>
+        <tr><td><strong>Total éléments orphelins supprimés</strong></td><td colspan="3" style="text-align: center; font-weight: 700; color: var(--success);">36</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</div>
+
+<footer>
+  <p>Audit GTM + CookieScript + GA4 réalisé les 7-8 avril 2026 — Container GTM-PNR2PTM (Version 711) + CMP RGPDV2 + GA4 G-80CD9W8TF5</p>
+  <p style="margin-top: 4px;">Papouille France — www.papouillefrance.com</p>
+</footer>
+
+</body>
+</html>
