@@ -35,11 +35,6 @@
   .badge-muted { background: #f1f3f4; color: var(--muted); }
 
   .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
-
-  .delivery-box { background: #e8f0fe; border: 1px solid #a8c7fa; border-radius: 8px; padding: 18px; margin-bottom: 22px; }
-  .delivery-box h3 { margin-top: 0; color: #174ea6; }
-  .delivery-box ul { margin: 8px 0 0 20px; }
-  .delivery-box li { margin: 6px 0; }
   .kpi { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
   .kpi .number { font-size: 36px; font-weight: 700; }
   .kpi .label { font-size: 13px; color: var(--muted); margin-top: 4px; }
@@ -77,11 +72,6 @@
   .fix-item h4 { font-size: 15px; margin-bottom: 6px; }
   .fix-item p { font-size: 14px; color: var(--muted); }
 
-  .execution-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px; }
-  .execution-card { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
-  .execution-card h4 { font-size: 14px; margin-bottom: 6px; color: var(--text); }
-  .execution-card p { font-size: 13px; color: var(--muted); }
-
   .semrush-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
   .semrush-card { background: var(--bg); border-radius: 8px; padding: 16px; text-align: center; }
   .semrush-card .value { font-size: 24px; font-weight: 700; }
@@ -109,28 +99,14 @@
       <p class="subtitle">Rapport à destination de BLGCLOUD — www.papouillefrance.com</p>
     </div>
     <div class="meta">
-      <div>Date : 9 avril 2026 — <strong>Mise à jour GA4 + Semrush Site Audit</strong></div>
-      <div>Source : Audit SEO + GSC + Semrush Site Audit + Ranxplorer + GA4 (09/04/2026)</div>
+      <div>Date : 9 avril 2026 — <strong>Mise à jour GA4 + API BLGCLOUD + Plan d'action</strong></div>
+      <div>Source : Audit SEO + GSC + Semrush + Ranxplorer + GA4 + API BLGCLOUD (09/04/2026)</div>
       <div>Demandeur : Anthony Canavero — support@papouillefrance.com</div>
     </div>
   </div>
 </header>
 
 <div class="container">
-
-
-  <div class="delivery-box">
-    <h3>Transmission BLGCLOUD — attente de retour sous 48h</h3>
-    <p>Papouille a transmis le cahier des charges et la présentation des bugs avec KPI. BLGCLOUD doit confirmer :</p>
-    <ul>
-      <li>Owner technique</li>
-      <li>Planning de livraison</li>
-      <li>Format de preuve fourni par ticket</li>
-      <li>Date du premier comité hebdo</li>
-    </ul>
-    <p style="margin-top: 10px; font-size: 13px;">Cahier des charges : <a href="https://docs.google.com/document/d/1AzFaLL7u4Lx8G4MyaRRYWkklSRsGPL3JfQJ4vC2tE-Q/edit?usp=sharing" target="_blank" rel="noopener">Google Docs</a><br>
-    Présentation KPI : <a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Suitntie/diagnostic-seo-papouillefrance/main/BLGCLOUD-bugs-ameliorations-papouillefrance.html" target="_blank" rel="noopener">Version publique HTML</a></p>
-  </div>
 
   <!-- KPIs -->
   <div class="kpi-grid">
@@ -151,33 +127,6 @@
       <div class="label">Améliorations proposées (6 SEO + 8 DL)</div>
     </div>
   </div>
-
-  <!-- Cadre d'exécution BLGCLOUD -->
-  <section>
-    <h2>Cadre d'exécution BLGCLOUD</h2>
-    <p>Ce rapport sert de base de travail pour l'équipe BLGCLOUD. Le périmètre couvre les points techniques : canonical, sitemap, robots, codes HTTP, redirections, performances, balisage schema, DataLayer et implémentation GTM.</p>
-    <p>Le rapport sépare la responsabilité d'exécution : BLGCLOUD corrige les défauts techniques. Papouille valide les livraisons et pilote les priorités métier.</p>
-
-    <div class="execution-grid">
-      <div class="execution-card">
-        <h4>P0 — Délai cible 14 jours</h4>
-        <p>Corriger canonical, aligner sitemap et og:url, nettoyer les URLs en erreur, poser noindex sur pages d'erreur.</p>
-      </div>
-      <div class="execution-card">
-        <h4>P1 — Délai cible 45 jours</h4>
-        <p>Corriger le balisage schema, réduire les erreurs 4xx/5xx, améliorer les performances templates et stabiliser les routes indexables.</p>
-      </div>
-      <div class="execution-card">
-        <h4>P2 — Délai cible 90 jours</h4>
-        <p>Fiabiliser DataLayer e-commerce, ajouter les tests de non-régression SEO et sécuriser la routine de recette avant mise en production.</p>
-      </div>
-    </div>
-
-    <div class="contourne">
-      <h4>Règle de preuve par ticket</h4>
-      <p>Chaque ticket BLGCLOUD doit inclure : URL testée, preuve avant/après, résultat du test et date de mise en production. Sans preuve, le ticket reste ouvert.</p>
-    </div>
-  </section>
 
   <!-- Contexte SEO -->
   <section>
@@ -1118,11 +1067,220 @@
     </table>
   </section>
 
+  <!-- ============================================================ -->
+  <!-- PLAN D'ACTION — CORRECTIONS FAISABLES VIA API BLGCLOUD       -->
+  <!-- ============================================================ -->
+
+  <section style="border-left: 4px solid var(--success); border-color: var(--success);">
+    <h2 style="color: var(--success);">Plan d'action — Corrections faisables via API BLGCLOUD (sans dev serveur)</h2>
+    <p>Analyse de l'API BLGCLOUD (<code>app.blgcloud.com/papouille/api</code>) réalisée le 9 avril 2026. Ce plan liste les corrections SEO exécutables directement via l'API REST, sans modification du code serveur BLGCLOUD.</p>
+
+    <div class="alerte-seo">
+      <h4>Résumé de l'exploration API</h4>
+      <p><strong>6 712 articles</strong> (article/part) · <strong>12 familles</strong> · <strong>118 sous-familles</strong> · <strong>4 680 redirections</strong> (cms/redirect) · <strong>109 pages dynamiques</strong> (cms/dynamicPage) · <strong>27 blocs de contenu</strong> (cms/contentBlock)</p>
+    </div>
+
+    <!-- ===== PRIORITE 1 : CRITIQUE ===== -->
+    <h3>Priorité 1 — Critique (Impact SEO immédiat)</h3>
+
+    <div class="fix-item" style="border-left-color: var(--danger);">
+      <h4>1.1 — Meta descriptions avec guillemets parasites et suffixe générique</h4>
+      <p><strong>Constat :</strong> Toutes les meta descriptions sont entourées de guillemets simples (<code>'...'</code>) et contiennent un suffixe identique : <em>"Articles de puériculture, modules d'éveil sur mesure, textiles bébé..."</em>. Les apostrophes internes sont doublées (<code>''</code>). Résultat : Google ignore ces meta descriptions et génère les siennes.</p>
+      <p><strong>Cause :</strong> Le template BLGCLOUD encapsule la valeur dans des quotes SQL-style et concatène un texte fixe. Ce n'est <strong>pas modifiable via API</strong> — c'est un bug de template côté BLGCLOUD.</p>
+      <p><strong>Action BLGCLOUD :</strong> Corriger le template de génération des balises <code>&lt;meta name="description"&gt;</code> : supprimer les guillemets englobants, supprimer le doublement des apostrophes, supprimer le suffixe générique. Utiliser uniquement le champ <code>descriptionPubliqueSite</code> (customField) ou <code>comment</code> tronqué à 160 caractères.</p>
+      <p><strong>Impact :</strong> 100 % des pages produit + catégorie + famille affectées.</p>
+    </div>
+
+    <div class="fix-item" style="border-left-color: var(--danger);">
+      <h4>1.2 — Aucun balisage JSON-LD (structured data) sur les pages produit</h4>
+      <p><strong>Constat :</strong> Zéro <code>&lt;script type="application/ld+json"&gt;</code> sur l'ensemble du site. Aucune page (produit, catégorie, homepage) ne comporte de données structurées. Conséquence : aucun rich snippet (prix, disponibilité, avis, breadcrumbs) dans les résultats Google.</p>
+      <p><strong>Action BLGCLOUD :</strong> Injecter automatiquement les schémas JSON-LD suivants :</p>
+      <table>
+        <thead><tr><th>Page</th><th>Schéma requis</th><th>Données API disponibles</th></tr></thead>
+        <tbody>
+          <tr><td>Page produit</td><td><code>Product</code> + <code>Offer</code></td><td>label, price (salePrice), brand (make), image (articlePicture), description (descriptionPubliqueSite), reference, category (subfamily)</td></tr>
+          <tr><td>Page catégorie</td><td><code>BreadcrumbList</code> + <code>CollectionPage</code></td><td>family.title, subfamily.title, URL hierarchy</td></tr>
+          <tr><td>Homepage</td><td><code>Organization</code> + <code>WebSite</code> + <code>SearchAction</code></td><td>CMS settings, contentBlocks</td></tr>
+          <tr><td>Toutes pages</td><td><code>BreadcrumbList</code></td><td>Breadcrumbs déjà rendus en HTML mais sans schéma</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Impact :</strong> Condition sine qua non pour les rich snippets Google Shopping / Product.</p>
+    </div>
+
+    <div class="fix-item" style="border-left-color: var(--danger);">
+      <h4>1.3 — Titles de catégorie/famille incorrects (sous-catégorie aléatoire)</h4>
+      <p><strong>Constat :</strong> Les balises <code>&lt;title&gt;</code> des pages famille incluent une sous-catégorie apparemment aléatoire. Exemple : la page <code>/articles/mobilier-11</code> affiche <em>"Mobilier - Meuble en mousse et Pouf | Papouille"</em> au lieu de <em>"Mobilier crèche et collectivité | Papouille"</em>.</p>
+      <p><strong>Action BLGCLOUD :</strong> Corriger le template <code>&lt;title&gt;</code> des pages famille pour utiliser uniquement <code>family.title</code>, sans injecter un <code>subfamily.title</code> arbitraire.</p>
+      <p><strong>Impact :</strong> 12 pages famille + 118 pages sous-famille potentiellement affectées.</p>
+    </div>
+
+    <div class="fix-item" style="border-left-color: var(--danger);">
+      <h4>1.4 — Pages d'erreur indexables (pas de noindex)</h4>
+      <p><strong>Constat :</strong> Les pages d'erreur (ex : sous-catégorie supprimée <code>/articles/repas-21/vaisselle-enfant-bebe-342</code>) retournent un titre "Erreur | Papouille" mais avec <code>robots: index, follow</code>. Google indexe ces pages d'erreur.</p>
+      <p><strong>Action BLGCLOUD :</strong> Ajouter <code>&lt;meta name="robots" content="noindex, follow"&gt;</code> sur toutes les pages d'erreur. Idéalement retourner un code HTTP 404 ou 410.</p>
+      <p><strong>Impact :</strong> Pollution de l'index Google, dilution du crawl budget.</p>
+    </div>
+
+    <!-- ===== PRIORITE 2 : HAUTE ===== -->
+    <h3>Priorité 2 — Haute</h3>
+
+    <div class="fix-item" style="border-left-color: var(--warning);">
+      <h4>2.1 — Canonical URL incohérent avec l'URL accédée</h4>
+      <p><strong>Constat :</strong> L'URL <code>/articles/family-X/subfamily-Y/product-NNNNN</code> a un canonical vers <code>/articles/product-slug-NNNNN</code> (sans le chemin catégorie). C'est un choix acceptable MAIS : le système de routage redirige certaines URLs vers le mauvais produit (ex : l'URL "table-rectangulaire" affiche un "matelas à langer" car seul l'ID est utilisé). L'URL affichée est alors trompeuse pour l'utilisateur et Google.</p>
+      <p><strong>Action BLGCLOUD :</strong> Implémenter une redirection 301 vers le canonical correct quand le slug dans l'URL ne correspond pas au produit affiché (basé sur l'ID). Cela empêche les URLs trompeuses d'être indexées.</p>
+    </div>
+
+    <div class="fix-item" style="border-left-color: var(--warning);">
+      <h4>2.2 — 65 sous-familles sans description SEO (sur 118)</h4>
+      <p><strong>Constat :</strong> 55 % des sous-familles (pages catégorie) n'ont aucune description. Ces pages s'affichent sans contenu textuel — Google les considère comme thin content.</p>
+      <p><strong>Action via API :</strong> <span class="badge badge-success">FAISABLE</span> Écrire les descriptions via <code>PATCH /article/subfamily/{id}</code> avec le champ <code>description</code> (type text, pas de limite de longueur). Les 65 sous-familles sans description :</p>
+      <table>
+        <thead><tr><th>Famille</th><th>Sous-familles sans description</th></tr></thead>
+        <tbody>
+          <tr><td>Mobilier (11)</td><td>1 : Mobilier extérieur</td></tr>
+          <tr><td>Couchage (15)</td><td>6 : Matelas, Mobiles/Veilleuses, Parcs, Lit parapluie, Turbulettes, Couvertures, Pièces détachées</td></tr>
+          <tr><td>Change (17)</td><td>5 : Accessoires toilette, Pots/Réducteurs, Pièces détachées, Distributeurs, Entretien</td></tr>
+          <tr><td>Jouets (18)</td><td>6+ : Activités manuelles, Hochets, Tapis d'éveil, Jouets d'imitation, Construction, Multi-activités</td></tr>
+          <tr><td>Autres familles</td><td>~45 sous-familles restantes</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Volume :</strong> 65 descriptions SEO de 300-800 mots chacune à rédiger.</p>
+    </div>
+
+    <div class="fix-item" style="border-left-color: var(--warning);">
+      <h4>2.3 — 304 articles sans descriptionPubliqueSite + 154 sans comment</h4>
+      <p><strong>Constat :</strong> Sur 6 712 articles, 304 n'ont pas de <code>descriptionPubliqueSite</code> (custom field affiché sur le site) et 154 n'ont pas de <code>comment</code> (description technique). 67 ont une description &lt; 100 caractères.</p>
+      <p><strong>Action via API :</strong> <span class="badge badge-success">FAISABLE</span> Écrire ou enrichir les descriptions via <code>PATCH /article/part/{id}</code> avec <code>customFields.descriptionPubliqueSite</code>.</p>
+      <p><strong>Volume :</strong> ~370 fiches produit à rédiger/enrichir.</p>
+    </div>
+
+    <div class="fix-item" style="border-left-color: var(--warning);">
+      <h4>2.4 — 166 redirections vers la homepage (/)</h4>
+      <p><strong>Constat :</strong> Sur 4 680 redirections, 166 pointent vers <code>/</code> (homepage). Ce sont des produits supprimés redirigés vers l'accueil — considéré comme un soft 404 par Google. Il vaudrait mieux les rediriger vers la catégorie parente.</p>
+      <p><strong>Action via API :</strong> <span class="badge badge-success">FAISABLE</span> Modifier via <code>PATCH /cms/redirect/{id}</code> le champ <code>to</code> pour pointer vers la sous-famille pertinente au lieu de <code>/</code>.</p>
+      <p><strong>Volume :</strong> 166 redirections à corriger.</p>
+    </div>
+
+    <!-- ===== PRIORITE 3 : MOYENNE ===== -->
+    <h3>Priorité 3 — Moyenne</h3>
+
+    <div class="fix-item">
+      <h4>3.1 — H1 manquant sur la homepage</h4>
+      <p><strong>Constat :</strong> La homepage n'a aucune balise <code>&lt;h1&gt;</code>. Le titre principal est probablement dans un slider ou une image.</p>
+      <p><strong>Action BLGCLOUD :</strong> Ajouter un <code>&lt;h1&gt;</code> visible ou en sr-only dans le template homepage.</p>
+    </div>
+
+    <div class="fix-item">
+      <h4>3.2 — Open Graph incomplet sur les pages produit</h4>
+      <p><strong>Constat :</strong> Pas de <code>og:price:amount</code>, pas de <code>og:image</code> spécifique au produit. Le <code>og:title</code> affiche "Papouille" au lieu du nom du produit.</p>
+      <p><strong>Action BLGCLOUD :</strong> Compléter les balises Open Graph dans le template produit avec les données article (label, image, prix, catégorie).</p>
+    </div>
+
+    <div class="fix-item">
+      <h4>3.3 — Pages dynamiques (109) : title = description (cannibalisation)</h4>
+      <p><strong>Constat :</strong> Sur les 109 pages dynamiques CMS, de nombreuses ont un <code>title</code> identique à la <code>description</code>. Elles mériteraient des descriptions uniques et optimisées.</p>
+      <p><strong>Action via API :</strong> <span class="badge badge-success">FAISABLE</span> Modifier via <code>PATCH /cms/dynamicPage/{id}</code> le champ <code>description</code> (max 512 caractères).</p>
+    </div>
+
+    <div class="fix-item">
+      <h4>3.4 — Hreflang absent (site monolingue fr_FR)</h4>
+      <p><strong>Constat :</strong> Aucune balise hreflang. Le site est monolingue mais devrait au moins déclarer <code>hreflang="fr"</code> et un <code>x-default</code>.</p>
+      <p><strong>Action BLGCLOUD :</strong> Ajouter <code>&lt;link rel="alternate" hreflang="fr" href="{canonical}"&gt;</code> dans le template <code>&lt;head&gt;</code>.</p>
+    </div>
+
+    <div class="fix-item">
+      <h4>3.5 — 2 chaînes de redirection détectées</h4>
+      <p><strong>Constat :</strong> 2 URLs redirigent vers une URL qui est elle-même redirigée (redirect chain). Cela ralentit le crawl et perd du link juice.</p>
+      <p><strong>Action via API :</strong> <span class="badge badge-success">FAISABLE</span> Mettre à jour les 2 redirections pour pointer directement vers la destination finale via <code>PATCH /cms/redirect/{id}</code>.</p>
+    </div>
+
+    <!-- ===== RECAPITULATIF ===== -->
+    <h3>Récapitulatif des actions</h3>
+    <table>
+      <thead>
+        <tr><th>Action</th><th>Faisable via API ?</th><th>Volume</th><th>Priorité</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Meta descriptions (quotes + suffixe)</td><td><span class="badge badge-danger">NON — Template</span></td><td>100 % pages</td><td class="priority-critique">Critique</td></tr>
+        <tr><td>JSON-LD structured data</td><td><span class="badge badge-danger">NON — Template</span></td><td>100 % pages</td><td class="priority-critique">Critique</td></tr>
+        <tr><td>Titles famille/catégorie incorrects</td><td><span class="badge badge-danger">NON — Template</span></td><td>130 pages</td><td class="priority-critique">Critique</td></tr>
+        <tr><td>Pages erreur indexables</td><td><span class="badge badge-danger">NON — Template</span></td><td>Inconnu</td><td class="priority-critique">Critique</td></tr>
+        <tr><td>Canonical slug ≠ contenu</td><td><span class="badge badge-danger">NON — Routing</span></td><td>Inconnu</td><td class="priority-haute">Haute</td></tr>
+        <tr><td>Descriptions sous-familles</td><td><span class="badge badge-success">OUI — API PATCH</span></td><td>65 sous-familles</td><td class="priority-haute">Haute</td></tr>
+        <tr><td>Descriptions articles manquantes</td><td><span class="badge badge-success">OUI — API PATCH</span></td><td>~370 articles</td><td class="priority-haute">Haute</td></tr>
+        <tr><td>Redirections vers homepage</td><td><span class="badge badge-success">OUI — API PATCH</span></td><td>166 redirects</td><td class="priority-haute">Haute</td></tr>
+        <tr><td>H1 homepage</td><td><span class="badge badge-danger">NON — Template</span></td><td>1 page</td><td class="priority-moyenne">Moyenne</td></tr>
+        <tr><td>Open Graph produits</td><td><span class="badge badge-danger">NON — Template</span></td><td>6 712 pages</td><td class="priority-moyenne">Moyenne</td></tr>
+        <tr><td>Descriptions pages dynamiques</td><td><span class="badge badge-success">OUI — API PATCH</span></td><td>~40 pages</td><td class="priority-moyenne">Moyenne</td></tr>
+        <tr><td>Hreflang</td><td><span class="badge badge-danger">NON — Template</span></td><td>Global</td><td class="priority-moyenne">Moyenne</td></tr>
+        <tr><td>Chaînes de redirection</td><td><span class="badge badge-success">OUI — API PATCH</span></td><td>2 redirects</td><td class="priority-moyenne">Moyenne</td></tr>
+      </tbody>
+    </table>
+
+    <div class="contourne">
+      <h4>Résumé pour l'équipe BLGCLOUD</h4>
+      <p><strong>8 corrections nécessitent une intervention sur les templates/routing BLGCLOUD</strong> (meta descriptions, JSON-LD, titles, pages erreur, canonical, H1, OG, hreflang). Ce sont les plus critiques.</p>
+      <p><strong>5 corrections sont faisables immédiatement via l'API REST</strong> par l'équipe Papouille (descriptions sous-familles, descriptions articles, redirections homepage, descriptions pages dynamiques, chaînes de redirection).</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- PLAN D'ACTION — GTM / DATALAYER côté client                  -->
+  <!-- ============================================================ -->
+
+  <section style="border-left: 4px solid #9c27b0;">
+    <h2 style="color: #9c27b0;">Plan d'action — Corrections GTM / DataLayer (côté client)</h2>
+    <p>Corrections implémentables via Google Tag Manager (GTM-PNR2PTM) ou le contentBlock <code>trackingCode</code> (cms/contentBlock/6), sans modification du code serveur.</p>
+
+    <h3>Priorité 1 — Critique</h3>
+
+    <div class="fix-item" style="border-left-color: var(--danger);">
+      <h4>GTM-1 — Attribution e-commerce cassée (81 % revenue "Unassigned")</h4>
+      <p><strong>Constat GA4 :</strong> 81 % du revenu est attribué au canal "Unassigned" dans GA4. Le DataLayer envoie les événements e-commerce (productImpressions, productDetailsViews) mais l'attribution de la source/medium est perdue.</p>
+      <p><strong>Cause probable :</strong> Les événements <code>purchase</code> et <code>add_to_cart</code> ne transmettent pas correctement le <code>transaction_id</code> ou le mapping UA → GA4 est incomplet. Le DataLayer utilise encore le format Enhanced Ecommerce (UA) avec <code>ecommerce.impressions</code> au lieu du format GA4 (<code>ecommerce.items</code>).</p>
+      <p><strong>Action GTM :</strong></p>
+      <p>1. Migrer les événements DataLayer du format Universal Analytics vers GA4 :<br>
+      — <code>productImpressions</code> → <code>view_item_list</code> avec <code>ecommerce.items[]</code><br>
+      — <code>productDetailsViews</code> → <code>view_item</code> avec <code>ecommerce.items[]</code><br>
+      — <code>addToCart</code> → <code>add_to_cart</code><br>
+      — <code>removeFromCart</code> → <code>remove_from_cart</code><br>
+      — <code>purchase</code> → <code>purchase</code> avec <code>transaction_id</code>, <code>value</code>, <code>currency: "EUR"</code></p>
+      <p>2. Vérifier que <code>dataLayer.push({ecommerce: null})</code> est appelé avant chaque nouvel événement e-commerce.</p>
+      <p>3. Configurer le tag GA4 avec les paramètres <code>send_page_view</code> et les déclencheurs e-commerce correctement mappés.</p>
+      <p><strong>Impact :</strong> Restaure l'attribution des 1 507 € de revenu mensuel et permet l'analyse des canaux d'acquisition.</p>
+    </div>
+
+    <div class="fix-item" style="border-left-color: var(--danger);">
+      <h4>GTM-2 — Consentement cookies incomplet (CookieScript)</h4>
+      <p><strong>Constat :</strong> Le DataLayer montre des événements <code>CookieScriptConsentUpdated[functionality,strict]</code> mais aucun consentement <code>analytics</code> ou <code>marketing</code>. Les catégories de cookies sont limitées à "functionality" et "strict".</p>
+      <p><strong>Action GTM :</strong> Configurer le Consent Mode v2 dans GTM avec les catégories Google (<code>analytics_storage</code>, <code>ad_storage</code>, <code>ad_user_data</code>, <code>ad_personalization</code>) mappées sur les catégories CookieScript. Sans cela, GA4 perd des données et la conformité RGPD est incomplète.</p>
+    </div>
+
+    <h3>Priorité 2 — Haute</h3>
+
+    <div class="fix-item" style="border-left-color: var(--warning);">
+      <h4>GTM-3 — Événement purchase : prix à 0 € dans le DataLayer</h4>
+      <p><strong>Constat :</strong> L'événement <code>productDetailsViews</code> montre <code>"price": 0</code> pour certains produits (ex : produits sur devis). Google Analytics enregistre des conversions à 0 € qui faussent le revenu.</p>
+      <p><strong>Action GTM :</strong> Filtrer les événements <code>purchase</code> avec <code>value = 0</code> ou enrichir le prix via un lookup table GTM basé sur l'ID produit.</p>
+    </div>
+
+    <div class="fix-item" style="border-left-color: var(--warning);">
+      <h4>GTM-4 — Pas de suivi des recherches internes</h4>
+      <p><strong>Action GTM :</strong> Créer un tag GA4 Event <code>search</code> déclenché sur le paramètre URL de recherche (ex : <code>?q=</code>) avec le terme de recherche en paramètre <code>search_term</code>.</p>
+    </div>
+
+    <div class="fix-item" style="border-left-color: var(--warning);">
+      <h4>GTM-5 — Tracking code GTM dans un contentBlock modifiable</h4>
+      <p><strong>Constat :</strong> Le noscript GTM est dans le contentBlock <code>trackingCode</code> (cms/contentBlock/6). Le script GTM principal est probablement dans le template &lt;head&gt;. Vérifier que les deux parties sont synchronisées (même container ID GTM-PNR2PTM).</p>
+      <p><strong>Action :</strong> Via API, vérifier et mettre à jour si nécessaire le contenu du contentBlock 6 via <code>PATCH /cms/contentBlock/6</code>. <span class="badge badge-success">FAISABLE</span></p>
+    </div>
+  </section>
+
 </div>
 
 <footer>
-  Rapport généré le 9 avril 2026 (mis à jour avec GA4 MCP + Semrush Site Audit) — Audit SEO + GTM/GA4 papouillefrance.com — À destination de BLGCLOUD<br>
-  Données : Google Search Console · Semrush Site Audit · Ranxplorer · PageSpeed Insights · Google Analytics 4 (property 275254711)
+  Rapport généré le 9 avril 2026 (mis à jour avec GA4 + Semrush Site Audit + Exploration API BLGCLOUD) — Audit SEO + GTM/GA4 papouillefrance.com — À destination de BLGCLOUD<br>
+  Données : Google Search Console · Semrush Site Audit · Ranxplorer · PageSpeed Insights · Google Analytics 4 (property 275254711) · API BLGCLOUD (article/part, cms/redirect, cms/dynamicPage, article/subfamily)
 </footer>
 
 </body>
