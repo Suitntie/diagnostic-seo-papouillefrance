@@ -35,6 +35,11 @@
   .badge-muted { background: #f1f3f4; color: var(--muted); }
 
   .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+
+  .delivery-box { background: #e8f0fe; border: 1px solid #a8c7fa; border-radius: 8px; padding: 18px; margin-bottom: 22px; }
+  .delivery-box h3 { margin-top: 0; color: #174ea6; }
+  .delivery-box ul { margin: 8px 0 0 20px; }
+  .delivery-box li { margin: 6px 0; }
   .kpi { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
   .kpi .number { font-size: 36px; font-weight: 700; }
   .kpi .label { font-size: 13px; color: var(--muted); margin-top: 4px; }
@@ -112,6 +117,20 @@
 </header>
 
 <div class="container">
+
+
+  <div class="delivery-box">
+    <h3>Transmission BLGCLOUD — attente de retour sous 48h</h3>
+    <p>Papouille a transmis le cahier des charges et la présentation des bugs avec KPI. BLGCLOUD doit confirmer :</p>
+    <ul>
+      <li>Owner technique</li>
+      <li>Planning de livraison</li>
+      <li>Format de preuve fourni par ticket</li>
+      <li>Date du premier comité hebdo</li>
+    </ul>
+    <p style="margin-top: 10px; font-size: 13px;">Cahier des charges : <a href="https://docs.google.com/document/d/1AzFaLL7u4Lx8G4MyaRRYWkklSRsGPL3JfQJ4vC2tE-Q/edit?usp=sharing" target="_blank" rel="noopener">Google Docs</a><br>
+    Présentation KPI : <a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Suitntie/diagnostic-seo-papouillefrance/main/BLGCLOUD-bugs-ameliorations-papouillefrance.html" target="_blank" rel="noopener">Version publique HTML</a></p>
+  </div>
 
   <!-- KPIs -->
   <div class="kpi-grid">
