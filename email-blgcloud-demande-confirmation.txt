@@ -1,13 +1,19 @@
 Bonjour,
 
-Merci de prendre en charge le cahier des charges transmis ce jour.
-Ce plan couvre les correctifs SEO et tracking côté BLGCLOUD.
+Merci pour votre prise en charge du cahier des charges transmis ce jour.
+Nous avançons avec vous sur ce plan SEO et tracking.
 
-Merci de confirmer sous 48h :
-- L'owner technique
-- Le planning de livraison
-- Le format de preuve fourni par ticket
-- La date du premier comité hebdo
+Pour lancer le suivi dans de bonnes conditions, merci de nous confirmer sous 48h :
+- l'owner technique côté BLGCLOUD,
+- le planning de livraison P0, P1 et P2,
+- le format de preuve fourni par ticket,
+- la date du premier comité hebdo.
+
+Format de preuve attendu par ticket :
+- URL concernée,
+- capture avant/après,
+- résultat du test,
+- référence de mise en production.
 
 Cahier des charges :
 https://docs.google.com/document/d/1AzFaLL7u4Lx8G4MyaRRYWkklSRsGPL3JfQJ4vC2tE-Q/edit?usp=sharing
@@ -15,5 +21,7 @@ https://docs.google.com/document/d/1AzFaLL7u4Lx8G4MyaRRYWkklSRsGPL3JfQJ4vC2tE-Q/
 Présentation Bugs & Améliorations SEO + DataLayer avec KPI :
 https://htmlpreview.github.io/?https://raw.githubusercontent.com/Suitntie/diagnostic-seo-papouillefrance/main/BLGCLOUD-bugs-ameliorations-papouillefrance.html
 
-Cordialement,
+Si vous préférez, nous pouvons proposer un créneau de comité dès cette semaine.
+
+Merci et bonne journée,
 Papouille
