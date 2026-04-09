@@ -1769,13 +1769,131 @@
             </table>
         </section>
 
+        <!-- ============================================================ -->
+        <!-- PLAN D'ACTION PAPOUILLE — Ce que vous pouvez faire MAINTENANT -->
+        <!-- ============================================================ -->
+
+        <section style="border-left: 5px solid #0d904f;">
+            <h2 style="color: #0d904f;">Plan d'action Papouille — Corrections faisables sans développeur</h2>
+            <p>Suite à l'exploration de l'API BLGCLOUD et de l'audit du site, voici les actions que l'équipe Papouille peut exécuter <strong>directement via l'API BLGCLOUD ou via GTM</strong>, sans attendre de développement côté BLGCLOUD.</p>
+
+            <div style="background: #e6f4ea; border: 1px solid #a8dab5; border-radius: 8px; padding: 20px; margin: 16px 0;">
+                <h4 style="color: #0d904f;">Données API BLGCLOUD disponibles</h4>
+                <p><strong>6 712 articles</strong> dans <code>article/part</code> · <strong>118 sous-familles</strong> · <strong>12 familles</strong> · <strong>4 680 redirections</strong> · <strong>109 pages dynamiques</strong> · <strong>27 blocs de contenu</strong></p>
+                <p>Champs SEO modifiables via API : <code>customFields.descriptionPubliqueSite</code>, <code>comment</code>, <code>label</code> (article/part) · <code>description</code> (subfamily, dynamicPage) · <code>to</code> (cms/redirect) · <code>content</code> (cms/contentBlock)</p>
+            </div>
+
+            <h3>Action 1 — Rédiger les 65 descriptions de sous-familles manquantes</h3>
+            <table>
+                <thead><tr><th>Détail</th><th>Valeur</th></tr></thead>
+                <tbody>
+                    <tr><td>Volume</td><td><strong>65 sous-familles</strong> sur 118 n'ont aucune description</td></tr>
+                    <tr><td>Endpoint API</td><td><code>PATCH /article/subfamily/{id}</code> → champ <code>description</code></td></tr>
+                    <tr><td>Format</td><td>HTML, 300 à 800 mots, incluant mots-clés naturels liés à la petite enfance</td></tr>
+                    <tr><td>Priorité</td><td><span style="color: #e37400; font-weight: 700;">HAUTE</span> — Ces pages catégorie sont considérées "thin content" par Google</td></tr>
+                    <tr><td>Estimation</td><td>~3 à 5 jours de rédaction (ou automatisable avec IA + validation humaine)</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Action 2 — Compléter les fiches produit sans description</h3>
+            <table>
+                <thead><tr><th>Détail</th><th>Valeur</th></tr></thead>
+                <tbody>
+                    <tr><td>Volume</td><td><strong>304 articles</strong> sans <code>descriptionPubliqueSite</code> + <strong>67</strong> avec description &lt; 100 caractères</td></tr>
+                    <tr><td>Endpoint API</td><td><code>PATCH /article/part/{id}</code> → <code>customFields.descriptionPubliqueSite</code></td></tr>
+                    <tr><td>Champ existant</td><td>6 408 articles ont déjà une description publique (95,5 %)</td></tr>
+                    <tr><td>Priorité</td><td><span style="color: #e37400; font-weight: 700;">HAUTE</span></td></tr>
+                    <tr><td>Astuce</td><td>Les 457 articles avec <code>courteDescription</code> peuvent servir de base pour enrichir les descriptions manquantes</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Action 3 — Corriger les 166 redirections vers la homepage</h3>
+            <table>
+                <thead><tr><th>Détail</th><th>Valeur</th></tr></thead>
+                <tbody>
+                    <tr><td>Volume</td><td><strong>166 redirections</strong> pointent vers <code>/</code> (homepage) au lieu de la catégorie parente</td></tr>
+                    <tr><td>Endpoint API</td><td><code>PATCH /cms/redirect/{id}</code> → champ <code>to</code></td></tr>
+                    <tr><td>Stratégie</td><td>Extraire la catégorie depuis l'URL <code>from</code> (ex : <code>/articles/change-17/...</code> → rediriger vers <code>/articles/change-17</code>)</td></tr>
+                    <tr><td>Priorité</td><td><span style="color: #e37400; font-weight: 700;">HAUTE</span> — Google considère ces redirections vers homepage comme des soft 404</td></tr>
+                    <tr><td>Scriptable</td><td>Oui, 100 % automatisable avec un script Python + API</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Action 4 — Optimiser les descriptions des pages dynamiques</h3>
+            <table>
+                <thead><tr><th>Détail</th><th>Valeur</th></tr></thead>
+                <tbody>
+                    <tr><td>Volume</td><td>~40 pages dynamiques où <code>title</code> = <code>description</code> (cannibalisation)</td></tr>
+                    <tr><td>Endpoint API</td><td><code>PATCH /cms/dynamicPage/{id}</code> → champ <code>description</code> (max 512 chars)</td></tr>
+                    <tr><td>Priorité</td><td><span style="color: #1a73e8; font-weight: 600;">MOYENNE</span></td></tr>
+                </tbody>
+            </table>
+
+            <h3>Action 5 — Corrections GTM (Google Tag Manager)</h3>
+            <p>Ces corrections se font dans l'interface GTM (container GTM-PNR2PTM) :</p>
+            <table>
+                <thead><tr><th>#</th><th>Action</th><th>Priorité</th><th>Détail</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td>GTM-1</td>
+                        <td>Migrer le DataLayer e-commerce au format GA4</td>
+                        <td><span style="color: #d93025; font-weight: 700;">CRITIQUE</span></td>
+                        <td>Le DataLayer utilise encore le format Universal Analytics (<code>ecommerce.impressions</code>). Migrer vers <code>ecommerce.items[]</code> pour restaurer l'attribution (81 % du revenu est "Unassigned")</td>
+                    </tr>
+                    <tr>
+                        <td>GTM-2</td>
+                        <td>Configurer le Consent Mode v2</td>
+                        <td><span style="color: #d93025; font-weight: 700;">CRITIQUE</span></td>
+                        <td>Mapper les catégories CookieScript sur <code>analytics_storage</code>, <code>ad_storage</code>, <code>ad_user_data</code>, <code>ad_personalization</code></td>
+                    </tr>
+                    <tr>
+                        <td>GTM-3</td>
+                        <td>Filtrer les événements purchase à 0 €</td>
+                        <td><span style="color: #e37400; font-weight: 700;">HAUTE</span></td>
+                        <td>Certains produits "sur devis" envoient <code>price: 0</code> ce qui fausse les métriques de revenu</td>
+                    </tr>
+                    <tr>
+                        <td>GTM-4</td>
+                        <td>Ajouter le tracking des recherches internes</td>
+                        <td><span style="color: #e37400; font-weight: 700;">HAUTE</span></td>
+                        <td>Créer un tag GA4 event <code>search</code> avec <code>search_term</code> déclenché sur le paramètre <code>?q=</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Action 6 — Demandes à transmettre à BLGCLOUD (développement requis)</h3>
+            <p>Ces corrections nécessitent une modification des templates serveur BLGCLOUD. À transmettre en tant que demande de support/bug :</p>
+            <table>
+                <thead><tr><th>#</th><th>Bug / Amélioration</th><th>Priorité</th></tr></thead>
+                <tbody>
+                    <tr><td>1</td><td>Meta descriptions avec guillemets parasites et suffixe générique</td><td><span style="color: #d93025; font-weight: 700;">CRITIQUE</span></td></tr>
+                    <tr><td>2</td><td>Aucun balisage JSON-LD sur les pages produit (Product, Offer, BreadcrumbList)</td><td><span style="color: #d93025; font-weight: 700;">CRITIQUE</span></td></tr>
+                    <tr><td>3</td><td>Balise title des pages famille/catégorie affiche une sous-catégorie aléatoire</td><td><span style="color: #d93025; font-weight: 700;">CRITIQUE</span></td></tr>
+                    <tr><td>4</td><td>Pages d'erreur indexables (manque noindex + code HTTP 404)</td><td><span style="color: #d93025; font-weight: 700;">CRITIQUE</span></td></tr>
+                    <tr><td>5</td><td>URL slug produit ≠ produit affiché (routing basé sur ID uniquement)</td><td><span style="color: #e37400; font-weight: 700;">HAUTE</span></td></tr>
+                    <tr><td>6</td><td>H1 manquant sur la homepage</td><td><span style="color: #1a73e8; font-weight: 600;">MOYENNE</span></td></tr>
+                    <tr><td>7</td><td>Open Graph incomplet sur pages produit</td><td><span style="color: #1a73e8; font-weight: 600;">MOYENNE</span></td></tr>
+                    <tr><td>8</td><td>Hreflang absent</td><td><span style="color: #1a73e8; font-weight: 600;">MOYENNE</span></td></tr>
+                </tbody>
+            </table>
+
+            <div style="background: #e8f0fe; border: 1px solid #aecbfa; border-radius: 8px; padding: 20px; margin: 16px 0;">
+                <h4 style="color: #1a73e8;">Ordre de priorité recommandé</h4>
+                <p>1. <strong>Transmettre les 4 bugs critiques à BLGCLOUD</strong> (meta descriptions, JSON-LD, titles, pages erreur) — ce sont les plus impactants et bloquants.</p>
+                <p>2. <strong>Lancer la rédaction des descriptions sous-familles</strong> (Action 1) — 65 pages "thin content" à enrichir.</p>
+                <p>3. <strong>Corriger les 166 redirections homepage via script</strong> (Action 3) — automatisable en 1h.</p>
+                <p>4. <strong>Configurer GTM</strong> (Action 5, GTM-1 et GTM-2) — restaure l'attribution e-commerce.</p>
+                <p>5. <strong>Compléter les fiches produit</strong> (Action 2) — travail de fond, peut être planifié sur plusieurs semaines.</p>
+            </div>
+        </section>
+
         <!-- FOOTER -->
         <footer>
             <p>
-                <strong>Rapport généré le 9 avril 2026</strong> (mis à jour avec GA4 + Semrush Site Audit + GSC MCP) — Audit interne papouillefrance.com — Équipe Papouille
+                <strong>Rapport généré le 9 avril 2026</strong> (mis à jour avec GA4 + Semrush Site Audit + GSC MCP + Exploration API BLGCLOUD) — Audit interne papouillefrance.com — Équipe Papouille
             </p>
             <p style="margin-top: 10px;">
-                <strong>Données sources :</strong> Google Analytics 4 (property 275254711) · Google Search Console · Semrush MCP + Site Audit · Ranxplorer · PageSpeed Insights
+                <strong>Données sources :</strong> Google Analytics 4 (property 275254711) · Google Search Console · Semrush MCP + Site Audit · Ranxplorer · PageSpeed Insights · API BLGCLOUD (article/part, cms/redirect, cms/dynamicPage, article/subfamily)
             </p>
             <p style="margin-top: 10px; font-size: 0.85em;">
                 Ce rapport est confidentiel. Destiné à l'usage interne de l'équipe Papouille uniquement.
