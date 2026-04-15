@@ -99,8 +99,8 @@
       <p class="subtitle">Rapport à destination de BLGCLOUD — www.papouillefrance.com</p>
     </div>
     <div class="meta">
-      <div>Date : 9 avril 2026 — <strong>Mise à jour GA4 + API BLGCLOUD + Plan d'action</strong></div>
-      <div>Source : Audit SEO + GSC + Semrush + Ranxplorer + GA4 + API BLGCLOUD (09/04/2026)</div>
+      <div>Date : 14 avril 2026 — <strong>MAJ Semrush Site Audit 13/04/2026 + Audit Netlinking Semjuice 09/04</strong></div>
+      <div>Source : Audit SEO + GSC + Semrush + Ranxplorer + GA4 + API BLGCLOUD + Semjuice (14/04/2026)</div>
       <div>Demandeur : Anthony Canavero — support@papouillefrance.com</div>
     </div>
   </div>
@@ -127,6 +127,72 @@
       <div class="label">Améliorations proposées (6 SEO + 8 DL)</div>
     </div>
   </div>
+
+  <!-- Mise à jour 14/04/2026 -->
+  <section style="border-left: 5px solid var(--danger); background: linear-gradient(90deg, #fce8e6 0%, #ffffff 40%);">
+    <h2 style="color: var(--danger);">🆕 Mise à jour 14 avril 2026 — Nouvelles données Semrush + Semjuice</h2>
+    <p><strong>L'audit Semrush Site Audit a été relancé le 13/04/2026.</strong> Voici les évolutions et 2 nouveaux bugs critiques à prendre en compte en priorité absolue :</p>
+
+    <h3 style="color: var(--danger); margin-top: 20px;">🔴 NOUVEAU BUG CRITIQUE — Santé recherche IA : 49% (objectif 80%)</h3>
+    <div class="alerte-seo">
+      <p><strong>4 489 pages bloquées aux robots Googlebot, ChatGPT-User, OAI-SearchBot et Google-Extended.</strong> Semrush a introduit un nouvel indicateur "Santé de la recherche IA" (beta). Score Papouille : <strong>49%</strong> (objectif 80%). Près de la moitié du catalogue est invisible aux moteurs de recherche classiques ET aux IA (ChatGPT, Perplexity, Google AI Overviews).</p>
+      <p><strong>Action BLGCLOUD :</strong> Auditer le <code>robots.txt</code> + les balises <code>&lt;meta name="robots"&gt;</code> générées par le CMS. Identifier pourquoi 4 489 pages sont bloquées et débloquer celles qui doivent être indexées (toutes les fiches produit actives). <strong>ROI estimé : potentiellement 45% du catalogue re-indexé avec quelques lignes de config.</strong></p>
+    </div>
+
+    <h3 style="color: var(--danger); margin-top: 20px;">🔴 BUG CRITIQUE — Structure Hn de la homepage cassée (confirmé par audit Semjuice 09/04)</h3>
+    <div class="alerte-seo">
+      <p><strong>La homepage n'a pas de balise H1.</strong> Les H2 sont vides ("Promotion", "Destockage"). Les H3 sont utilisés comme bannières marketing ("PROMOTION", "MADE IN FRANCE", "Catalogue 2026"). Seules les H4/H5 ont du sens SEO. Google ne peut pas comprendre le sujet principal de la page.</p>
+      <p><strong>Action BLGCLOUD :</strong> Refactor du template homepage : 1 seul H1 avec mot-clé principal (ex : <code>Matériel de puériculture &amp; mobilier petite enfance</code>), hiérarchie respectée H1 &gt; H2 &gt; H3, retirer les Hn utilisés à des fins de mise en forme.</p>
+    </div>
+
+    <h3 style="color: var(--primary); margin-top: 20px;">📊 Évolution des chiffres Semrush (07/04 → 13/04)</h3>
+    <div class="semrush-grid">
+      <div class="semrush-card">
+        <div class="value">61%</div>
+        <div class="trend up">▲ +1 pt vs précédent</div>
+        <div class="metric-label">Santé du site</div>
+      </div>
+      <div class="semrush-card">
+        <div class="value">166</div>
+        <div class="trend up">▼ -3 076 vs précédent</div>
+        <div class="metric-label">Pages rompues (amélioration)</div>
+      </div>
+      <div class="semrush-card">
+        <div class="value">910</div>
+        <div class="trend up">▼ -1 278 vs précédent</div>
+        <div class="metric-label">URLs mortes sitemap (amélioration)</div>
+      </div>
+    </div>
+    <div class="semrush-grid">
+      <div class="semrush-card">
+        <div class="value" style="color: var(--danger);">4 888</div>
+        <div class="metric-label">Erreurs totales</div>
+      </div>
+      <div class="semrush-card">
+        <div class="value" style="color: var(--warning);">34 295</div>
+        <div class="metric-label">Avertissements</div>
+      </div>
+      <div class="semrush-card">
+        <div class="value" style="color: var(--danger);">5 805</div>
+        <div class="metric-label">Pages avec problèmes</div>
+      </div>
+    </div>
+    <div class="semrush-grid">
+      <div class="semrush-card">
+        <div class="value" style="color: var(--danger);">2 279</div>
+        <div class="metric-label">Problèmes recherche IA</div>
+      </div>
+      <div class="semrush-card">
+        <div class="value" style="color: var(--warning);">727</div>
+        <div class="metric-label">Contenu non optimisé (IA)</div>
+      </div>
+      <div class="semrush-card">
+        <div class="value" style="color: var(--warning);">510</div>
+        <div class="metric-label">Faible HTML sémantique (IA)</div>
+      </div>
+    </div>
+
+  </section>
 
   <!-- Contexte SEO -->
   <section>
